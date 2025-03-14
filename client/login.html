@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register - Beauty Store</title>
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/register.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Login Form -->
+        <div id="login-form" class="form-container">
+            <h2>Login</h2>
+            <form onsubmit="loginUser(event)">
+                <div class="form-group">
+                    <label for="login-username">Username:</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Register</a></p>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="form-container" style="display: none;">
+            <h2>Register</h2>
+            <form onsubmit="registerUser(event)">
+                <div class="form-group">
+                    <label for="register-username">Username:</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password:</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Clear localStorage when arriving at login page
+        window.onload = function() {
+            localStorage.clear();
+        }
+
+        function showLoginForm() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+    </script>
+    <script src="js/auth.js"></script>
+</body>
+</html> 

@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="60" cy="60" r="58" fill="white" stroke="#e91e63" stroke-width="2"/>
+    
+    <!-- Lipstick -->
+    <path d="M45 35 L45 75 L55 75 L55 35 Z" fill="#e91e63"/>
+    <path d="M45 35 L50 30 L55 35 Z" fill="#c2185b"/>
+    
+    <!-- Mirror -->
+    <circle cx="75" cy="60" r="15" fill="none" stroke="#e91e63" stroke-width="2"/>
+    <circle cx="75" cy="60" r="12" fill="none" stroke="#e91e63" stroke-width="1"/>
+    <line x1="75" y1="45" x2="75" y2="40" stroke="#e91e63" stroke-width="2"/>
+    
+    <!-- Text -->
+    <text x="60" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="#e91e63">SHEGLAM</text>
+</svg> 

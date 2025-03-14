@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/product.css"
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="assets/beauty-logo.svg" alt="Beauty Store Logo">
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="nav-links">
+                <a href="#" data-section="home" class="active">Home</a>
+                <a href="#" data-section="skincare">Skincare</a>
+                <a href="#" data-section="makeup">Makeup</a>
+            </div>
+            <div class="header-icons">
+                <div class="user-icon" onclick="handleUserIconClick()">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="cart-icon" onclick="showCartModal()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+            <div class="add-product">
+                <button class="add-product-button">+</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="active">
+            <h1 style="color: white;">Most Popular Products</h1>
+            <div class="products-grid" id="popular-products"></div>
+        </section>
+
+        <!-- Skin Care Section -->
+        <section id="skincare">
+            <h1 >Skin Care</h1>
+            <div class="products-grid" id="skincare-products"></div>
+        </section>
+
+        <!-- Makeup Section -->
+        <section id="makeup">
+            <h1>Makeup</h1>
+            <div class="products-grid" id="makeup-products"></div>
+        </section>
+
+        <!-- Search Results Section -->
+        <section id="search-results">
+            <h1>Search Results</h1>
+            <div class="products-grid" id="search-products"></div>
+        </section>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="product-details">
+                <img src="" alt="" id="modal-product-image">
+                <div class="product-info">
+                    <h2 id="modal-product-name"></h2>
+                    <p id="modal-product-description"></p>
+                    <p class="price" id="modal-product-price"></p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cart-total-amount">0.00</span></h3>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal"></div>
+
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/checkout.js"></script>
+    <script>
+    function handleUserIconClick() {
+        const isLoggedIn = localStorage.getItem('userId');
+        if (isLoggedIn) {
+            window.location.href = 'profile.html';
+        } else {
+            window.location.href = 'login.html';
+        }
+    }
+
+    // Admin functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        if (isAdmin) {
+            // Add admin controls to each product card
+            const cart = document.querySelector('.cart-icon');
+            cart.style.display = 'none';
+            const productCards = document.querySelectorAll('.product-card');
+            const addProductBtn = document.querySelector('.add-product');
+            addProductBtn.style.display = 'flex';
+            productCards.forEach(card => {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-product-btn';
+                deleteBtn.innerHTML = '<i class="fas fa-minus"></i>';
+                deleteBtn.onclick = () => deleteProduct(card.dataset.productId);
+                card.insertBefore(deleteBtn, card.firstChild);
+            });
+
+            // Add the "Add Product" button
+            const productsContainer = document.querySelector('.products-container');
+            const adminControls = document.createElement('div');
+            adminControls.className = 'admin-controls';
+            adminControls.innerHTML = `
+                <button onclick="showAddProductModal()" class="add-product-btn">
+                    <i class="fas fa-plus"></i> Add New Product
+                </button>
+            `;
+            productsContainer.insertBefore(adminControls, productsContainer.firstChild);
+        }
+    });
+    </script>
+</body>
+</html> 

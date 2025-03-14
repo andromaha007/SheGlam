@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Beauty Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles/profile.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1 id="profile-title">My Profile</h1>
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Store
+            </a>
+        </div>
+        
+        <div class="profile-card">
+            <div class="profile-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-group">
+                    <label>Role</label>
+                    <p id="profile-role">Loading...</p>
+                </div>
+
+                <div class="detail-group">
+                    <label>Username</label>
+                    <p id="profile-username">Loading...</p>
+                </div>
+                
+                <div class="detail-group">
+                    <label>Email</label>
+                    <p id="profile-email">Loading...</p>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                if (isAdmin) {
+                    // Display admin credentials
+                    document.getElementById('profile-title').textContent = 'Admin Profile';
+                    document.getElementById('profile-role').textContent = 'Administrator';
+                    document.getElementById('profile-username').textContent = 'admin';
+                    document.getElementById('profile-email').textContent = 'admin@admin.mail';
+                } else {
+                    // Fetch regular user data
+                    const response = await fetch(`http://localhost:5000/api/users/${userId}`);
+                    const userData = await response.json();
+
+                    if (response.ok) {
+                        document.getElementById('profile-role').textContent = 'User';
+                        document.getElementById('profile-username').textContent = userData.username;
+                        document.getElementById('profile-email').textContent = userData.email;
+                    } else {
+                        alert('Error loading profile');
+                        window.location.href = 'login.html';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading profile');
+                window.location.href = 'login.html';
+            }
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html> 
