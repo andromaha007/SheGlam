@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* GLOBAL STYLES */
+        :root {
+            --primary: #f28e9c;
+            --primary-light: #ffd3da;
+            --secondary: #8ecfe8;
+            --dark: #333333;
+            --light: #ffffff;
+            --gray: #f5f5f5;
+            --accent: #d1b3ee;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fcfcfc;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* HEADER STYLES */
+        header {
+            background-color: var(--light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo img {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 40%;
+            max-width: 500px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--gray);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-light);
+            background-color: white;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            color: var(--dark);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 1;
+            color: var(--primary);
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .user-icon, .cart-icon {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .user-icon:hover, .cart-icon:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* MAIN CONTENT STYLES */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+        
+        section {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section h1 {
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--dark);
+        }
+        
+        section h1:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* CATEGORY FILTER */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-button {
+            padding: 0.6rem 1.2rem;
+            background-color: var(--gray);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-button:hover, .filter-button.active {
+            background-color: var(--primary-light);
+            color: var(--dark);
+        }
+
+        .filter-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* PRODUCTS GRID */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            background-color: #f9f9f9;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-info {
+            padding: 1.2rem;
+        }
+        
+        .product-brand {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .product-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            background-color: var(--gray);
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+        }
+        
+        .product-description {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 2.8em;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .quick-add {
+            position: absolute;
+            bottom: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .quick-add {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .quick-add:hover {
+            background-color: var(--dark);
+        }
+
+        /* Tags */
+        .featured-tag, .sale-tag, .new-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            z-index: 2;
+        }
+
+        .featured-tag {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .sale-tag {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .new-tag {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            background-color: #eee;
+            transform: rotate(90deg);
+        }
+        
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        #modal-product-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            background-color: #f9f9f9;
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+        
+        .modal-brand {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-name {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-category {
+            display: inline-block;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+            background-color: var(--gray);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-light);
+            border-radius: var(--radius);
+        }
+        
+        .add-to-cart {
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        /* CART MODAL */
+        #cart-items {
+            margin-bottom: 2rem;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+        
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+        
+        .cart-item-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #eee;
+        }
+        
+        .remove-item {
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-item:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--gray);
+        }
+        
+        .checkout-btn {
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        /* RESPONSIVE STYLES */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-bar {
+                width: 60%;
+            }
+            
+            .product-details {
+                grid-template-columns: 1fr;
+            }
+            
+            #modal-product-image {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .search-bar {
+                width: 70%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            .header-icons, .logo {
+                width: 50%;
+            }
+            
+            .header-icons {
+                justify-content: flex-end;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .cart-item {
+                grid-template-columns: 60px 1fr;
+            }
+            
+            .cart-item-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+            }
+            
+            .cart-total {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .checkout-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <img src="./assets/beauty-logo.svg" alt="Beauty Store Logo">
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search skincare products...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="skincare.html" class="active">Skincare</a>
+                <a href="#">Makeup</a>
+            </div>
+            <div class="header-icons">
+                <div class="user-icon" onclick="handleUserIconClick()">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="cart-icon" onclick="showCartModal()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="skincare">
+            <h1>Skincare Products</h1>
+            
+            <div class="category-filter">
+                <button class="filter-button active" data-category="all">All Products</button>
+                <button class="filter-button" data-category="cleanser">Cleansers</button>
+                <button class="filter-button" data-category="moisturizer">Moisturizers</button>
+                <button class="filter-button" data-category="treatment">Treatments</button>
+                <button class="filter-button" data-category="sunscreen">Sunscreen</button>
+                <button class="filter-button" data-category="toner">Toners</button>
+            </div>
+            
+            <div class="products-grid" id="skincare-products">
+                <!-- Product 1: CeraVe Hydrating Cleanser -->
+                <div class="product-card" data-product-id="1" data-category="cleanser">
+                    <div class="featured-tag">Bestseller</div>
+                    <img src="/api/placeholder/400/320" alt="CeraVe Hydrating Facial Cleanser" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">CeraVe</div>
+                        <h3 class="product-name">Hydrating Facial Cleanser</h3>
+                        <span class="product-category">Cleanser</span>
+                        <p class="product-description">Developed with dermatologists, this gentle cleanser with ceramides and hyaluronic acid hydrates while cleansing.</p>
+                        <p class="product-price">$15.99</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 2: Estée Lauder Night Repair -->
+                <div class="product-card" data-product-id="2" data-category="treatment">
+                    <div class="sale-tag">15% OFF</div>
+                    <img src="/api/placeholder/400/320" alt="Estée Lauder Advanced Night Repair" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">Estée Lauder</div>
+                        <h3 class="product-name">Advanced Night Repair</h3>
+                        <span class="product-category">Treatment</span>
+                        <p class="product-description">Powerful overnight treatment that reduces multiple signs of aging with synchronized recovery complex II technology.</p>
+                        <p class="product-price">$75.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 3: La Roche-Posay Sunscreen -->
+                <div class="product-card" data-product-id="3" data-category="sunscreen">
+                    <img src="/api/placeholder/400/320" alt="La Roche-Posay Anthelios Sunscreen" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">La Roche-Posay</div>
+                        <h3 class="product-name">Anthelios 50+ Invisible Fluid</h3>
+                        <span class="product-category">Sunscreen</span>
+                        <p class="product-description">Very high sun protection with SPF 50+ that provides broad-spectrum UVA/UVB protection in an ultra-lightweight formula.</p>
+                        <p class="product-price">$29.99</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 4: Neutrogena Hydro Boost -->
+                <div class="product-card" data-product-id="4" data-category="moisturizer">
+                    <div class="new-tag">New</div>
+                    <img src="/api/placeholder/400/320" alt="Neutrogena Hydro Boost Gel Cream" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">Neutrogena</div>
+                        <h3 class="product-name">Hydro Boost Gel Cream</h3>
+                        <span class="product-category">Moisturizer</span>
+                        <p class="product-description">Lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours with hyaluronic acid.</p>
+                        <p class="product-price">$19.99</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 5: Paula's Choice Exfoliant -->
+                <div class="product-card" data-product-id="5" data-category="treatment">
+                    <img src="/api/placeholder/400/320" alt="Paula's Choice BHA Liquid Exfoliant" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">Paula's Choice</div>
+                        <h3 class="product-name">2% BHA Liquid Exfoliant</h3>
+                        <span class="product-category">Treatment</span>
+                        <p class="product-description">Leave-on exfoliant that gently removes dead skin and unclogs pores with salicylic acid for smoother, brighter skin.</p>
+                        <p class="product-price">$29.50</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 6: SkinCeuticals CE Ferulic -->
+                <div class="product-card" data-product-id="6" data-category="treatment">
+                    <div class="featured-tag">Premium</div>
+                    <img src="/api/placeholder/400/320" alt="SkinCeuticals C E Ferulic Serum" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">SkinCeuticals</div>
+                        <h3 class="product-name">C E Ferulic Serum</h3>
+                        <span class="product-category">Treatment</span>
+                        <p class="product-description">Patented daytime vitamin C serum for advanced environmental protection and improvement in the appearance of fine lines.</p>
+                        <p class="product-price">$166.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 7: Thayers Witch Hazel Toner -->
+                <div class="product-card" data-product-id="7" data-category="toner">
+                    <img src="/api/placeholder/400/320" alt="Thayers Witch Hazel Rose Petal Toner" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">Thayers</div>
+                        <h3 class="product-name">Witch Hazel Rose Petal Toner</h3>
+                        <span class="product-category">Toner</span>
+                        <p class="product-description">Alcohol-free toner made with witch hazel extract, aloe vera, and rose water to cleanse, tone, and moisturize skin.</p>
+                        <p class="product-price">$10.95</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Product 8: BECCA Shimmering Skin Perfector -->
+                <div class="product-card" data-product-id="8" data-category="moisturizer">
+                    <div class="sale-tag">10% OFF</div>
+                    <img src="/api/placeholder/400/320" alt="BECCA Shimmering Skin Perfector" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">BECCA</div>
+                        <h3 class="product-name">Shimmering Skin Perfector</h3>
+                        <span class="product-category">Moisturizer</span>
+                        <p class="product-description">Luminous cream that creates a subtle glow, infused with fine luminescent pearls that absorb and reflect light.</p>
+                        <p class="product-price">$38.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="product-details">
+                <img src="" alt="" id="modal-product-image">
+                <div class="product-info">
+                    <div class="modal-brand" id="modal-product-brand">Brand</div>
+                    <h2 class="modal-name" id="modal-product-name">Product Name</h2>
+                    <div class="modal-category" id="modal-product-category">Category</div>
+                    <p class="modal-description" id="modal-product-description">This is a detailed description of the product with information about ingredients, benefits, and how to use it. The perfect addition to your beauty routine.</p>
+                    <p class="price" id="modal-product-price">$48.00</p>
+                    <button class="add-to-cart">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cart-items">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cart-total-amount">0.00</span></h3>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cart data
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            let cartTotal = calculateCartTotal();
+            updateCartCount();
+
+            // Filter functionality
+            setupFilters();
+            
+            // Product card click events
+            setupProductCards();
+            
+            // Modal close events
+            setupModalCloseEvents();
+            
+            // Search functionality
+            setupSearch();
+        });
+        
+        // Filter functionality
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active class
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    const productCards = document.querySelectorAll('.product-card');
+                    
+                    productCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Product card setup
+        function setupProductCards() {
+            const productCards = document.querySelectorAll('.product-card');
+            const quickAddButtons = document.querySelectorAll('.quick-add');
+            
+            productCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add')) {
+                        const productId = parseInt(this.getAttribute('data-product-id'));
+                        openProductModal(productId);
+                    }
+                });
+            });
+            
+            quickAddButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const productId = parseInt(this.closest('.product-card').getAttribute('data-product-id'));
+                    addToCart(productId, 1);
+                    
+                    // Animation feedback
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-plus"></i>';
+                    }, 1000);
+                });
+            });
+        }
+        
+        // Modal setup
+        function setupModalCloseEvents() {
+            const closeButtons = document.querySelectorAll('.close');
+            
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Add to cart button in modal
+            const addToCartButton = document.querySelector('.add-to-cart');
+            addToCartButton.addEventListener('click', function() {
+                const productId = parseInt(this.getAttribute('data-product-id'));
+                addToCart(productId, 1);
+                document.getElementById('product-modal').style.display = 'none';
+            });
+        }
+        
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.trim().toLowerCase();
+                    if (searchTerm.length > 0) {
+                        searchProducts(searchTerm);
+                    }
+                }
+            });
+        }
+        
+        function searchProducts(term) {
+            const productCards = document.querySelectorAll('.product-card');
+            let found = false;
+            
+            productCards.forEach(card => {
+                const name = card.querySelector('.product-name').textContent.toLowerCase();
+                const brand = card.querySelector('.product-brand').textContent.toLowerCase();
+                const desc = card.querySelector('.product-description').textContent.toLowerCase();
+                
+                if (name.includes(term) || brand.includes(term) || desc.includes(term)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Reset category filter buttons
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.filter-button[data-category="all"]').classList.add('active');
+            
+            // Show message if no results
+            if (!found) {
+                alert('No products found matching your search. Try different keywords.');
+            }
+        }
+        
+        // Product modal
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                const modal = document.getElementById('product-modal');
+                
+                document.getElementById('modal-product-image').src = product.image;
+                document.getElementById('modal-product-image').alt = product.name;
+                document.getElementById('modal-product-brand').textContent = product.brand;
+                document.getElementById('modal-product-name').textContent = product.name;
+                document.getElementById('modal-product-category').textContent = product.category;
+                document.getElementById('modal-product-description').textContent = product.description;
+                document.getElementById('modal-product-price').textContent = `${product.price.toFixed(2)}`;
+                
+                // Set product ID for add to cart button
+                document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
+                
+                modal.style.display = 'flex';
+            }
+        }
+        
+        // Cart functionality
+        function showCartModal() {
+            updateCartDisplay();
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+        
+        function addToCart(productId, quantity) {
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                const existingItem = cart.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: product.name,
+                        brand: product.brand,
+                        price: product.price,
+                        image: product.image,
+                        quantity: quantity
+                    });
+                }
+                
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                updateCartCount();
+            }
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = totalItems;
+        }
+        
+        function updateCartDisplay() {
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+                document.getElementById('cart-total-amount').textContent = '0.00';
+                return;
+            }
+            
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.setAttribute('data-product-id', item.id);
+                
+                itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p class="cart-item-price">${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn decrease">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn increase">+</button>
+                        </div>
+                        <i class="fas fa-times remove-item"></i>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(itemElement);
+                
+                // Add event listeners for quantity buttons
+                const decreaseBtn = itemElement.querySelector('.decrease');
+                const increaseBtn = itemElement.querySelector('.increase');
+                const removeBtn = itemElement.querySelector('.remove-item');
+                
+                decreaseBtn.addEventListener('click', () => updateItemQuantity(item.id, -1));
+                increaseBtn.addEventListener('click', () => updateItemQuantity(item.id, 1));
+                removeBtn.addEventListener('click', () => removeItemFromCart(item.id));
+            });
+            
+            // Update cart total
+            document.getElementById('cart-total-amount').textContent = calculateCartTotal().toFixed(2);
+        }
+        
+        function updateItemQuantity(productId, change) {
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity += change;
+                
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        }
+        
+        function removeItemFromCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                cart.splice(itemIndex, 1);
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        }
+        
+        function calculateCartTotal() {
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+        
+        function handleUserIconClick() {
+            const isLoggedIn = localStorage.getItem('userId');
+            if (isLoggedIn) {
+                window.location.href = 'profile.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Check if user has viewed the page before
+        function checkFirstTimeVisitor() {
+            if (!localStorage.getItem('visitedSkincare')) {
+                setTimeout(() => {
+                    showWelcomePopup();
+                }, 2000);
+                localStorage.setItem('visitedSkincare', 'true');
+            }
+        }
+        
+        function showWelcomePopup() {
+            const welcomePopup = document.createElement('div');
+            welcomePopup.style.position = 'fixed';
+            welcomePopup.style.bottom = '20px';
+            welcomePopup.style.right = '20px';
+            welcomePopup.style.backgroundColor = 'white';
+            welcomePopup.style.padding = '20px';
+            welcomePopup.style.borderRadius = 'var(--radius)';
+            welcomePopup.style.boxShadow = 'var(--shadow)';
+            welcomePopup.style.zIndex = '99';
+            welcomePopup.style.maxWidth = '300px';
+            welcomePopup.style.animation = 'slideIn 0.5s ease';
+            
+            welcomePopup.innerHTML = `
+                <h3 style="margin-bottom: 10px; color: var(--primary);">Welcome to Skincare!</h3>
+                <p style="margin-bottom: 15px;">Discover our premium collection of skincare products for all skin types.</p>
+                <button style="background-color: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; width: 100%;">Explore Now</button>
+                <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-weight: bold;" id="close-popup">×</span>
+            `;
+            
+            document.body.appendChild(welcomePopup);
+            
+            document.getElementById('close-popup').addEventListener('click', () => {
+                welcomePopup.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => {
+                    document.body.removeChild(welcomePopup);
+                }, 500);
+            });
+            
+            // Add the animation keyframes
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Initialize checking for first-time visitors
+        checkFirstTimeVisitor();
+        
+        // Product data for modal display
+        const products = [
+            {
+                id: 1,
+                brand: "CeraVe",
+                name: "Hydrating Facial Cleanser",
+                category: "Cleanser",
+                price: 15.99,
+                image: "/api/placeholder/400/320",
+                description: "Developed with dermatologists, this gentle, non-foaming cleanser for normal to dry skin hydrates while cleansing. Contains three essential ceramides and hyaluronic acid to help restore the skin's natural barrier and retain moisture. Free from fragrance and soap, this cleanser is perfect for daily use both morning and evening."
+            },
+            {
+                id: 2,
+                brand: "Estée Lauder",
+                name: "Advanced Night Repair",
+                category: "Treatment",
+                price: 75.00,
+                image: "/api/placeholder/400/320",
+                description: "This powerful overnight treatment works to reduce the look of multiple signs of aging. The synchronized recovery complex II technology helps to promote the skin's natural renewal process, resulting in smoother, more radiant skin. Use nightly on cleansed skin before your moisturizer for best results."
+            },
+            {
+                id: 3,
+                brand: "La Roche-Posay",
+                name: "Anthelios 50+ Invisible Fluid",
+                category: "Sunscreen",
+                price: 29.99,
+                image: "/api/placeholder/400/320",
+                description: "A very high sun protection facial sunscreen with SPF 50+ that provides broad-spectrum UVA/UVB protection. Its ultra-lightweight formula absorbs quickly without leaving a white cast or greasy residue. Water-resistant and suitable for sensitive skin, this sunscreen is perfect for daily protection against sun damage."
+            },
+            {
+                id: 4,
+                brand: "Neutrogena",
+                name: "Hydro Boost Gel Cream",
+                category: "Moisturizer",
+                price: 19.99,
+                image: "/api/placeholder/400/320",
+                description: "A lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours. Formulated with hyaluronic acid, it boosts hydration and locks it in for smoother, supple skin. Oil-free, dye-free, and fragrance-free, it's suitable for sensitive skin and can be used under makeup."
+            },
+            {
+                id: 5,
+                brand: "Paula's Choice",
+                name: "2% BHA Liquid Exfoliant",
+                category: "Treatment",
+                price: 29.50,
+                image: "/api/placeholder/400/320",
+                description: "A leave-on exfoliant that gently and effectively removes built-up layers of dead skin and unclogs pores. The non-abrasive formula with salicylic acid reveals smoother, brighter skin by unclogging pores and evening skin tone. Perfect for daily use, this exfoliant helps reduce blackheads, enlarged pores, and improve skin texture."
+            },
+            {
+                id: 6,
+                brand: "SkinCeuticals",
+                name: "C E Ferulic Serum",
+                category: "Treatment",
+                price: 166.00,
+                image: "/api/placeholder/400/320",
+                description: "A patented daytime vitamin C serum that delivers advanced environmental protection and improves the appearance of fine lines, wrinkles, and loss of firmness. The synergistic antioxidant combination helps neutralize free radicals induced by UVA/UVB, infrared radiation, and pollution. Once absorbed, this serum can't be washed or rubbed off, remaining effective for a minimum of 72 hours."
+            },
+            {
+                id: 7,
+                brand: "Thayers",
+                name: "Witch Hazel Rose Petal Toner",
+                category: "Toner",
+                price: 10.95,
+                image: "/api/placeholder/400/320",
+                description: "An alcohol-free toner made with witch hazel extract, aloe vera, and rose water. The gentle formula helps to cleanse, tone, and moisturize the skin without causing dryness or irritation. Witch hazel helps to refine pores while rose water soothes and adds a natural glow to the complexion."
+            },
+            {
+                id: 8,
+                brand: "BECCA",
+                name: "Shimmering Skin Perfector",
+                category: "Moisturizer",
+                price: 38.00,
+                image: "/api/placeholder/400/320",
+                description: "A luminous highlighter that creates a radiant glow on the skin. The creamy powder formula is infused with ultra-fine luminescent pearls that absorb, reflect, and refract light for a natural-looking highlight. Can be worn alone or layered over foundation for a customizable glow."
+            },
+            {
+                id: 9,
+                brand: "The Ordinary",
+                name: "Niacinamide 10% + Zinc 1%",
+                category: "Treatment",
+                price: 5.90,
+                image: "/api/placeholder/400/320",
+                description: "A high-strength vitamin and mineral formula that reduces the appearance of blemishes and congestion. The niacinamide (vitamin B3) reduces sebum production and zinc salt of pyrrolidone carboxylic acid (PCA) helps with visible aspects of sebum activity."
+            },
+            {
+                id: 10,
+                brand: "Fresh",
+                name: "Soy Face Cleanser",
+                category: "Cleanser",
+                price: 38.00,
+                image: "/api/placeholder/400/320",
+                description: "A gentle face wash suitable for all skin types that effectively removes makeup and impurities. This pH-balanced cleanser with amino acid-rich soy proteins, calming cucumber extract, and balancing rosewater leaves skin feeling soft and refreshed."
+            },
+            {
+                id: 11,
+                brand: "Clinique",
+                name: "Moisture Surge 100H",
+                category: "Moisturizer",
+                price: 41.00,
+                image: "/api/placeholder/400/320",
+                description: "An oil-free, gel-cream that provides instant and long-lasting hydration. With auto-replenishing technology with aloe vera and hyaluronic acid, it helps skin create its own internal water source for continual hydration. Perfect for all skin types."
+            },
+            {
+                id: 12,
+                brand: "Drunk Elephant",
+                name: "T.L.C. Framboos Glycolic Night Serum",
+                category: "Treatment",
+                price: 90.00,
+                image: "/api/placeholder/400/320",
+                description: "A night serum that refines and resurfaces skin by gently dissolving dead skin cells. The 12% AHA/BHA blend with glycolic, lactic, tartaric, citric, and salicylic acids delivers chemical exfoliation without sensitization or irritation."
+            }
+        ];
+        
+        // Add skincare routines information
+        function showRoutines() {
+            const routinesElement = document.createElement('div');
+            routinesElement.className = 'skincare-routines';
+            routinesElement.style.marginTop = '4rem';
+            routinesElement.style.padding = '2rem';
+            routinesElement.style.backgroundColor = 'var(--gray)';
+            routinesElement.style.borderRadius = 'var(--radius)';
+            
+            routinesElement.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; position: relative; display: inline-block;">Skincare Routines</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Morning Routine</h3>
+                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Cleanser:</strong> Start with a gentle cleanser</li>
+                            <li><strong>Toner:</strong> Balance skin's pH</li>
+                            <li><strong>Serum:</strong> Apply vitamin C for antioxidant protection</li>
+                            <li><strong>Moisturizer:</strong> Hydrate and seal in previous products</li>
+                            <li><strong>Sunscreen:</strong> Always finish with SPF 30+ protection</li>
+                        </ol>
+                    </div>
+                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Evening Routine</h3>
+                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Makeup Remover:</strong> Double cleanse if wearing makeup</li>
+                            <li><strong>Cleanser:</strong> Remove remaining impurities</li>
+                            <li><strong>Exfoliant:</strong> Use 2-3 times per week</li>
+                            <li><strong>Treatment:</strong> Apply serums with actives like retinol</li>
+                            <li><strong>Moisturizer:</strong> Use a richer formula for overnight repair</li>
+                        </ol>
+                    </div>
+                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Weekly Treatments</h3>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Face Mask:</strong> Use 1-2 times weekly based on skin needs</li>
+                            <li><strong>Chemical Exfoliation:</strong> AHA/BHA treatments for cell turnover</li>
+                            <li><strong>Facial Massage:</strong> Improve circulation with a jade roller or gua sha</li>
+                            <li><strong>Extra Hydration:</strong> Apply overnight masks for intense moisture</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="hide-routines" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; background-color: var(--gray); border: 1px solid #ddd; border-radius: 30px;">Hide Routines</button>
+            `;
+            
+            // Find the right place to insert the routines info
+            const section = document.getElementById('skincare');
+            section.appendChild(routinesElement);
+            
+            // Add event listener to hide button
+            document.getElementById('hide-routines').addEventListener('click', function() {
+                routinesElement.style.display = 'none';
+            });
+        }
+        
+        // Add skincare advice button
+        function addSkincareAdviceButton() {
+            const adviceButton = document.createElement('button');
+            adviceButton.textContent = 'View Skincare Routines';
+            adviceButton.style.backgroundColor = 'var(--primary)';
+            adviceButton.style.color = 'white';
+            adviceButton.style.border = 'none';
+            adviceButton.style.padding = '0.8rem 1.5rem';
+            adviceButton.style.borderRadius = '30px';
+            adviceButton.style.marginBottom = '2rem';
+            adviceButton.style.fontWeight = '500';
+            adviceButton.style.display = 'block';
+            adviceButton.style.marginLeft = 'auto';
+            adviceButton.style.marginRight = 'auto';
+            adviceButton.style.cursor = 'pointer';
+            
+            adviceButton.addEventListener('click', function() {
+                showRoutines();
+                this.style.display = 'none';
+            });
+            
+            // Insert after the category filters
+            const categoryFilter = document.querySelector('.category-filter');
+            categoryFilter.parentNode.insertBefore(adviceButton, categoryFilter.nextSibling);
+        }
+        
+        // Initialize skincare advice button
+        document.addEventListener('DOMContentLoaded', function() {
+            addSkincareAdviceButton();
+        });
+    </script>
+</body>
+</html>

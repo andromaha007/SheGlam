@@ -4,24 +4,669 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beauty Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/product.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* GLOBAL STYLES */
+        :root {
+            --primary: #f28e9c;
+            --primary-light: #ffd3da;
+            --secondary: #8ecfe8;
+            --dark: #333333;
+            --light: #ffffff;
+            --gray: #f5f5f5;
+            --accent: #d1b3ee;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fcfcfc;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* HEADER STYLES */
+        header {
+            background-color: var(--light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo img {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 40%;
+            max-width: 500px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--gray);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-light);
+            background-color: white;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            color: var(--dark);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 1;
+            color: var(--primary);
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .user-icon, .cart-icon {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .user-icon:hover, .cart-icon:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .add-product-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .add-product-button:hover {
+            background-color: #c29fe0;
+            transform: rotate(90deg);
+        }
+        
+        /* MAIN CONTENT STYLES */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+        
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section h1 {
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--dark);
+        }
+        
+        section h1:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .product-info {
+            padding: 1.2rem;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .product-description {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .quick-add {
+            position: absolute;
+            bottom: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .quick-add {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .quick-add:hover {
+            background-color: var(--dark);
+        }
+        
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            background-color: #eee;
+            transform: rotate(90deg);
+        }
+        
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        #modal-product-image {
+            width: 100%;
+            border-radius: var(--radius);
+            object-fit: cover;
+            height: 400px;
+        }
+        
+        .product-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-info p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-light);
+            border-radius: var(--radius);
+        }
+        
+        .add-to-cart {
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        /* CART MODAL */
+        #cart-items {
+            margin-bottom: 2rem;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+        
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+        
+        .cart-item-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #eee;
+        }
+        
+        .remove-item {
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-item:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--gray);
+        }
+        
+        .checkout-btn {
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        /* RESPONSIVE STYLES */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-bar {
+                width: 60%;
+            }
+            
+            .product-details {
+                grid-template-columns: 1fr;
+            }
+            
+            #modal-product-image {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .search-bar {
+                width: 70%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            .header-icons, .logo {
+                width: 50%;
+            }
+            
+            .header-icons {
+                justify-content: flex-end;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .cart-item {
+                grid-template-columns: 60px 1fr;
+            }
+            
+            .cart-item-actions {
+                grid-column: span 2;
+                justify-content: flex-end;
+            }
+            
+            .cart-total {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .checkout-btn {
+                width: 100%;
+            }
+        }
+        
+        /* SPECIAL ANIMATIONS AND EFFECTS */
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Popular products showcase styling */
+        #home {
+            background: linear-gradient(135deg, #f8bbd0 0%, #bbdefb 100%);
+            padding: 3rem;
+            border-radius: var(--radius);
+            margin-bottom: 3rem;
+        }
+        
+        #home h1 {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        #home h1:after {
+            background-color: white;
+        }
+        
+        /* Featured items styling */
+        .featured-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        
+        /* Sale tag styling */
+        .sale-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            z-index: 2;
+        }
+        
+        /* Delete product button for admin */
+        .delete-product-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-product-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <img src="assets/beauty-logo.svg" alt="Beauty Store Logo">
+                <img src="./assets/beauty-logo.svg" alt="Beauty Store Logo">
             </div>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search products...">
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="nav-links">
-                <a href="#" data-section="home" class="active">Home</a>
-                <a href="#" data-section="skincare">Skincare</a>
+                <a href="index.html" data-section="home" class="active">Home</a>
+                <a href="skincare.html" data-section="skincare">Skincare</a>
                 <a href="#" data-section="makeup">Makeup</a>
             </div>
             <div class="header-icons">
@@ -33,7 +678,7 @@
                     <span class="cart-count">0</span>
                 </div>
             </div>
-            <div class="add-product">
+            <div class="add-product" style="display: none;">
                 <button class="add-product-button">+</button>
             </div>
         </nav>
@@ -43,26 +688,83 @@
     <main>
         <!-- Home Section -->
         <section id="home" class="active">
-            <h1 style="color: white;">Most Popular Products</h1>
-            <div class="products-grid" id="popular-products"></div>
+            <h1>Most Popular Products</h1>
+            <div class="products-grid" id="popular-products">
+                <!-- Sample Product Cards -->
+                <div class="product-card" data-product-id="1">
+                    <div class="sale-tag">20% OFF</div>
+                    <img src="./assets/estee.webp" alt="Hydrating Serum" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">Hydrating Serum</h3>
+                        <p class="product-description">Intense hydration for all skin types with hyaluronic acid.</p>
+                        <p class="product-price">$48.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="product-card" data-product-id="2">
+                    <div class="featured-tag">Featured</div>
+                    <img src="./assets/skin_ceuticals.jpeg" alt="Glow Toner" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">Glow Toner</h3>
+                        <p class="product-description">Brightening toner with vitamin C and natural extracts.</p>
+                        <p class="product-price">$32.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="product-card" data-product-id="3">
+                    <img src="./assets/cerave_daily_hydrating-cleanser.webp" alt="Daily Moisturizer" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">Daily Moisturizer</h3>
+                        <p class="product-description">Lightweight daily moisturizer with SPF 30 protection.</p>
+                        <p class="product-price">$42.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="product-card" data-product-id="4">
+                    <img src="./assets/fenty_beauty.jpg" alt="Lip Treatment" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">Lip Treatment</h3>
+                        <p class="product-description">Nourishing lip balm with shea butter and vitamin E.</p>
+                        <p class="product-price">$18.00</p>
+                    </div>
+                    <button class="quick-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
         </section>
 
         <!-- Skin Care Section -->
         <section id="skincare">
-            <h1 >Skin Care</h1>
-            <div class="products-grid" id="skincare-products"></div>
+            <h1>Skin Care</h1>
+            <div class="products-grid" id="skincare-products">
+                <!-- Will be populated by JavaScript -->
+            </div>
         </section>
 
         <!-- Makeup Section -->
         <section id="makeup">
             <h1>Makeup</h1>
-            <div class="products-grid" id="makeup-products"></div>
+            <div class="products-grid" id="makeup-products">
+                <!-- Will be populated by JavaScript -->
+            </div>
         </section>
 
         <!-- Search Results Section -->
         <section id="search-results">
             <h1>Search Results</h1>
-            <div class="products-grid" id="search-products"></div>
+            <div class="products-grid" id="search-products">
+                <!-- Will be populated by JavaScript -->
+            </div>
         </section>
     </main>
 
@@ -73,10 +775,12 @@
             <div class="product-details">
                 <img src="" alt="" id="modal-product-image">
                 <div class="product-info">
-                    <h2 id="modal-product-name"></h2>
-                    <p id="modal-product-description"></p>
-                    <p class="price" id="modal-product-price"></p>
-                    <button class="add-to-cart">Add to Cart</button>
+                    <h2 id="modal-product-name">Product Name</h2>
+                    <p id="modal-product-description">This is a detailed description of the product with information about ingredients, benefits, and how to use it. The perfect addition to your beauty routine.</p>
+                    <p class="price" id="modal-product-price">$48.00</p>
+                    <button class="add-to-cart">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
@@ -87,62 +791,164 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Shopping Cart</h2>
-            <div id="cart-items"></div>
+            <div id="cart-items">
+                <!-- Sample Cart Item -->
+                <div class="cart-item">
+                    <img src="assets/products/hydrating-serum.jpg" alt="Hydrating Serum">
+                    <div class="cart-item-info">
+                        <h3>Hydrating Serum</h3>
+                        <p class="cart-item-price">$48.00</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn">-</button>
+                            <span>1</span>
+                            <button class="quantity-btn">+</button>
+                        </div>
+                        <i class="fas fa-times remove-item"></i>
+                    </div>
+                </div>
+            </div>
             <div class="cart-total">
-                <h3>Total: $<span id="cart-total-amount">0.00</span></h3>
+                <h3>Total: $<span id="cart-total-amount">48.00</span></h3>
                 <button class="checkout-btn">Proceed to Checkout</button>
             </div>
         </div>
     </div>
 
-    
-
     <!-- Checkout Modal -->
-    <div id="checkout-modal" class="modal"></div>
+    <div id="checkout-modal" class="modal">
+        <!-- Will be populated by JavaScript -->
+    </div>
 
-    <script src="js/products.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/checkout.js"></script>
     <script>
-    function handleUserIconClick() {
-        const isLoggedIn = localStorage.getItem('userId');
-        if (isLoggedIn) {
-            window.location.href = 'profile.html';
-        } else {
-            window.location.href = 'login.html';
-        }
-    }
-
-    // Admin functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const isAdmin = localStorage.getItem('isAdmin') === 'true';
-        if (isAdmin) {
-            // Add admin controls to each product card
-            const cart = document.querySelector('.cart-icon');
-            cart.style.display = 'none';
-            const productCards = document.querySelectorAll('.product-card');
-            const addProductBtn = document.querySelector('.add-product');
-            addProductBtn.style.display = 'flex';
-            productCards.forEach(card => {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-product-btn';
-                deleteBtn.innerHTML = '<i class="fas fa-minus"></i>';
-                deleteBtn.onclick = () => deleteProduct(card.dataset.productId);
-                card.insertBefore(deleteBtn, card.firstChild);
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Section switching
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+                    
+                    // Add active class to clicked link and corresponding section
+                    this.classList.add('active');
+                    document.getElementById(section).classList.add('active');
+                });
             });
-
-            // Add the "Add Product" button
-            const productsContainer = document.querySelector('.products-container');
-            const adminControls = document.createElement('div');
-            adminControls.className = 'admin-controls';
-            adminControls.innerHTML = `
-                <button onclick="showAddProductModal()" class="add-product-btn">
-                    <i class="fas fa-plus"></i> Add New Product
-                </button>
-            `;
-            productsContainer.insertBefore(adminControls, productsContainer.firstChild);
+            
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.trim().toLowerCase();
+                    if (searchTerm.length > 0) {
+                        // Hide all sections
+                        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+                        // Show search results section
+                        document.getElementById('search-results').classList.add('active');
+                        // Here you would implement the actual search logic
+                        // For demo purposes we'll just pretend
+                        console.log('Searching for:', searchTerm);
+                    }
+                }
+            });
+            
+            // Modal functionality
+            const productCards = document.querySelectorAll('.product-card');
+            const productModal = document.getElementById('product-modal');
+            const closeButtons = document.querySelectorAll('.close');
+            
+            productCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('quick-add')) {
+                        // Open product modal
+                        productModal.style.display = 'flex';
+                        // Here you would load the actual product details
+                        document.getElementById('modal-product-name').textContent = 
+                            this.querySelector('.product-name').textContent;
+                        document.getElementById('modal-product-price').textContent = 
+                            this.querySelector('.product-price').textContent;
+                    }
+                });
+            });
+            
+            // Quick add functionality
+            const quickAddButtons = document.querySelectorAll('.quick-add');
+            quickAddButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent card click
+                    const cartCount = document.querySelector('.cart-count');
+                    cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                    
+                    // Show quick animation
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-plus"></i>';
+                    }, 1000);
+                });
+            });
+            
+            // Close modals
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+        });
+        
+        // Cart functionality
+        function showCartModal() {
+            document.getElementById('cart-modal').style.display = 'flex';
         }
-    });
+        
+        // User icon functionality
+        function handleUserIconClick() {
+            const isLoggedIn = localStorage.getItem('userId');
+            if (isLoggedIn) {
+                window.location.href = 'profile.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Admin functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                // Show admin controls
+                document.querySelector('.add-product').style.display = 'flex';
+                document.querySelector('.cart-icon').style.display = 'none';
+                
+                // Add delete buttons to products
+                const productCards = document.querySelectorAll('.product-card');
+                productCards.forEach(card => {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-product-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        // Here you would add delete functionality
+                        card.style.opacity = '0.5';
+                        setTimeout(() => {
+                            card.remove();
+                        }, 300);
+                    };
+                    card.appendChild(deleteBtn);
+                });
+            }
+        });
     </script>
 </body>
-</html> 
+</html>
