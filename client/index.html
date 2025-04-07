@@ -666,8 +666,8 @@
             </div>
             <div class="nav-links">
                 <a href="index.html" data-section="home" class="active">Home</a>
-                <a href="skincare.html" data-section="skincare">Skincare</a>
-                <a href="#" data-section="makeup">Makeup</a>
+                <a href="skincare.html">Skincare</a>
+                <a href="makeup.html">Makeup</a>
             </div>
             <div class="header-icons">
                 <div class="user-icon" onclick="handleUserIconClick()">
@@ -822,144 +822,114 @@
     </div>
 
     <script>
-        // Navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Section switching
-            document.addEventListener('DOMContentLoaded', function() {
-    // Section switching
-    const navLinks = document.querySelectorAll('.nav-links a');
+    // Section switching for internal links only
+    const navLinks = document.querySelectorAll('.nav-links a[data-section]');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            const isInternalLink = this.getAttribute('data-section');
+            e.preventDefault();
+            const section = this.getAttribute('data-section');
             
-            // Only prevent default and handle internally if it has data-section
-            if (isInternalLink) {
-                e.preventDefault();
-                const section = this.getAttribute('data-section');
-                
-                // Remove active class from all links and sections
-                navLinks.forEach(link => link.classList.remove('active'));
-                document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-                
-                // Add active class to clicked link and corresponding section
-                this.classList.add('active');
-                document.getElementById(section).classList.add('active');
-            }
-            // Otherwise let the browser handle the navigation normally
+            // Remove active class from all links and sections
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            
+            // Add active class to clicked link and corresponding section
+            this.classList.add('active');
+            document.getElementById(section).classList.add('active');
         });
     });
     
-    // Rest of your JavaScript...
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = this.value.trim().toLowerCase();
+            if (searchTerm.length > 0) {
+                // Hide all sections
+                document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+                // Show search results section
+                document.getElementById('search-results').classList.add('active');
+                // Here you would implement the actual search logic
+                console.log('Searching for:', searchTerm);
+            }
+        }
+    });
+    
+    // Modal functionality
+    const productCards = document.querySelectorAll('.product-card');
+    const productModal = document.getElementById('product-modal');
+    const closeButtons = document.querySelectorAll('.close');
+    
+    productCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('quick-add')) {
+                // Open product modal
+                productModal.style.display = 'flex';
+                // Here you would load the actual product details
+                document.getElementById('modal-product-name').textContent = 
+                    this.querySelector('.product-name').textContent;
+                document.getElementById('modal-product-price').textContent = 
+                    this.querySelector('.product-price').textContent;
+            }
+        });
+    });
+    
+    // Quick add functionality
+    const quickAddButtons = document.querySelectorAll('.quick-add');
+    quickAddButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent card click
+            const cartCount = document.querySelector('.cart-count');
+            cartCount.textContent = parseInt(cartCount.textContent) + 1;
+            
+            // Show quick animation
+            this.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-plus"></i>';
+            }, 1000);
+        });
+    });
+    
+    // Close modals
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
+        });
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+    
+    // Admin functionality check
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        // Show admin controls
+        document.querySelector('.add-product').style.display = 'flex';
+        document.querySelector('.cart-icon').style.display = 'none';
+        
+        // Add delete buttons to products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                // Here you would add delete functionality
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            };
+            card.appendChild(deleteBtn);
+        });
+    }
 });
-            
-            // Search functionality
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    const searchTerm = this.value.trim().toLowerCase();
-                    if (searchTerm.length > 0) {
-                        // Hide all sections
-                        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-                        // Show search results section
-                        document.getElementById('search-results').classList.add('active');
-                        // Here you would implement the actual search logic
-                        // For demo purposes we'll just pretend
-                        console.log('Searching for:', searchTerm);
-                    }
-                }
-            });
-            
-            // Modal functionality
-            const productCards = document.querySelectorAll('.product-card');
-            const productModal = document.getElementById('product-modal');
-            const closeButtons = document.querySelectorAll('.close');
-            
-            productCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('quick-add')) {
-                        // Open product modal
-                        productModal.style.display = 'flex';
-                        // Here you would load the actual product details
-                        document.getElementById('modal-product-name').textContent = 
-                            this.querySelector('.product-name').textContent;
-                        document.getElementById('modal-product-price').textContent = 
-                            this.querySelector('.product-price').textContent;
-                    }
-                });
-            });
-            
-            // Quick add functionality
-            const quickAddButtons = document.querySelectorAll('.quick-add');
-            quickAddButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Prevent card click
-                    const cartCount = document.querySelector('.cart-count');
-                    cartCount.textContent = parseInt(cartCount.textContent) + 1;
-                    
-                    // Show quick animation
-                    this.innerHTML = '<i class="fas fa-check"></i>';
-                    setTimeout(() => {
-                        this.innerHTML = '<i class="fas fa-plus"></i>';
-                    }, 1000);
-                });
-            });
-            
-            // Close modals
-            closeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
-                });
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
-                if (e.target.classList.contains('modal')) {
-                    e.target.style.display = 'none';
-                }
-            });
-        });
-        
-        // Cart functionality
-        function showCartModal() {
-            document.getElementById('cart-modal').style.display = 'flex';
-        }
-        
-        // User icon functionality
-        function handleUserIconClick() {
-            const isLoggedIn = localStorage.getItem('userId');
-            if (isLoggedIn) {
-                window.location.href = 'profile.html';
-            } else {
-                window.location.href = 'login.html';
-            }
-        }
-
-        // Admin functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
-            if (isAdmin) {
-                // Show admin controls
-                document.querySelector('.add-product').style.display = 'flex';
-                document.querySelector('.cart-icon').style.display = 'none';
-                
-                // Add delete buttons to products
-                const productCards = document.querySelectorAll('.product-card');
-                productCards.forEach(card => {
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'delete-product-btn';
-                    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                    deleteBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        // Here you would add delete functionality
-                        card.style.opacity = '0.5';
-                        setTimeout(() => {
-                            card.remove();
-                        }, 300);
-                    };
-                    card.appendChild(deleteBtn);
-                });
-            }
-        });
     </script>
 </body>
 </html>

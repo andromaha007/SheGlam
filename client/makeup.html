@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skincare Products</title>
+    <title>Makeup Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* GLOBAL STYLES */
@@ -653,13 +653,13 @@
                 </a>
             </div>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search skincare products...">
+                <input type="text" id="searchInput" placeholder="Search makeup products...">
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="skincare.html" class="active">Skincare</a>
-                <a href="makeup.html">Makeup</a>
+                <a href="skincare.html">Skincare</a>
+                <a href="makeup.html" class="active">Makeup</a>
             </div>
             <div class="header-icons">
                 <div class="user-icon" onclick="handleUserIconClick()">
@@ -674,138 +674,138 @@
     </header>
 
     <main>
-        <section id="skincare">
-            <h1>Skincare Products</h1>
+        <section id="makeup">
+            <h1>Makeup Products</h1>
             
             <div class="category-filter">
                 <button class="filter-button active" data-category="all">All Products</button>
-                <button class="filter-button" data-category="cleanser">Cleansers</button>
-                <button class="filter-button" data-category="moisturizer">Moisturizers</button>
-                <button class="filter-button" data-category="treatment">Treatments</button>
-                <button class="filter-button" data-category="sunscreen">Sunscreen</button>
-                <button class="filter-button" data-category="toner">Toners</button>
+                <button class="filter-button" data-category="face">Face</button>
+                <button class="filter-button" data-category="eyes">Eyes</button>
+                <button class="filter-button" data-category="lips">Lips</button>
+                <button class="filter-button" data-category="cheeks">Cheeks</button>
+                <button class="filter-button" data-category="brushes">Brushes</button>
             </div>
             
-            <div class="products-grid" id="skincare-products">
-                <!-- Product 1: CeraVe Hydrating Cleanser -->
-                <div class="product-card" data-product-id="1" data-category="cleanser">
+            <div class="products-grid" id="makeup-products">
+                <!-- Product 1: Fenty Beauty Foundation -->
+                <div class="product-card" data-product-id="1" data-category="face">
                     <div class="featured-tag">Bestseller</div>
-                    <img src="/client/assets/skincare_ceravecleanser.webp" alt="CeraVe Hydrating Facial Cleanser" class="product-image">
+                    <img src="/client/assets/makeup_fentyfoundation.jpg" alt="Fenty Beauty Pro Filt'r Foundation" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">CeraVe</div>
-                        <h3 class="product-name">Hydrating Facial Cleanser</h3>
-                        <span class="product-category">Cleanser</span>
-                        <p class="product-description">Developed with dermatologists, this gentle cleanser with ceramides and hyaluronic acid hydrates while cleansing.</p>
-                        <p class="product-price">$15.99</p>
+                        <div class="product-brand">Fenty Beauty</div>
+                        <h3 class="product-name">Pro Filt'r Soft Matte Foundation</h3>
+                        <span class="product-category">Face</span>
+                        <p class="product-description">Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.</p>
+                        <p class="product-price">$39.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 2: Estée Lauder Night Repair -->
-                <div class="product-card" data-product-id="2" data-category="treatment">
-                    <div class="sale-tag">15% OFF</div>
-                    <img src="/client/assets/skincare_esteelauder.jpg" alt="Estée Lauder Advanced Night Repair" class="product-image">
+                <!-- Product 2: Anastasia Beverly Hills Brow Pencil -->
+                <div class="product-card" data-product-id="2" data-category="eyes">
+                    <div class="sale-tag">20% OFF</div>
+                    <img src="/client/assets/makeup_browwiz.webp" alt="Anastasia Beverly Hills Brow Wiz" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">Estée Lauder</div>
-                        <h3 class="product-name">Advanced Night Repair</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Powerful overnight treatment that reduces multiple signs of aging with synchronized recovery complex II technology.</p>
-                        <p class="product-price">$75.00</p>
+                        <div class="product-brand">Anastasia Beverly Hills</div>
+                        <h3 class="product-name">Brow Wiz</h3>
+                        <span class="product-category">Eyes</span>
+                        <p class="product-description">Ultra-slim, retractable eyebrow pencil for precise detailing and creating hair-like strokes.</p>
+                        <p class="product-price">$23.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 3: La Roche-Posay Sunscreen -->
-                <div class="product-card" data-product-id="3" data-category="sunscreen">
-                    <img src="/client/assets/skincare_larocheposay.webp" alt="La Roche-Posay Anthelios Sunscreen" class="product-image">
+                <!-- Product 3: Charlotte Tilbury Lipstick -->
+                <div class="product-card" data-product-id="3" data-category="lips">
+                    <img src="/client/assets/makeup_charlotelipstik.jpg" alt="Charlotte Tilbury Matte Revolution Lipstick" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">La Roche-Posay</div>
-                        <h3 class="product-name">Anthelios 50+ Invisible Fluid</h3>
-                        <span class="product-category">Sunscreen</span>
-                        <p class="product-description">Very high sun protection with SPF 50+ that provides broad-spectrum UVA/UVB protection in an ultra-lightweight formula.</p>
-                        <p class="product-price">$29.99</p>
+                        <div class="product-brand">Charlotte Tilbury</div>
+                        <h3 class="product-name">Matte Revolution Lipstick</h3>
+                        <span class="product-category">Lips</span>
+                        <p class="product-description">Matte lipstick with 3D glowing pigments that create the illusion of fuller, wider lips.</p>
+                        <p class="product-price">$34.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 4: Neutrogena Hydro Boost -->
-                <div class="product-card" data-product-id="4" data-category="moisturizer">
+                <!-- Product 4: NARS Blush -->
+                <div class="product-card" data-product-id="4" data-category="cheeks">
                     <div class="new-tag">New</div>
-                    <img src="/client/assets/skincare_neutrogenamoist.jpg" alt="Neutrogena Hydro Boost Gel Cream" class="product-image">
+                    <img src="/client/assets/makeup_nasrblush.webp" alt="NARS Blush" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">Neutrogena</div>
-                        <h3 class="product-name">Hydro Boost Gel Cream</h3>
-                        <span class="product-category">Moisturizer</span>
-                        <p class="product-description">Lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours with hyaluronic acid.</p>
-                        <p class="product-price">$19.99</p>
+                        <div class="product-brand">NARS</div>
+                        <h3 class="product-name">Blush</h3>
+                        <span class="product-category">Cheeks</span>
+                        <p class="product-description">Award-winning, natural-looking blush that delivers a wide range of shades and finishes.</p>
+                        <p class="product-price">$30.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 5: Paula's Choice Exfoliant -->
-                <div class="product-card" data-product-id="5" data-category="treatment">
-                    <img src="/client/assets/skincare_paulachoice.webp" alt="Paula's Choice BHA Liquid Exfoliant" class="product-image">
+                <!-- Product 5: Urban Decay Eyeshadow Palette -->
+                <div class="product-card" data-product-id="5" data-category="eyes">
+                    <img src="/client/assets/makeup_nakedpallete.jpg" alt="Urban Decay Naked Palette" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">Paula's Choice</div>
-                        <h3 class="product-name">2% BHA Liquid Exfoliant</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Leave-on exfoliant that gently removes dead skin and unclogs pores with salicylic acid for smoother, brighter skin.</p>
-                        <p class="product-price">$29.50</p>
+                        <div class="product-brand">Urban Decay</div>
+                        <h3 class="product-name">Naked Palette</h3>
+                        <span class="product-category">Eyes</span>
+                        <p class="product-description">Revolutionary eyeshadow palette filled with 12 neutral shades from silky mattes to smooth shimmers.</p>
+                        <p class="product-price">$54.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 6: SkinCeuticals CE Ferulic -->
-                <div class="product-card" data-product-id="6" data-category="treatment">
-                    <div class="featured-tag">Premium</div>
-                    <img src="/client/assets/skincare_cetreatment.jpg" alt="SkinCeuticals C E Ferulic Serum" class="product-image">
+                <!-- Product 6: Pat McGrath Labs Highlighter -->
+                <div class="product-card" data-product-id="6" data-category="cheeks">
+                    <div class="featured-tag">Luxury</div>
+                    <img src="/client/assets/makeup_pmlhighlighter.webp" alt="Pat McGrath Labs Highlighter" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">SkinCeuticals</div>
-                        <h3 class="product-name">C E Ferulic Serum</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Patented daytime vitamin C serum for advanced environmental protection and improvement in the appearance of fine lines.</p>
-                        <p class="product-price">$166.00</p>
+                        <div class="product-brand">Pat McGrath Labs</div>
+                        <h3 class="product-name">Skin Fetish Highlighter</h3>
+                        <span class="product-category">Cheeks</span>
+                        <p class="product-description">Transcendent gel-powder highlighter that creates an otherworldly glow on all skin tones.</p>
+                        <p class="product-price">$48.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 7: Thayers Witch Hazel Toner -->
-                <div class="product-card" data-product-id="7" data-category="toner">
-                    <img src="/client/assets/skincare_thayerstreatment.webp" alt="Thayers Witch Hazel Rose Petal Toner" class="product-image">
+                <!-- Product 7: MAC Lipstick -->
+                <div class="product-card" data-product-id="7" data-category="lips">
+                    <img src="/client/assets/makeup_maclipstick.webp" alt="MAC Lipstick" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">Thayers</div>
-                        <h3 class="product-name">Witch Hazel Rose Petal Toner</h3>
-                        <span class="product-category">Toner</span>
-                        <p class="product-description">Alcohol-free toner made with witch hazel extract, aloe vera, and rose water to cleanse, tone, and moisturize skin.</p>
-                        <p class="product-price">$10.95</p>
+                        <div class="product-brand">MAC</div>
+                        <h3 class="product-name">Matte Lipstick</h3>
+                        <span class="product-category">Lips</span>
+                        <p class="product-description">Intense color payoff with a no-shine matte finish in iconic shades that last for hours.</p>
+                        <p class="product-price">$19.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
 
-                <!-- Product 8: BECCA Shimmering Skin Perfector -->
-                <div class="product-card" data-product-id="8" data-category="moisturizer">
-                    <div class="sale-tag">10% OFF</div>
-                    <img src="/client/assets/skincare_beccaperfector.jpg" alt="BECCA Shimmering Skin Perfector" class="product-image">
+                <!-- Product 8: Morphe Brushes Set -->
+                <div class="product-card" data-product-id="8" data-category="brushes">
+                    <div class="sale-tag">15% OFF</div>
+                    <img src="/client/assets/makeup_brushset.webp" alt="Morphe Brush Set" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">BECCA</div>
-                        <h3 class="product-name">Shimmering Skin Perfector</h3>
-                        <span class="product-category">Moisturizer</span>
-                        <p class="product-description">Luminous cream that creates a subtle glow, infused with fine luminescent pearls that absorb and reflect light.</p>
-                        <p class="product-price">$38.00</p>
+                        <div class="product-brand">Morphe</div>
+                        <h3 class="product-name">Eye Brush Set</h3>
+                        <span class="product-category">Brushes</span>
+                        <p class="product-description">Set of professional-grade brushes for precise eyeshadow application and blending.</p>
+                        <p class="product-price">$24.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
@@ -851,48 +851,127 @@
     </div>
 
     <script>
+        // Product data for modal display
+        const products = [
+            {
+                id: 1,
+                brand: "Fenty Beauty",
+                name: "Pro Filt'r Soft Matte Foundation",
+                category: "Face",
+                price: 39.00,
+                image: "/api/placeholder/400/320",
+                description: "A soft matte, long-wear foundation with buildable, medium to full coverage, in a boundary-breaking range of 50 shades. The light-as-air, non-comedogenic formula is made with climate-adaptive technology that's resistant to sweat and humidity, and won't clog pores so that wherever you are, it's going to work on your skin."
+            },
+            {
+                id: 2,
+                brand: "Anastasia Beverly Hills",
+                name: "Brow Wiz",
+                category: "Eyes",
+                price: 23.00,
+                image: "/api/placeholder/400/320",
+                description: "An ultra-slim, retractable pencil for precise detailing and creating hair-like strokes. The fine tip is perfect for spot-filling sparse areas and creating hair-like strokes, while the spoolie end blends for a natural-looking finish. Available in multiple shades to match any hair color."
+            },
+            {
+                id: 3,
+                brand: "Charlotte Tilbury",
+                name: "Matte Revolution Lipstick",
+                category: "Lips",
+                price: 34.00,
+                image: "/api/placeholder/400/320",
+                description: "A matte lipstick that features a long-lasting, buildable, hydrating formula. Enriched with orchid extract and a blend of oils and waxes, this unique formula keeps lips hydrated all day. The square-angled tip mimics the shape of a lip brush for precise application."
+            },
+            {
+                id: 4,
+                brand: "NARS",
+                name: "Blush",
+                category: "Cheeks",
+                price: 30.00,
+                image: "/api/placeholder/400/320",
+                description: "An award-winning, pressed powder blush that delivers healthy-looking color to flatter any skin tone. The micronized powder ensures a soft, blendable application. Iconic shades include a range of translucent, natural tones, each with a subtle pink for a natural-looking blush undertone."
+            },
+            {
+                id: 5,
+                brand: "Urban Decay",
+                name: "Naked Palette",
+                category: "Eyes",
+                price: 54.00,
+                image: "/api/placeholder/400/320",
+                description: "An award-winning eyeshadow palette featuring 12 universal, neutral shades that flatter any skin tone. From ultra-smooth mattes to stunning shimmers, Naked is the palette that revolutionized neutral eyeshadows. Each shade features Urban Decay's Pigment Infusion System™ for rich, velvety, blendable color that lasts."
+            },
+            {
+                id: 6,
+                brand: "Pat McGrath Labs",
+                name: "Skin Fetish Highlighter",
+                category: "Cheeks",
+                price: 48.00,
+                image: "/api/placeholder/400/320",
+                description: "A transcendent, creamy powder highlighter that creates an otherworldly glow. This innovative formula fuses the luminosity of a cream, the ease of a powder, and the blendability of a gel. Apply lightly for subtle radiance or build for intense, prismatic luminosity."
+            },
+            {
+                id: 7,
+                brand: "MAC",
+                name: "Matte Lipstick",
+                category: "Lips",
+                price: 19.00,
+                image: "/api/placeholder/400/320",
+                description: "A rich, creamy lipstick formula with high color payoff in a no-shine matte finish. MAC Lipstick is available in various finishes, but the Matte finish is one of the most popular with its intense color and non-glossy, no-shine finish. The formula glides on smoothly and delivers rich, intense color."
+            },
+            {
+                id: 8,
+                brand: "Morphe",
+                name: "Eye Brush Set",
+                category: "Brushes",
+                price: 24.00,
+                image: "/api/placeholder/400/320",
+                description: "A professional-quality eye brush set essential for creating a variety of eye looks. The set includes brushes for applying shadow to the lid, defining the crease, blending out harsh lines, smudging along the lash line, and highlighting the brow bone. Each brush features synthetic bristles and a sleek handle for ultimate control."
+            }
+        ];
+        
         document.addEventListener('DOMContentLoaded', function() {
-    // Cart data
-    let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
-    let cartTotal = calculateCartTotal();
-    updateCartCount();
+            // Cart data
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            let cartTotal = calculateCartTotal();
+            updateCartCount();
 
-    // Filter functionality
-    setupFilters();
-    
-    // Product card click events
-    setupProductCards();
-    
-    // Modal close events
-    setupModalCloseEvents();
-    
-    // Search functionality
-    setupSearch();
-});
-
-// This is important - make sure your setupFilters function doesn't interfere with navigation
-function setupFilters() {
-    const filterButtons = document.querySelectorAll('.filter-button');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Update active class
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // Filter functionality
+            setupFilters();
             
-            const category = this.getAttribute('data-category');
-            const productCards = document.querySelectorAll('.product-card');
+            // Product card click events
+            setupProductCards();
             
-            productCards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            // Modal close events
+            setupModalCloseEvents();
+            
+            // Search functionality
+            setupSearch();
+            
+            // Add makeup tips button
+            addMakeupTipsButton();
         });
-    });
-}
+        
+        // Filter functionality
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active class
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    const productCards = document.querySelectorAll('.product-card');
+                    
+                    productCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
         
         // Product card setup
         function setupProductCards() {
@@ -923,7 +1002,7 @@ function setupFilters() {
             });
         }
         
-        // Modal setup
+        // Modal close events
         function setupModalCloseEvents() {
             const closeButtons = document.querySelectorAll('.close');
             
@@ -946,6 +1025,28 @@ function setupFilters() {
                 addToCart(productId, 1);
                 document.getElementById('product-modal').style.display = 'none';
             });
+        }
+        
+        // Product modal
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                const modal = document.getElementById('product-modal');
+                
+                document.getElementById('modal-product-image').src = product.image;
+                document.getElementById('modal-product-image').alt = product.name;
+                document.getElementById('modal-product-brand').textContent = product.brand;
+                document.getElementById('modal-product-name').textContent = product.name;
+                document.getElementById('modal-product-category').textContent = product.category;
+                document.getElementById('modal-product-description').textContent = product.description;
+                document.getElementById('modal-product-price').textContent = `$${product.price.toFixed(2)}`;
+                
+                // Set product ID for add to cart button
+                document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
+                
+                modal.style.display = 'flex';
+            }
         }
         
         // Search functionality
@@ -988,28 +1089,6 @@ function setupFilters() {
             // Show message if no results
             if (!found) {
                 alert('No products found matching your search. Try different keywords.');
-            }
-        }
-        
-        // Product modal
-        function openProductModal(productId) {
-            const product = products.find(p => p.id === productId);
-            
-            if (product) {
-                const modal = document.getElementById('product-modal');
-                
-                document.getElementById('modal-product-image').src = product.image;
-                document.getElementById('modal-product-image').alt = product.name;
-                document.getElementById('modal-product-brand').textContent = product.brand;
-                document.getElementById('modal-product-name').textContent = product.name;
-                document.getElementById('modal-product-category').textContent = product.category;
-                document.getElementById('modal-product-description').textContent = product.description;
-                document.getElementById('modal-product-price').textContent = `${product.price.toFixed(2)}`;
-                
-                // Set product ID for add to cart button
-                document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
-                
-                modal.style.display = 'flex';
             }
         }
         
@@ -1070,7 +1149,7 @@ function setupFilters() {
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-info">
                         <h3>${item.name}</h3>
-                        <p class="cart-item-price">${item.price.toFixed(2)}</p>
+                        <p class="cart-item-price">$${item.price.toFixed(2)}</p>
                     </div>
                     <div class="cart-item-actions">
                         <div class="quantity-control">
@@ -1141,13 +1220,119 @@ function setupFilters() {
             }
         }
         
+        // Add makeup tips section
+        function addMakeupTipsButton() {
+            const tipsButton = document.createElement('button');
+            tipsButton.textContent = 'View Makeup Tips';
+            tipsButton.style.backgroundColor = 'var(--primary)';
+            tipsButton.style.color = 'white';
+            tipsButton.style.border = 'none';
+            tipsButton.style.padding = '0.8rem 1.5rem';
+            tipsButton.style.borderRadius = '30px';
+            tipsButton.style.marginBottom = '2rem';
+            tipsButton.style.fontWeight = '500';
+            tipsButton.style.display = 'block';
+            tipsButton.style.marginLeft = 'auto';
+            tipsButton.style.marginRight = 'auto';
+            tipsButton.style.cursor = 'pointer';
+            
+            tipsButton.addEventListener('click', function() {
+                showMakeupTips();
+                this.style.display = 'none';
+            });
+            
+            // Insert after the category filters
+            const categoryFilter = document.querySelector('.category-filter');
+            categoryFilter.parentNode.insertBefore(tipsButton, categoryFilter.nextSibling);
+        }
+        
+        function showMakeupTips() {
+            const tipsElement = document.createElement('div');
+            tipsElement.className = 'makeup-tips';
+            tipsElement.style.marginTop = '4rem';
+            tipsElement.style.padding = '2rem';
+            tipsElement.style.backgroundColor = 'var(--gray)';
+            tipsElement.style.borderRadius = 'var(--radius)';
+            
+            tipsElement.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; position: relative; display: inline-block;">Makeup Application Tips</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Face Makeup Order</h3>
+                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Primer:</strong> Create a smooth base for foundation</li>
+                            <li><strong>Color Corrector:</strong> Target specific concerns</li>
+                            <li><strong>Foundation:</strong> Apply from center outward</li>
+                            <li><strong>Concealer:</strong> Target under eyes and blemishes</li>
+                            <li><strong>Powder:</strong> Set liquid products</li>
+                            <li><strong>Bronzer/Blush/Highlight:</strong> Add dimension</li>
+                            <li><strong>Setting Spray:</strong> Lock everything in place</li>
+                        </ol>
+                    </div>
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Eye Makeup Tips</h3>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Prime:</strong> Always use eyeshadow primer</li>
+                            <li><strong>Blend:</strong> Use windshield wiper motions</li>
+                            <li><strong>Dark to Light:</strong> Apply darkest shade in crease</li>
+                            <li><strong>Highlight:</strong> Add shimmer to inner corners</li>
+                            <li><strong>Mascara:</strong> Apply to top and bottom lashes</li>
+                            <li><strong>Waterline:</strong> Use waterproof liner to avoid smudging</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Lip Application Secrets</h3>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Exfoliate:</strong> Use a lip scrub before application</li>
+                            <li><strong>Outline:</strong> Use lip liner for precise edges</li>
+                            <li><strong>Apply:</strong> Start in center and work outward</li>
+                            <li><strong>Blot:</strong> Press lips with tissue between layers</li>
+                            <li><strong>Highlight:</strong> Add a touch to cupid's bow</li>
+                            <li><strong>Set:</strong> Dust with translucent powder for matte look</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="hide-tips" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; background-color: var(--gray); border: 1px solid #ddd; border-radius: 30px;">Hide Tips</button>
+            `;
+            
+            // Find the right place to insert the tips info
+            const section = document.getElementById('makeup');
+            section.appendChild(tipsElement);
+            
+            // Add event listener to hide button
+            document.getElementById('hide-tips').addEventListener('click', function() {
+                tipsElement.style.display = 'none';
+                const tipsButton = document.createElement('button');
+                tipsButton.textContent = 'View Makeup Tips';
+                tipsButton.style.backgroundColor = 'var(--primary)';
+                tipsButton.style.color = 'white';
+                tipsButton.style.border = 'none';
+                tipsButton.style.padding = '0.8rem 1.5rem';
+                tipsButton.style.borderRadius = '30px';
+                tipsButton.style.marginBottom = '2rem';
+                tipsButton.style.fontWeight = '500';
+                tipsButton.style.display = 'block';
+                tipsButton.style.marginLeft = 'auto';
+                tipsButton.style.marginRight = 'auto';
+                tipsButton.style.cursor = 'pointer';
+                
+                tipsButton.addEventListener('click', function() {
+                    showMakeupTips();
+                    this.style.display = 'none';
+                });
+                
+                const categoryFilter = document.querySelector('.category-filter');
+                categoryFilter.parentNode.insertBefore(tipsButton, categoryFilter.nextSibling);
+            });
+        }
+        
         // Check if user has viewed the page before
         function checkFirstTimeVisitor() {
-            if (!localStorage.getItem('visitedSkincare')) {
+            if (!localStorage.getItem('visitedMakeup')) {
                 setTimeout(() => {
                     showWelcomePopup();
                 }, 2000);
-                localStorage.setItem('visitedSkincare', 'true');
+                localStorage.setItem('visitedMakeup', 'true');
             }
         }
         
@@ -1165,8 +1350,8 @@ function setupFilters() {
             welcomePopup.style.animation = 'slideIn 0.5s ease';
             
             welcomePopup.innerHTML = `
-                <h3 style="margin-bottom: 10px; color: var(--primary);">Welcome to Skincare!</h3>
-                <p style="margin-bottom: 15px;">Discover our premium collection of skincare products for all skin types.</p>
+                <h3 style="margin-bottom: 10px; color: var(--primary);">Welcome to Makeup!</h3>
+                <p style="margin-bottom: 15px;">Discover our premium collection of makeup products for every look.</p>
                 <button style="background-color: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; width: 100%;">Explore Now</button>
                 <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-weight: bold;" id="close-popup">×</span>
             `;
@@ -1197,204 +1382,6 @@ function setupFilters() {
         
         // Initialize checking for first-time visitors
         checkFirstTimeVisitor();
-        
-        // Product data for modal display
-        const products = [
-            {
-                id: 1,
-                brand: "CeraVe",
-                name: "Hydrating Facial Cleanser",
-                category: "Cleanser",
-                price: 15.99,
-                image: "/api/placeholder/400/320",
-                description: "Developed with dermatologists, this gentle, non-foaming cleanser for normal to dry skin hydrates while cleansing. Contains three essential ceramides and hyaluronic acid to help restore the skin's natural barrier and retain moisture. Free from fragrance and soap, this cleanser is perfect for daily use both morning and evening."
-            },
-            {
-                id: 2,
-                brand: "Estée Lauder",
-                name: "Advanced Night Repair",
-                category: "Treatment",
-                price: 75.00,
-                image: "/api/placeholder/400/320",
-                description: "This powerful overnight treatment works to reduce the look of multiple signs of aging. The synchronized recovery complex II technology helps to promote the skin's natural renewal process, resulting in smoother, more radiant skin. Use nightly on cleansed skin before your moisturizer for best results."
-            },
-            {
-                id: 3,
-                brand: "La Roche-Posay",
-                name: "Anthelios 50+ Invisible Fluid",
-                category: "Sunscreen",
-                price: 29.99,
-                image: "/api/placeholder/400/320",
-                description: "A very high sun protection facial sunscreen with SPF 50+ that provides broad-spectrum UVA/UVB protection. Its ultra-lightweight formula absorbs quickly without leaving a white cast or greasy residue. Water-resistant and suitable for sensitive skin, this sunscreen is perfect for daily protection against sun damage."
-            },
-            {
-                id: 4,
-                brand: "Neutrogena",
-                name: "Hydro Boost Gel Cream",
-                category: "Moisturizer",
-                price: 19.99,
-                image: "/api/placeholder/400/320",
-                description: "A lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours. Formulated with hyaluronic acid, it boosts hydration and locks it in for smoother, supple skin. Oil-free, dye-free, and fragrance-free, it's suitable for sensitive skin and can be used under makeup."
-            },
-            {
-                id: 5,
-                brand: "Paula's Choice",
-                name: "2% BHA Liquid Exfoliant",
-                category: "Treatment",
-                price: 29.50,
-                image: "/api/placeholder/400/320",
-                description: "A leave-on exfoliant that gently and effectively removes built-up layers of dead skin and unclogs pores. The non-abrasive formula with salicylic acid reveals smoother, brighter skin by unclogging pores and evening skin tone. Perfect for daily use, this exfoliant helps reduce blackheads, enlarged pores, and improve skin texture."
-            },
-            {
-                id: 6,
-                brand: "SkinCeuticals",
-                name: "C E Ferulic Serum",
-                category: "Treatment",
-                price: 166.00,
-                image: "/api/placeholder/400/320",
-                description: "A patented daytime vitamin C serum that delivers advanced environmental protection and improves the appearance of fine lines, wrinkles, and loss of firmness. The synergistic antioxidant combination helps neutralize free radicals induced by UVA/UVB, infrared radiation, and pollution. Once absorbed, this serum can't be washed or rubbed off, remaining effective for a minimum of 72 hours."
-            },
-            {
-                id: 7,
-                brand: "Thayers",
-                name: "Witch Hazel Rose Petal Toner",
-                category: "Toner",
-                price: 10.95,
-                image: "/api/placeholder/400/320",
-                description: "An alcohol-free toner made with witch hazel extract, aloe vera, and rose water. The gentle formula helps to cleanse, tone, and moisturize the skin without causing dryness or irritation. Witch hazel helps to refine pores while rose water soothes and adds a natural glow to the complexion."
-            },
-            {
-                id: 8,
-                brand: "BECCA",
-                name: "Shimmering Skin Perfector",
-                category: "Moisturizer",
-                price: 38.00,
-                image: "/api/placeholder/400/320",
-                description: "A luminous highlighter that creates a radiant glow on the skin. The creamy powder formula is infused with ultra-fine luminescent pearls that absorb, reflect, and refract light for a natural-looking highlight. Can be worn alone or layered over foundation for a customizable glow."
-            },
-            {
-                id: 9,
-                brand: "The Ordinary",
-                name: "Niacinamide 10% + Zinc 1%",
-                category: "Treatment",
-                price: 5.90,
-                image: "/api/placeholder/400/320",
-                description: "A high-strength vitamin and mineral formula that reduces the appearance of blemishes and congestion. The niacinamide (vitamin B3) reduces sebum production and zinc salt of pyrrolidone carboxylic acid (PCA) helps with visible aspects of sebum activity."
-            },
-            {
-                id: 10,
-                brand: "Fresh",
-                name: "Soy Face Cleanser",
-                category: "Cleanser",
-                price: 38.00,
-                image: "/api/placeholder/400/320",
-                description: "A gentle face wash suitable for all skin types that effectively removes makeup and impurities. This pH-balanced cleanser with amino acid-rich soy proteins, calming cucumber extract, and balancing rosewater leaves skin feeling soft and refreshed."
-            },
-            {
-                id: 11,
-                brand: "Clinique",
-                name: "Moisture Surge 100H",
-                category: "Moisturizer",
-                price: 41.00,
-                image: "/api/placeholder/400/320",
-                description: "An oil-free, gel-cream that provides instant and long-lasting hydration. With auto-replenishing technology with aloe vera and hyaluronic acid, it helps skin create its own internal water source for continual hydration. Perfect for all skin types."
-            },
-            {
-                id: 12,
-                brand: "Drunk Elephant",
-                name: "T.L.C. Framboos Glycolic Night Serum",
-                category: "Treatment",
-                price: 90.00,
-                image: "/api/placeholder/400/320",
-                description: "A night serum that refines and resurfaces skin by gently dissolving dead skin cells. The 12% AHA/BHA blend with glycolic, lactic, tartaric, citric, and salicylic acids delivers chemical exfoliation without sensitization or irritation."
-            }
-        ];
-        
-        // Add skincare routines information
-        function showRoutines() {
-            const routinesElement = document.createElement('div');
-            routinesElement.className = 'skincare-routines';
-            routinesElement.style.marginTop = '4rem';
-            routinesElement.style.padding = '2rem';
-            routinesElement.style.backgroundColor = 'var(--gray)';
-            routinesElement.style.borderRadius = 'var(--radius)';
-            
-            routinesElement.innerHTML = `
-                <h2 style="margin-bottom: 1.5rem; position: relative; display: inline-block;">Skincare Routines</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Morning Routine</h3>
-                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Cleanser:</strong> Start with a gentle cleanser</li>
-                            <li><strong>Toner:</strong> Balance skin's pH</li>
-                            <li><strong>Serum:</strong> Apply vitamin C for antioxidant protection</li>
-                            <li><strong>Moisturizer:</strong> Hydrate and seal in previous products</li>
-                            <li><strong>Sunscreen:</strong> Always finish with SPF 30+ protection</li>
-                        </ol>
-                    </div>
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Evening Routine</h3>
-                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Makeup Remover:</strong> Double cleanse if wearing makeup</li>
-                            <li><strong>Cleanser:</strong> Remove remaining impurities</li>
-                            <li><strong>Exfoliant:</strong> Use 2-3 times per week</li>
-                            <li><strong>Treatment:</strong> Apply serums with actives like retinol</li>
-                            <li><strong>Moisturizer:</strong> Use a richer formula for overnight repair</li>
-                        </ol>
-                    </div>
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Weekly Treatments</h3>
-                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Face Mask:</strong> Use 1-2 times weekly based on skin needs</li>
-                            <li><strong>Chemical Exfoliation:</strong> AHA/BHA treatments for cell turnover</li>
-                            <li><strong>Facial Massage:</strong> Improve circulation with a jade roller or gua sha</li>
-                            <li><strong>Extra Hydration:</strong> Apply overnight masks for intense moisture</li>
-                        </ul>
-                    </div>
-                </div>
-                <button id="hide-routines" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; background-color: var(--gray); border: 1px solid #ddd; border-radius: 30px;">Hide Routines</button>
-            `;
-            
-            // Find the right place to insert the routines info
-            const section = document.getElementById('skincare');
-            section.appendChild(routinesElement);
-            
-            // Add event listener to hide button
-            document.getElementById('hide-routines').addEventListener('click', function() {
-                routinesElement.style.display = 'none';
-            });
-        }
-        
-        // Add skincare advice button
-        function addSkincareAdviceButton() {
-            const adviceButton = document.createElement('button');
-            adviceButton.textContent = 'View Skincare Routines';
-            adviceButton.style.backgroundColor = 'var(--primary)';
-            adviceButton.style.color = 'white';
-            adviceButton.style.border = 'none';
-            adviceButton.style.padding = '0.8rem 1.5rem';
-            adviceButton.style.borderRadius = '30px';
-            adviceButton.style.marginBottom = '2rem';
-            adviceButton.style.fontWeight = '500';
-            adviceButton.style.display = 'block';
-            adviceButton.style.marginLeft = 'auto';
-            adviceButton.style.marginRight = 'auto';
-            adviceButton.style.cursor = 'pointer';
-            
-            adviceButton.addEventListener('click', function() {
-                showRoutines();
-                this.style.display = 'none';
-            });
-            
-            // Insert after the category filters
-            const categoryFilter = document.querySelector('.category-filter');
-            categoryFilter.parentNode.insertBefore(adviceButton, categoryFilter.nextSibling);
-        }
-        
-        // Initialize skincare advice button
-        document.addEventListener('DOMContentLoaded', function() {
-            addSkincareAdviceButton();
-        });
     </script>
 </body>
 </html>
