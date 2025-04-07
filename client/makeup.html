@@ -642,6 +642,48 @@
                 width: 100%;
             }
         }
+
+        /* Add this CSS to both skincare.html and makeup.html in the <style> section */
+
+/* Delete product button for admin */
+.delete-product-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.delete-product-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Add Product Button */
+.add-product-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.add-product-button:hover {
+    background-color: #c29fe0;
+    transform: rotate(90deg);
+}
     </style>
 </head>
 <body>
@@ -859,7 +901,7 @@
                 name: "Pro Filt'r Soft Matte Foundation",
                 category: "Face",
                 price: 39.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_fentyfoundation.jpg",
                 description: "A soft matte, long-wear foundation with buildable, medium to full coverage, in a boundary-breaking range of 50 shades. The light-as-air, non-comedogenic formula is made with climate-adaptive technology that's resistant to sweat and humidity, and won't clog pores so that wherever you are, it's going to work on your skin."
             },
             {
@@ -868,7 +910,7 @@
                 name: "Brow Wiz",
                 category: "Eyes",
                 price: 23.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_browwiz.webp",
                 description: "An ultra-slim, retractable pencil for precise detailing and creating hair-like strokes. The fine tip is perfect for spot-filling sparse areas and creating hair-like strokes, while the spoolie end blends for a natural-looking finish. Available in multiple shades to match any hair color."
             },
             {
@@ -877,7 +919,7 @@
                 name: "Matte Revolution Lipstick",
                 category: "Lips",
                 price: 34.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_charlotelipstik.jpg",
                 description: "A matte lipstick that features a long-lasting, buildable, hydrating formula. Enriched with orchid extract and a blend of oils and waxes, this unique formula keeps lips hydrated all day. The square-angled tip mimics the shape of a lip brush for precise application."
             },
             {
@@ -886,7 +928,7 @@
                 name: "Blush",
                 category: "Cheeks",
                 price: 30.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_nasrblush.webp",
                 description: "An award-winning, pressed powder blush that delivers healthy-looking color to flatter any skin tone. The micronized powder ensures a soft, blendable application. Iconic shades include a range of translucent, natural tones, each with a subtle pink for a natural-looking blush undertone."
             },
             {
@@ -895,7 +937,7 @@
                 name: "Naked Palette",
                 category: "Eyes",
                 price: 54.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_nakedpallete.jpg",
                 description: "An award-winning eyeshadow palette featuring 12 universal, neutral shades that flatter any skin tone. From ultra-smooth mattes to stunning shimmers, Naked is the palette that revolutionized neutral eyeshadows. Each shade features Urban Decay's Pigment Infusion System™ for rich, velvety, blendable color that lasts."
             },
             {
@@ -904,7 +946,7 @@
                 name: "Skin Fetish Highlighter",
                 category: "Cheeks",
                 price: 48.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_pmlhighlighter.webp",
                 description: "A transcendent, creamy powder highlighter that creates an otherworldly glow. This innovative formula fuses the luminosity of a cream, the ease of a powder, and the blendability of a gel. Apply lightly for subtle radiance or build for intense, prismatic luminosity."
             },
             {
@@ -913,7 +955,7 @@
                 name: "Matte Lipstick",
                 category: "Lips",
                 price: 19.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_maclipstick.web",
                 description: "A rich, creamy lipstick formula with high color payoff in a no-shine matte finish. MAC Lipstick is available in various finishes, but the Matte finish is one of the most popular with its intense color and non-glossy, no-shine finish. The formula glides on smoothly and delivers rich, intense color."
             },
             {
@@ -922,32 +964,67 @@
                 name: "Eye Brush Set",
                 category: "Brushes",
                 price: 24.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/makeup_brushset.webp",
                 description: "A professional-quality eye brush set essential for creating a variety of eye looks. The set includes brushes for applying shadow to the lid, defining the crease, blending out harsh lines, smudging along the lash line, and highlighting the brow bone. Each brush features synthetic bristles and a sleek handle for ultimate control."
             }
         ];
         
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cart data
-            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
-            let cartTotal = calculateCartTotal();
-            updateCartCount();
+        // Add this code to the makeup.html file, replacing the existing DOMContentLoaded event handler
 
-            // Filter functionality
-            setupFilters();
-            
-            // Product card click events
-            setupProductCards();
-            
-            // Modal close events
-            setupModalCloseEvents();
-            
-            // Search functionality
-            setupSearch();
-            
-            // Add makeup tips button
-            addMakeupTipsButton();
+document.addEventListener('DOMContentLoaded', function() {
+    // Cart data
+    let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+    let cartTotal = calculateCartTotal();
+    updateCartCount();
+
+    // Filter functionality
+    setupFilters();
+    
+    // Product card click events
+    setupProductCards();
+    
+    // Modal close events
+    setupModalCloseEvents();
+    
+    // Search functionality
+    setupSearch();
+    
+    // Add makeup tips button
+    addMakeupTipsButton();
+    
+    // Add admin functionality check - THIS IS THE IMPORTANT PART
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        // Show admin controls
+        const addProductBtn = document.createElement('div');
+        addProductBtn.className = 'add-product';
+        addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
+        document.querySelector('nav').appendChild(addProductBtn);
+        
+        // Hide cart icon for admin
+        document.querySelector('.cart-icon').style.display = 'none';
+        
+        // Add delete buttons to products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                // Here you would add delete functionality
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            };
+            card.appendChild(deleteBtn);
         });
+    }
+    
+    // Initialize checking for first-time visitors
+    checkFirstTimeVisitor();
+});
         
         // Filter functionality
         function setupFilters() {
@@ -1382,6 +1459,30 @@
         
         // Initialize checking for first-time visitors
         checkFirstTimeVisitor();
+
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        // Show admin controls
+        document.querySelector('.add-product').style.display = 'flex';
+        document.querySelector('.cart-icon').style.display = 'none';
+        
+        // Add delete buttons to products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                // Here you would add delete functionality
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            };
+            card.appendChild(deleteBtn);
+        });
+    }
     </script>
 </body>
 </html>

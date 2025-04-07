@@ -642,6 +642,47 @@
                 width: 100%;
             }
         }
+        /* Add this CSS to both skincare.html and makeup.html in the <style> section */
+
+/* Delete product button for admin */
+.delete-product-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.delete-product-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Add Product Button */
+.add-product-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.add-product-button:hover {
+    background-color: #c29fe0;
+    transform: rotate(90deg);
+}
     </style>
 </head>
 <body>
@@ -851,7 +892,9 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+   // Add this code to the skincare.html file just after the DOMContentLoaded event
+
+document.addEventListener('DOMContentLoaded', function() {
     // Cart data
     let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
     let cartTotal = calculateCartTotal();
@@ -868,6 +911,39 @@
     
     // Search functionality
     setupSearch();
+    
+    // Initialize skincare advice button
+    addSkincareAdviceButton();
+    
+    // Add admin functionality check - THIS IS THE IMPORTANT PART
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        // Show admin controls
+        const addProductBtn = document.createElement('div');
+        addProductBtn.className = 'add-product';
+        addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
+        document.querySelector('nav').appendChild(addProductBtn);
+        
+        // Hide cart icon for admin
+        document.querySelector('.cart-icon').style.display = 'none';
+        
+        // Add delete buttons to products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                // Here you would add delete functionality
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            };
+            card.appendChild(deleteBtn);
+        });
+    }
 });
 
 // This is important - make sure your setupFilters function doesn't interfere with navigation
@@ -1206,7 +1282,7 @@ function setupFilters() {
                 name: "Hydrating Facial Cleanser",
                 category: "Cleanser",
                 price: 15.99,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_ceravecleanser.webp",
                 description: "Developed with dermatologists, this gentle, non-foaming cleanser for normal to dry skin hydrates while cleansing. Contains three essential ceramides and hyaluronic acid to help restore the skin's natural barrier and retain moisture. Free from fragrance and soap, this cleanser is perfect for daily use both morning and evening."
             },
             {
@@ -1215,7 +1291,7 @@ function setupFilters() {
                 name: "Advanced Night Repair",
                 category: "Treatment",
                 price: 75.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_esteelauder.jpg",
                 description: "This powerful overnight treatment works to reduce the look of multiple signs of aging. The synchronized recovery complex II technology helps to promote the skin's natural renewal process, resulting in smoother, more radiant skin. Use nightly on cleansed skin before your moisturizer for best results."
             },
             {
@@ -1224,7 +1300,7 @@ function setupFilters() {
                 name: "Anthelios 50+ Invisible Fluid",
                 category: "Sunscreen",
                 price: 29.99,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_larocheposay.webp",
                 description: "A very high sun protection facial sunscreen with SPF 50+ that provides broad-spectrum UVA/UVB protection. Its ultra-lightweight formula absorbs quickly without leaving a white cast or greasy residue. Water-resistant and suitable for sensitive skin, this sunscreen is perfect for daily protection against sun damage."
             },
             {
@@ -1233,7 +1309,7 @@ function setupFilters() {
                 name: "Hydro Boost Gel Cream",
                 category: "Moisturizer",
                 price: 19.99,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_neutrogenamoist.jpg",
                 description: "A lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours. Formulated with hyaluronic acid, it boosts hydration and locks it in for smoother, supple skin. Oil-free, dye-free, and fragrance-free, it's suitable for sensitive skin and can be used under makeup."
             },
             {
@@ -1242,7 +1318,7 @@ function setupFilters() {
                 name: "2% BHA Liquid Exfoliant",
                 category: "Treatment",
                 price: 29.50,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_paulachoice.webp",
                 description: "A leave-on exfoliant that gently and effectively removes built-up layers of dead skin and unclogs pores. The non-abrasive formula with salicylic acid reveals smoother, brighter skin by unclogging pores and evening skin tone. Perfect for daily use, this exfoliant helps reduce blackheads, enlarged pores, and improve skin texture."
             },
             {
@@ -1251,7 +1327,7 @@ function setupFilters() {
                 name: "C E Ferulic Serum",
                 category: "Treatment",
                 price: 166.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_cetreatment.jpg",
                 description: "A patented daytime vitamin C serum that delivers advanced environmental protection and improves the appearance of fine lines, wrinkles, and loss of firmness. The synergistic antioxidant combination helps neutralize free radicals induced by UVA/UVB, infrared radiation, and pollution. Once absorbed, this serum can't be washed or rubbed off, remaining effective for a minimum of 72 hours."
             },
             {
@@ -1260,7 +1336,7 @@ function setupFilters() {
                 name: "Witch Hazel Rose Petal Toner",
                 category: "Toner",
                 price: 10.95,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_thayerstreatment.webp",
                 description: "An alcohol-free toner made with witch hazel extract, aloe vera, and rose water. The gentle formula helps to cleanse, tone, and moisturize the skin without causing dryness or irritation. Witch hazel helps to refine pores while rose water soothes and adds a natural glow to the complexion."
             },
             {
@@ -1269,45 +1345,10 @@ function setupFilters() {
                 name: "Shimmering Skin Perfector",
                 category: "Moisturizer",
                 price: 38.00,
-                image: "/api/placeholder/400/320",
+                image: "/client/assets/skincare_beccaperfector.jpg",
                 description: "A luminous highlighter that creates a radiant glow on the skin. The creamy powder formula is infused with ultra-fine luminescent pearls that absorb, reflect, and refract light for a natural-looking highlight. Can be worn alone or layered over foundation for a customizable glow."
             },
-            {
-                id: 9,
-                brand: "The Ordinary",
-                name: "Niacinamide 10% + Zinc 1%",
-                category: "Treatment",
-                price: 5.90,
-                image: "/api/placeholder/400/320",
-                description: "A high-strength vitamin and mineral formula that reduces the appearance of blemishes and congestion. The niacinamide (vitamin B3) reduces sebum production and zinc salt of pyrrolidone carboxylic acid (PCA) helps with visible aspects of sebum activity."
-            },
-            {
-                id: 10,
-                brand: "Fresh",
-                name: "Soy Face Cleanser",
-                category: "Cleanser",
-                price: 38.00,
-                image: "/api/placeholder/400/320",
-                description: "A gentle face wash suitable for all skin types that effectively removes makeup and impurities. This pH-balanced cleanser with amino acid-rich soy proteins, calming cucumber extract, and balancing rosewater leaves skin feeling soft and refreshed."
-            },
-            {
-                id: 11,
-                brand: "Clinique",
-                name: "Moisture Surge 100H",
-                category: "Moisturizer",
-                price: 41.00,
-                image: "/api/placeholder/400/320",
-                description: "An oil-free, gel-cream that provides instant and long-lasting hydration. With auto-replenishing technology with aloe vera and hyaluronic acid, it helps skin create its own internal water source for continual hydration. Perfect for all skin types."
-            },
-            {
-                id: 12,
-                brand: "Drunk Elephant",
-                name: "T.L.C. Framboos Glycolic Night Serum",
-                category: "Treatment",
-                price: 90.00,
-                image: "/api/placeholder/400/320",
-                description: "A night serum that refines and resurfaces skin by gently dissolving dead skin cells. The 12% AHA/BHA blend with glycolic, lactic, tartaric, citric, and salicylic acids delivers chemical exfoliation without sensitization or irritation."
-            }
+            
         ];
         
         // Add skincare routines information
@@ -1395,6 +1436,30 @@ function setupFilters() {
         document.addEventListener('DOMContentLoaded', function() {
             addSkincareAdviceButton();
         });
+
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        // Show admin controls
+        document.querySelector('.add-product').style.display = 'flex';
+        document.querySelector('.cart-icon').style.display = 'none';
+        
+        // Add delete buttons to products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                // Here you would add delete functionality
+                card.style.opacity = '0.5';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            };
+            card.appendChild(deleteBtn);
+        });
+    }
     </script>
 </body>
 </html>
