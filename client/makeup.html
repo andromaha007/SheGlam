@@ -684,6 +684,168 @@
     background-color: #c29fe0;
     transform: rotate(90deg);
 }
+
+/* Add Product Modal Styles */
+#add-product-modal .modal-content {
+    max-width: 600px;
+}
+
+#add-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 0.3rem;
+}
+
+.add-product-submit {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 30px;
+    align-self: center;
+    transition: all 0.3s ease;
+}
+
+.add-product-submit:hover {
+    background-color: var(--dark);
+    transform: translateY(-3px);
+}
+
+/* File upload preview */
+.image-preview {
+    width: 100%;
+    height: 200px;
+    margin-top: 0.5rem;
+    border: 1px dashed #ddd;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+}
+
+.success-message {
+    color: #2ecc71;
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+}
+
+/* Add these styles to your CSS in each page */
+
+/* Search Results Styles */
+.results-count {
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: #777;
+}
+
+.no-results {
+    text-align: center;
+    width: 100%;
+    padding: 3rem 1rem;
+    background-color: var(--gray);
+    border-radius: var(--radius);
+}
+
+.no-results h3 {
+    margin: 1rem 0;
+    color: var(--dark);
+}
+
+.no-results p {
+    color: #777;
+    margin-bottom: 1.5rem;
+}
+
+.search-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.search-category-link {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--primary-light);
+    color: var(--dark);
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.search-category-link:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Search highlight animation */
+@keyframes searchHighlight {
+    0% { transform: scale(1); box-shadow: var(--shadow); }
+    50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); }
+    100% { transform: scale(1); box-shadow: var(--shadow); }
+}
+
+.search-highlight {
+    animation: searchHighlight 1s ease;
+}
     </style>
 </head>
 <body>
@@ -1483,6 +1645,323 @@ document.addEventListener('DOMContentLoaded', function() {
             card.appendChild(deleteBtn);
         });
     }
+
+    // Add Product Modal Functionality
+function setupAddProductModal() {
+    // Get DOM elements
+    const addProductBtn = document.querySelector('.add-product-button');
+    const addProductModal = document.getElementById('add-product-modal');
+    const closeBtn = addProductModal.querySelector('.close');
+    const addProductForm = document.getElementById('add-product-form');
+    
+    // Open modal when add product button is clicked
+    addProductBtn.addEventListener('click', () => {
+        addProductModal.style.display = 'flex';
+    });
+    
+    // Close modal when close button is clicked
+    closeBtn.addEventListener('click', () => {
+        addProductModal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', (e) => {
+        if (e.target === addProductModal) {
+            addProductModal.style.display = 'none';
+        }
+    });
+    
+    // Handle form submission
+    addProductForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('product-name').value;
+        const brand = document.getElementById('product-brand').value;
+        const category = document.getElementById('product-category').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const description = document.getElementById('product-description').value;
+        const imageUrl = document.getElementById('product-image').value;
+        const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+        
+        // Create product object for database
+        const productData = {
+            title: name,
+            description: description,
+            price: price,
+            image_url: imageUrl
+        };
+        
+        try {
+            // Send product data to server
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Product added:', result);
+                
+                // Create product card and add to page
+                createProductCard({
+                    id: result.productId,
+                    brand: brand,
+                    name: name,
+                    category: category,
+                    price: price,
+                    description: description,
+                    image: imageUrl,
+                    tagType: tagType !== 'none' ? tagType : null
+                });
+                
+                // Clear form
+                addProductForm.reset();
+                
+                // Close modal
+                addProductModal.style.display = 'none';
+                
+                // Show success notification
+                showNotification('Product added successfully', 'success');
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to add product');
+            }
+        } catch (error) {
+            console.error('Error adding product:', error);
+            showNotification(error.message, 'error');
+        }
+    });
+}
+
+// Function to create a new product card in the DOM
+function createProductCard(product) {
+    // Create product card element
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card';
+    productCard.setAttribute('data-product-id', product.id);
+    productCard.setAttribute('data-category', product.category);
+    
+    // Add tag if specified
+    if (product.tagType) {
+        const tagElement = document.createElement('div');
+        tagElement.className = `${product.tagType}-tag`;
+        tagElement.textContent = product.tagType === 'featured' ? 'Featured' : 
+                                product.tagType === 'sale' ? '20% OFF' : 'New';
+        productCard.appendChild(tagElement);
+    }
+    
+    // Add product image
+    const imageElement = document.createElement('img');
+    imageElement.src = product.image;
+    imageElement.alt = product.name;
+    imageElement.className = 'product-image';
+    productCard.appendChild(imageElement);
+    
+    // Add product info
+    const infoElement = document.createElement('div');
+    infoElement.className = 'product-info';
+    
+    const brandElement = document.createElement('div');
+    brandElement.className = 'product-brand';
+    brandElement.textContent = product.brand;
+    infoElement.appendChild(brandElement);
+    
+    const nameElement = document.createElement('h3');
+    nameElement.className = 'product-name';
+    nameElement.textContent = product.name;
+    infoElement.appendChild(nameElement);
+    
+    const categoryElement = document.createElement('span');
+    categoryElement.className = 'product-category';
+    categoryElement.textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
+    infoElement.appendChild(categoryElement);
+    
+    const descElement = document.createElement('p');
+    descElement.className = 'product-description';
+    descElement.textContent = product.description;
+    infoElement.appendChild(descElement);
+    
+    const priceElement = document.createElement('p');
+    priceElement.className = 'product-price';
+    priceElement.textContent = `$${product.price.toFixed(2)}`;
+    infoElement.appendChild(priceElement);
+    
+    productCard.appendChild(infoElement);
+    
+    // Add quick add button
+    const quickAddBtn = document.createElement('button');
+    quickAddBtn.className = 'quick-add';
+    quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+    quickAddBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addToCart(product.id, 1);
+        
+        // Animation feedback
+        quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        }, 1000);
+    });
+    productCard.appendChild(quickAddBtn);
+    
+    // Add delete button (for admin)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-product-btn';
+    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+    deleteBtn.onclick = async (e) => {
+        e.stopPropagation();
+        
+        try {
+            // Send delete request to server
+            const response = await fetch(`/api/products/${product.id}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                // Remove product card from DOM with animation
+                productCard.style.opacity = '0.5';
+                setTimeout(() => {
+                    productCard.remove();
+                }, 300);
+                
+                showNotification('Product deleted successfully', 'success');
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete product');
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            showNotification(error.message, 'error');
+        }
+    };
+    productCard.appendChild(deleteBtn);
+    
+    // Add product card to grid
+    const productsGrid = document.querySelector('.products-grid');
+    productsGrid.appendChild(productCard);
+    
+    // Add click event to open modal
+    productCard.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add')) {
+            openProductModal(product.id);
+        }
+    });
+    
+    return productCard;
+}
+
+// Function to show notification
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Add animation
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Initialize add product functionality when admin is logged in
+function initAdminProductFeatures() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        setupAddProductModal();
+    }
+}
+
+// Call init function when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Rest of your existing initialization code...
+    
+    // Initialize admin features
+    initAdminProductFeatures();
+});
     </script>
+    <!-- Add Product Modal -->
+<div id="add-product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Product</h2>
+        <form id="add-product-form">
+            <div class="form-group">
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-brand">Brand</label>
+                <input type="text" id="product-brand" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-category">Category</label>
+                <select id="product-category" required>
+                    <option value="">Select a category</option>
+                    <option value="cleanser">Cleanser</option>
+                    <option value="moisturizer">Moisturizer</option>
+                    <option value="treatment">Treatment</option>
+                    <option value="sunscreen">Sunscreen</option>
+                    <option value="toner">Toner</option>
+                    <option value="face">Face Makeup</option>
+                    <option value="eyes">Eye Makeup</option>
+                    <option value="lips">Lip Products</option>
+                    <option value="cheeks">Cheek Products</option>
+                    <option value="brushes">Brushes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-price">Price ($)</label>
+                <input type="number" id="product-price" step="0.01" min="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-description">Description</label>
+                <textarea id="product-description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-image">Image URL</label>
+                <input type="text" id="product-image" required placeholder="Enter image URL">
+            </div>
+            
+            <div class="form-group">
+                <label>Featured Tag</label>
+                <div class="radio-group">
+                    <input type="radio" id="tag-none" name="product-tag" value="none" checked>
+                    <label for="tag-none">None</label>
+                    
+                    <input type="radio" id="tag-featured" name="product-tag" value="featured">
+                    <label for="tag-featured">Featured</label>
+                    
+                    <input type="radio" id="tag-sale" name="product-tag" value="sale">
+                    <label for="tag-sale">Sale</label>
+                    
+                    <input type="radio" id="tag-new" name="product-tag" value="new">
+                    <label for="tag-new">New</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="add-product-submit">Add Product</button>
+        </form>
+    </div>
+</div>
+
+<script src="../js/search.js"></script>
 </body>
 </html>
