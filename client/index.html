@@ -814,6 +814,18 @@
 .search-highlight {
     animation: searchHighlight 1s ease;
 }
+
+.information {
+    padding: 8px;
+    color: white;
+    border-radius: 5px;
+    margin-left: 1050px;
+    background-color: var(--primary);
+}
+
+.information:hover {
+    background-color: rgb(233, 179, 188);
+}
     </style>
 </head>
 <body>
@@ -861,9 +873,7 @@
                         <p class="product-description">Intense hydration for all skin types with hyaluronic acid.</p>
                         <p class="product-price">$48.00</p>
                     </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    
                 </div>
                 
                 <div class="product-card" data-product-id="2">
@@ -874,9 +884,7 @@
                         <p class="product-description">Brightening toner with vitamin C and natural extracts.</p>
                         <p class="product-price">$32.00</p>
                     </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    
                 </div>
                 
                 <div class="product-card" data-product-id="3">
@@ -886,9 +894,7 @@
                         <p class="product-description">Lightweight daily moisturizer with SPF 30 protection.</p>
                         <p class="product-price">$42.00</p>
                     </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    
                 </div>
                 
                 <div class="product-card" data-product-id="4">
@@ -898,9 +904,10 @@
                         <p class="product-description">Nourishing lip balm with shea butter and vitamin E.</p>
                         <p class="product-price">$18.00</p>
                     </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                   
+                </div>
+                <div>
+                    <button class="information">More Information</button>
                 </div>
             </div>
         </section>
@@ -930,23 +937,6 @@
         </section>
     </main>
 
-    <!-- Product Modal -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="product-details">
-                <img src="" alt="" id="modal-product-image">
-                <div class="product-info">
-                    <h2 id="modal-product-name">Product Name</h2>
-                    <p id="modal-product-description">This is a detailed description of the product with information about ingredients, benefits, and how to use it. The perfect addition to your beauty routine.</p>
-                    <p class="price" id="modal-product-price">$48.00</p>
-                    <button class="add-to-cart">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Shopping Cart Modal -->
     <div id="cart-modal" class="modal">
@@ -983,64 +973,6 @@
         <!-- Will be populated by JavaScript -->
     </div>
     <script>
-         const products = [
-        {
-            id: 1,
-            brand: "",
-            name: "Hydrating Serum",
-            category: "Serum",
-            price: 48.00,
-            image: "./assets/estee.webp",
-            description: "Intense hydration for all skin types with hyaluronic acid. This lightweight formula quickly absorbs to deliver deep hydration throughout the day."
-        },
-        {
-            id: 2,
-            brand: "",
-            name: "Glow Toner",
-            category: "Toner",
-            price: 32.00,
-            image: "./assets/skin_ceuticals.jpeg",
-            description: "Brightening toner with vitamin C and natural extracts. Helps to refine pores and even skin tone for a natural radiant glow."
-        },
-        {
-            id: 3,
-            brand: "",
-            name: "Daily Moisturizer",
-            category: "Moisturizer",
-            price: 42.00,
-            image: "./assets/cerave_daily_hydrating-cleanser.webp",
-            description: "Lightweight daily moisturizer with SPF 30 protection. Hydrates while protecting your skin from harmful UV rays."
-        },
-        {
-            id: 4,
-            brand: "",
-            name: "Lip Treatment",
-            category: "Lips",
-            price: 18.00,
-            image: "./assets/fenty_beauty.jpg",
-            description: "Nourishing lip balm with shea butter and vitamin E. Repairs and protects dry, chapped lips while adding a subtle sheen."
-        }
-    ];
-
-    // Open product modal function
-    function openProductModal(productId) {
-        const product = products.find(p => p.id == productId);
-        
-        if (product) {
-            const modal = document.getElementById('product-modal');
-            
-            document.getElementById('modal-product-image').src = product.image;
-            document.getElementById('modal-product-image').alt = product.name;
-            document.getElementById('modal-product-name').textContent = product.name;
-            document.getElementById('modal-product-description').textContent = product.description;
-            document.getElementById('modal-product-price').textContent = `$${product.price.toFixed(2)}`;
-            
-            // Set product ID for add to cart button
-            document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
-            
-            modal.style.display = 'flex';
-        }
-    }
 
     // Add to cart function
     function addToCart(productId, quantity) {
@@ -1080,6 +1012,20 @@
         updateCartCount();
     });
 
+    // Get reference to checkout button
+const checkoutBtn = document.querySelector('.checkout-btn');
+
+// Add event listener for checkout button
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', function() {
+        // Close the cart modal
+        document.getElementById('cart-modal').style.display = 'none';
+        
+        // Redirect to checkout page
+        window.location.href = 'checkout.html';
+    });
+}
+
 
         document.addEventListener('DOMContentLoaded', function() {
     // Section switching for internal links only
@@ -1117,7 +1063,6 @@
     
     // Modal functionality
     const productCards = document.querySelectorAll('.product-card');
-    const productModal = document.getElementById('product-modal');
     const closeButtons = document.querySelectorAll('.close');
     
     productCards.forEach(card => {
@@ -1389,13 +1334,6 @@ function createProductCard(product) {
     const productsGrid = document.querySelector('.products-grid');
     productsGrid.appendChild(productCard);
     
-    // Add click event to open modal
-    productCard.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add')) {
-            openProductModal(product.id);
-        }
-    });
-    
     return productCard;
 }
 
@@ -1436,77 +1374,77 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize admin features
     initAdminProductFeatures();
 });
-    </script>
-    <!-- Add Product Modal -->
-<div id="add-product-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Add New Product</h2>
-        <form id="add-product-form">
-            <div class="form-group">
-                <label for="product-name">Product Name</label>
-                <input type="text" id="product-name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="product-brand">Brand</label>
-                <input type="text" id="product-brand" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="product-category">Category</label>
-                <select id="product-category" required>
-                    <option value="">Select a category</option>
-                    <option value="cleanser">Cleanser</option>
-                    <option value="moisturizer">Moisturizer</option>
-                    <option value="treatment">Treatment</option>
-                    <option value="sunscreen">Sunscreen</option>
-                    <option value="toner">Toner</option>
-                    <option value="face">Face Makeup</option>
-                    <option value="eyes">Eye Makeup</option>
-                    <option value="lips">Lip Products</option>
-                    <option value="cheeks">Cheek Products</option>
-                    <option value="brushes">Brushes</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="product-price">Price ($)</label>
-                <input type="number" id="product-price" step="0.01" min="0.01" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="product-description">Description</label>
-                <textarea id="product-description" rows="4" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="product-image">Image URL</label>
-                <input type="text" id="product-image" required placeholder="Enter image URL">
-            </div>
-            
-            <div class="form-group">
-                <label>Featured Tag</label>
-                <div class="radio-group">
-                    <input type="radio" id="tag-none" name="product-tag" value="none" checked>
-                    <label for="tag-none">None</label>
-                    
-                    <input type="radio" id="tag-featured" name="product-tag" value="featured">
-                    <label for="tag-featured">Featured</label>
-                    
-                    <input type="radio" id="tag-sale" name="product-tag" value="sale">
-                    <label for="tag-sale">Sale</label>
-                    
-                    <input type="radio" id="tag-new" name="product-tag" value="new">
-                    <label for="tag-new">New</label>
-                </div>
-            </div>
-            
-            <button type="submit" class="add-product-submit">Add Product</button>
-        </form>
-    </div>
-</div>
 
+const information = document.querySelector('.information').addEventListener('click', () => {
+    window.location.href = 'skincare.html'
+});
+
+// Function to handle user icon click - simply redirect to profile page
+function handleUserIconClick() {
+    // Redirect to profile page
+    window.location.href = 'profile.html';
+}
+
+// Function to show cart modal
+function showCartModal() {
+    const cartModal = document.getElementById('cart-modal');
+    
+    // Get cart data from localStorage
+    const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalAmount = document.getElementById('cart-total-amount');
+    
+    // Clear previous cart items
+    cartItemsContainer.innerHTML = '';
+    
+    if (cart.length === 0) {
+        // Show empty cart message
+        cartItemsContainer.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <i class="fas fa-shopping-cart" style="font-size: 2rem; color: #ddd; margin-bottom: 1rem;"></i>
+                <h3>Your cart is empty</h3>
+                <p>Looks like you haven't added any products to your cart yet.</p>
+            </div>
+        `;
+        cartTotalAmount.textContent = '0.00';
+    } else {
+        // Calculate total
+        let total = 0;
+        
+        // Add each item to the cart
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            
+            const cartItemElement = document.createElement('div');
+            cartItemElement.className = 'cart-item';
+            cartItemElement.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <div class="cart-item-info">
+                    <h3>${item.name}</h3>
+                    <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+                </div>
+                <div class="cart-item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <i class="fas fa-times remove-item"></i>
+                </div>
+            `;
+            
+            cartItemsContainer.appendChild(cartItemElement);
+        });
+        
+        // Update total amount
+        cartTotalAmount.textContent = total.toFixed(2);
+    }
+    
+    // Display the modal
+    cartModal.style.display = 'flex';
+}
+    </script>
 <script src="./js/search.js"></script>  
 </body>
 </html>

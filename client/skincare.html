@@ -1076,6 +1076,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize skincare advice button
     addSkincareAdviceButton();
+
+    // Get reference to checkout button
+const checkoutBtn = document.querySelector('.checkout-btn');
+
+// Add event listener for checkout button
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', function() {
+        // Close the cart modal
+        document.getElementById('cart-modal').style.display = 'none';
+        
+        // Redirect to checkout page
+        window.location.href = 'checkout.html';
+    });
+}
     
     // Add admin functionality check - THIS IS THE IMPORTANT PART
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
@@ -1593,11 +1607,6 @@ function setupFilters() {
             const categoryFilter = document.querySelector('.category-filter');
             categoryFilter.parentNode.insertBefore(adviceButton, categoryFilter.nextSibling);
         }
-        
-        // Initialize skincare advice button
-        document.addEventListener('DOMContentLoaded', function() {
-            addSkincareAdviceButton();
-        });
 
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
     if (isAdmin) {
