@@ -1157,6 +1157,320 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get reference to checkout button
 const checkoutBtn = document.querySelector('.checkout-btn');
 
+// Add Product Modal Functionality
+function setupAddProductModal() {
+    // Get DOM elements
+    const addProductBtn = document.querySelector('.add-product-button');
+    const addProductModal = document.getElementById('add-product-modal');
+    
+    // Ensure elements exist before adding event listeners
+    if (!addProductBtn || !addProductModal) {
+        console.error('Add product button or modal not found');
+        return;
+    }
+    
+    const closeBtn = addProductModal.querySelector('.close');
+    const addProductForm = document.getElementById('add-product-form');
+    
+    // Open modal when add product button is clicked
+    addProductBtn.addEventListener('click', () => {
+        addProductModal.style.display = 'flex';
+    });
+    
+    // Close modal when close button is clicked
+    closeBtn.addEventListener('click', () => {
+        addProductModal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', (e) => {
+        if (e.target === addProductModal) {
+            addProductModal.style.display = 'none';
+        }
+    });
+    
+    // Handle form submission
+    addProductForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('product-name').value;
+        const brand = document.getElementById('product-brand').value;
+        const category = document.getElementById('product-category').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const description = document.getElementById('product-description').value;
+        const imageUrl = document.getElementById('product-image').value;
+        const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+        
+        // Create product object for database
+        const productData = {
+            title: name,
+            description: description,
+            price: price,
+            image_url: imageUrl
+        };
+        
+        try {
+            // Send product data to server
+            const response = await fetch('http://localhost:5000/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Product added:', result);
+                
+                // Create product card and add to page
+                const newProduct = {
+                    id: result.productId,
+                    brand: brand,
+                    name: name,
+                    category: category,
+                    price: price,
+                    description: description,
+                    image: imageUrl,
+                    tagType: tagType !== 'none' ? tagType : null
+                };
+                
+                createProductCard(newProduct);
+                
+                // Clear form
+                addProductForm.reset();
+                
+                // Close modal
+                addProductModal.style.display = 'none';
+                
+                // Show notification
+                alert('Product added successfully!');
+            } else {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to add product');
+            }
+        } catch (error) {
+            console.error('Error adding product:', error);
+            alert('Error adding product: ' + error.message);
+        }
+    });
+}
+
+// Function to create a new product card and add it to the page
+function createProductCard(product) {
+    // Create product card element
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card';
+    productCard.setAttribute('data-product-id', product.id);
+    productCard.setAttribute('data-category', product.category.toLowerCase());
+    
+    // Add tag if specified
+    if (product.tagType) {
+        const tagElement = document.createElement('div');
+        tagElement.className = `${product.tagType}-tag`;
+        tagElement.textContent = product.tagType === 'featured' ? 'Featured' : 
+                               product.tagType === 'sale' ? '20% OFF' : 'New';
+        productCard.appendChild(tagElement);
+    }
+    
+    // Add product image
+    const imageElement = document.createElement('img');
+    imageElement.src = product.image;
+    imageElement.alt = product.name;
+    imageElement.className = 'product-image';
+    productCard.appendChild(imageElement);
+    
+    // Add product info
+    const infoElement = document.createElement('div');
+    infoElement.className = 'product-info';
+    
+    const brandElement = document.createElement('div');
+    brandElement.className = 'product-brand';
+    brandElement.textContent = product.brand;
+    infoElement.appendChild(brandElement);
+    
+    const nameElement = document.createElement('h3');
+    nameElement.className = 'product-name';
+    nameElement.textContent = product.name;
+    infoElement.appendChild(nameElement);
+    
+    const categoryElement = document.createElement('span');
+    categoryElement.className = 'product-category';
+    categoryElement.textContent = product.category;
+    infoElement.appendChild(categoryElement);
+    
+    const descElement = document.createElement('p');
+    descElement.className = 'product-description';
+    descElement.textContent = product.description;
+    infoElement.appendChild(descElement);
+    
+    const priceElement = document.createElement('p');
+    priceElement.className = 'product-price';
+    priceElement.textContent = `$${product.price.toFixed(2)}`;
+    infoElement.appendChild(priceElement);
+    
+    productCard.appendChild(infoElement);
+    
+    // Add quick add button
+    const quickAddBtn = document.createElement('button');
+    quickAddBtn.className = 'quick-add';
+    quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+    quickAddBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addToCart(product.id, 1);
+        
+        // Animation feedback
+        quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        }, 1000);
+    });
+    productCard.appendChild(quickAddBtn);
+    
+    // Add delete button (for admin)
+    if (localStorage.getItem('isAdmin') === 'true') {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-product-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteBtn.onclick = async (e) => {
+            e.stopPropagation();
+            
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    // Send delete request to server
+                    const response = await fetch(`http://localhost:5000/api/products/${product.id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        // Remove product card from DOM with animation
+                        productCard.style.opacity = '0.5';
+                        setTimeout(() => {
+                            productCard.remove();
+                        }, 300);
+                        
+                        alert('Product deleted successfully');
+                    } else {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Failed to delete product');
+                    }
+                } catch (error) {
+                    console.error('Error deleting product:', error);
+                    alert('Error deleting product: ' + error.message);
+                }
+            }
+        };
+        productCard.appendChild(deleteBtn);
+    }
+    
+    // Find the appropriate container to add the product card to
+    let containerSelector = '.products-grid';
+    if (product.category.toLowerCase() === 'cleanser' || product.category.toLowerCase() === 'moisturizer' || 
+        product.category.toLowerCase() === 'treatment' || product.category.toLowerCase() === 'sunscreen' || 
+        product.category.toLowerCase() === 'toner') {
+        containerSelector = '#skincare-products';
+    } else if (product.category.toLowerCase() === 'face' || product.category.toLowerCase() === 'eyes' || 
+               product.category.toLowerCase() === 'lips' || product.category.toLowerCase() === 'cheeks' || 
+               product.category.toLowerCase() === 'brushes') {
+        containerSelector = '#makeup-products';
+    }
+    
+    const productsGrid = document.querySelector(containerSelector);
+    if (productsGrid) {
+        productsGrid.appendChild(productCard);
+    } else {
+        // Fallback to any products grid
+        const anyGrid = document.querySelector('.products-grid');
+        if (anyGrid) {
+            anyGrid.appendChild(productCard);
+        }
+    }
+    
+    // Add click event to open modal
+    productCard.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add') &&
+            !e.target.classList.contains('delete-product-btn') && !e.target.closest('.delete-product-btn')) {
+            
+            const productId = parseInt(this.getAttribute('data-product-id'));
+            // If we have a function to open product modal, use it
+            if (typeof openProductModal === 'function') {
+                openProductModal(productId);
+            }
+        }
+    });
+    
+    return productCard;
+}
+
+// Initialize admin functionality 
+document.addEventListener('DOMContentLoaded', function() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    
+    if (isAdmin) {
+        console.log('Admin is logged in, setting up admin features');
+        
+        // Create and add the "Add Product" button if it doesn't exist
+        if (!document.querySelector('.add-product')) {
+            const addProductBtn = document.createElement('div');
+            addProductBtn.className = 'add-product';
+            addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
+            
+            const nav = document.querySelector('nav');
+            if (nav) {
+                nav.appendChild(addProductBtn);
+            }
+        }
+        
+        // Hide cart icon for admin
+        const cartIcon = document.querySelector('.cart-icon');
+        if (cartIcon) {
+            cartIcon.style.display = 'none';
+        }
+        
+        // Set up the add product modal
+        setupAddProductModal();
+        
+        // Add delete buttons to existing products
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            if (!card.querySelector('.delete-product-btn')) {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-product-btn';
+                deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    
+                    if (confirm('Are you sure you want to delete this product?')) {
+                        const productId = card.getAttribute('data-product-id');
+                        
+                        fetch(`http://localhost:5000/api/products/${productId}`, {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                card.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    card.remove();
+                                }, 300);
+                                alert('Product deleted successfully');
+                            } else {
+                                throw new Error('Failed to delete product');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error deleting product');
+                        });
+                    }
+                };
+                card.appendChild(deleteBtn);
+            }
+        });
+    }
+});//*//
+   // Add this code to the skincare.html file just after the DOMContentLoaded event
+
 // Add event listener for checkout button
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', function() {
@@ -1977,5 +2291,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script src="../js/search.js"></script>
+<script src="js/admin.js"></script>
 </body>
 </html>

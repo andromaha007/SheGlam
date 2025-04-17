@@ -456,17 +456,19 @@
         </div>
     </main>
 
-    <!-- Custom Popup HTML -->
-    <div class="popup-overlay" id="order-confirmation-popup">
-        <div class="popup-content">
-            <div class="popup-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2 class="popup-title">Order Confirmed!</h2>
-            <p class="popup-message">Thank you for your order! Your confirmation number is: <span class="order-number" id="confirmation-number">BT-123456</span></p>
-            <button class="popup-confirm-btn" id="popup-confirm-btn">Continue Shopping</button>
+    <!-- Enhanced Order Confirmation Popup -->
+<div class="popup-overlay" id="order-confirmation-popup">
+    <div class="popup-content">
+        <div class="popup-icon">
+            <i class="fas fa-check-circle"></i>
         </div>
+        <h2 class="popup-title">Order Confirmed!</h2>
+        <p class="popup-message">Thank you for your order! Your confirmation number is: <span class="order-number" id="confirmation-number">BT-123456</span></p>
+        <p class="popup-details">We've saved your order details and will process it right away.</p>
+        <p class="popup-shipping">A confirmation email will be sent to your email address.</p>
+        <button class="popup-confirm-btn" id="popup-confirm-btn">Continue Shopping</button>
     </div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -590,26 +592,85 @@
                 const confirmBtn = document.getElementById('popup-confirm-btn');
                 const confirmationNumber = document.getElementById('confirmation-number');
                 
-                // Add event listener for place order button
-                document.getElementById('place-order-btn').addEventListener('click', function() {
-                    const form = document.getElementById('shipping-form');
-                    
-                    // Check if form is valid
-                    if (form.checkValidity()) {
-                        // Generate random confirmation number
-                        const orderNumber = 'BT-' + Math.floor(100000 + Math.random() * 900000);
-                        confirmationNumber.textContent = orderNumber;
-                        
-                        // Show popup
-                        popup.classList.add('active');
-                        
-                        // Clear cart
-                        localStorage.removeItem('beautyCart');
-                    } else {
-                        // Trigger form validation
-                        form.reportValidity();
-                    }
-                });
+                // Modify the place order button event listener
+document.getElementById('place-order-btn').addEventListener('click', async function() {
+    const form = document.getElementById('shipping-form');
+    
+    // Check if form is valid
+    if (form.checkValidity()) {
+        try {
+            // Get the cart data
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            
+            // Calculate totals (same as before)
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08; // 8% tax
+            const shipping = subtotal > 50 ? 0 : 5.99; // Free shipping over $50
+            const final_price = subtotal + tax + shipping;
+            
+            // Get user ID from localStorage
+            const userId = localStorage.getItem('userId');
+            
+            // Get form data
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const country = document.getElementById('country').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const postalCode = document.getElementById('postalCode').value;
+            
+            // Prepare order data
+            const orderData = {
+                user_id: userId || 1, // Use 1 as default for guest users if no userId present
+                first_name: firstName,
+                last_name: lastName,
+                address: address,
+                city: city,
+                postal_code: postalCode,
+                country: country,
+                final_price: final_price
+            };
+            
+            console.log('Sending order data:', orderData);
+            
+            // Send order data to the server
+            const response = await fetch('http://localhost:5000/api/orders/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                console.log('Order created successfully:', data);
+                
+                // Generate random confirmation number
+                const orderNumber = 'BT-' + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('confirmation-number').textContent = orderNumber;
+                
+                // Show popup
+                document.getElementById('order-confirmation-popup').classList.add('active');
+                
+                // Clear cart
+                localStorage.removeItem('beautyCart');
+                
+            } else {
+                console.error('Error creating order:', data.error);
+                alert('There was an error processing your order. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('There was an error processing your order. Please try again.');
+        }
+    } else {
+        // Trigger form validation
+        form.reportValidity();
+    }
+});
                 
                 // Add event listener for popup confirm button
                 confirmBtn.addEventListener('click', function() {
