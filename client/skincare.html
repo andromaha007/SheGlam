@@ -1404,36 +1404,7 @@ if (checkoutBtn) {
         window.location.href = 'checkout.html';
     });
 }
-    
-    // Add admin functionality check - THIS IS THE IMPORTANT PART
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    if (isAdmin) {
-        // Show admin controls
-        const addProductBtn = document.createElement('div');
-        addProductBtn.className = 'add-product';
-        addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
-        document.querySelector('nav').appendChild(addProductBtn);
-        
-        // Hide cart icon for admin
-        document.querySelector('.cart-icon').style.display = 'none';
-        
-        // Add delete buttons to products
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-product-btn';
-            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                // Here you would add delete functionality
-                card.style.opacity = '0.5';
-                setTimeout(() => {
-                    card.remove();
-                }, 300);
-            };
-            card.appendChild(deleteBtn);
-        });
-    }
+
 });
 
 // This is important - make sure your setupFilters function doesn't interfere with navigation

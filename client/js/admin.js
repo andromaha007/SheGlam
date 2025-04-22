@@ -2,15 +2,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded in admin.js');
     
-    // Check if user is admin
+    // Check if admin is logged in
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    console.log('Is admin status:', isAdmin);
     
     if (isAdmin) {
         console.log('Admin user detected, initializing admin features');
         initAdminInterface();
-        
-        // Load products from database on page load
-        loadProductsFromDatabase();
     } else {
         console.log('Not an admin user, skipping admin features');
     }
@@ -20,11 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function initAdminInterface() {
     console.log('Initializing admin interface');
     
+    // First create or ensure the add product modal exists
+    ensureAddProductModalExists();
+    
     // Setup admin UI elements
     setupAdminUI();
-    
-    // Setup add product functionality
-    setupAddProduct();
     
     // Add delete buttons to existing products
     addDeleteButtonsToProducts();
@@ -43,6 +41,7 @@ function setupAdminUI() {
     if (!document.querySelector('.add-product')) {
         const addProductBtn = document.createElement('div');
         addProductBtn.className = 'add-product';
+        addProductBtn.style.display = 'flex';
         addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
         
         const nav = document.querySelector('nav');
@@ -51,39 +50,18 @@ function setupAdminUI() {
             console.log('Add product button created and added to nav');
         }
     }
+    
+    // Set up the add product button
+    setupAddProductButton();
 }
 
-// Function to set up add product functionality
-function setupAddProduct() {
-    // Check if modal exists already
-    let addProductModal = document.getElementById('add-product-modal');
-    
-    // Create modal if it doesn't exist
-    if (!addProductModal) {
+// Function to ensure the add product modal exists
+function ensureAddProductModalExists() {
+    if (!document.getElementById('add-product-modal')) {
+        console.log('Add product modal not found, creating it');
         createAddProductModal();
-        addProductModal = document.getElementById('add-product-modal');
-    }
-    
-    // Add event listener to add product button
-    const addProductBtn = document.querySelector('.add-product-button');
-    if (addProductBtn) {
-        // Remove existing event listeners by cloning
-        const newBtn = addProductBtn.cloneNode(true);
-        if (addProductBtn.parentNode) {
-            addProductBtn.parentNode.replaceChild(newBtn, addProductBtn);
-        }
-        
-        // Add click event listener
-        newBtn.addEventListener('click', function() {
-            console.log('Add product button clicked');
-            if (addProductModal) {
-                addProductModal.style.display = 'flex';
-            } else {
-                console.error('Add product modal not found');
-            }
-        });
-        
-        console.log('Event listener added to add product button');
+    } else {
+        console.log('Add product modal already exists');
     }
 }
 
@@ -91,12 +69,18 @@ function setupAddProduct() {
 function createAddProductModal() {
     console.log('Creating add product modal');
     
-    // Create modal element
+    // Skip if modal already exists
+    if (document.getElementById('add-product-modal')) {
+        console.log('Modal already exists, skipping creation');
+        return;
+    }
+    
+    // Create the modal element
     const modal = document.createElement('div');
     modal.id = 'add-product-modal';
     modal.className = 'modal';
     
-    // Create modal content
+    // Set the modal HTML content
     modal.innerHTML = `
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -166,9 +150,18 @@ function createAddProductModal() {
         </div>
     `;
     
-    // Add modal to document
+    // Add the modal to the document body
     document.body.appendChild(modal);
-    console.log('Add product modal added to document');
+    console.log('Add product modal created and added to document');
+    
+    // Verify the modal was added correctly
+    const addedModal = document.getElementById('add-product-modal');
+    if (!addedModal) {
+        console.error('Failed to create modal - not found after creation');
+        return;
+    }
+    
+    console.log('Modal created successfully');
     
     // Set up modal close button
     const closeBtn = modal.querySelector('.close');
@@ -176,6 +169,8 @@ function createAddProductModal() {
         closeBtn.addEventListener('click', function() {
             modal.style.display = 'none';
         });
+    } else {
+        console.error('Close button not found in modal');
     }
     
     // Close modal when clicking outside content
@@ -190,91 +185,120 @@ function createAddProductModal() {
     if (form) {
         form.addEventListener('submit', handleAddProductSubmit);
         console.log('Event listener added to add product form');
+    } else {
+        console.error('Form not found in modal');
+    }
+}
+
+// Function to set up add product button
+function setupAddProductButton() {
+    const addProductBtn = document.querySelector('.add-product-button');
+    
+    if (addProductBtn) {
+        // Remove existing event listeners by cloning
+        const newBtn = addProductBtn.cloneNode(true);
+        if (addProductBtn.parentNode) {
+            addProductBtn.parentNode.replaceChild(newBtn, addProductBtn);
+        }
+        
+        // Add click event listener
+        newBtn.addEventListener('click', function() {
+            console.log('Add product button clicked');
+            showAddProductModal();
+        });
+        
+        console.log('Event listener added to add product button');
+    } else {
+        console.error('Add product button not found');
+    }
+}
+
+// Function to show add product modal
+function showAddProductModal() {
+    console.log('Showing add product modal');
+    
+    // Check if modal exists
+    let modal = document.getElementById('add-product-modal');
+    
+    // If modal doesn't exist, create it
+    if (!modal) {
+        console.log('Modal not found, creating it');
+        createAddProductModal();
+        modal = document.getElementById('add-product-modal');
+    }
+    
+    // Show the modal
+    if (modal) {
+        console.log('Displaying modal');
+        modal.style.display = 'flex';
+    } else {
+        console.error('Modal not found after creation attempt');
     }
 }
 
 // Function to handle add product form submission
 async function handleAddProductSubmit(e) {
     e.preventDefault();
-    console.log('Add product form submitted');
     
-    // Get form values
-    const name = document.getElementById('product-name').value;
-    const brand = document.getElementById('product-brand').value;
+    // Get form data
+    const title = document.getElementById('product-name').value;
     const category = document.getElementById('product-category').value;
     const price = parseFloat(document.getElementById('product-price').value);
     const description = document.getElementById('product-description').value;
-    const imageUrl = document.getElementById('product-image').value;
+    const image_url = document.getElementById('product-image').value;
+    const brand = document.getElementById('product-brand').value;
     const tagType = document.querySelector('input[name="product-tag"]:checked').value;
     
-    console.log('Form data:', { name, brand, category, price, description, imageUrl, tagType });
+    console.log('Submitting product:', { title, category, price, description, image_url, brand });
     
     try {
-        // Prepare data for database - match your products table schema exactly
-        const productData = {
-            title: name,
-            product_description: description,
-            price: parseInt(price), // Convert to integer since price is INT in your DB
-            image_url: imageUrl,
-            category: category,
-            brand: brand // Save brand in localStorage for frontend use
-        };
-        
-        console.log('Sending to database:', productData);
-        
-        // Send product data to server
+        // Send to server
         const response = await fetch('http://localhost:5000/api/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(productData)
+            body: JSON.stringify({
+                title,
+                description,
+                price,
+                image_url,
+                category
+            })
         });
+        
+        console.log('Response status:', response.status);
         
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Server error:', errorText);
-            throw new Error('Failed to add product to database');
+            console.error('Error response:', errorText);
+            throw new Error('Failed to add product: ' + errorText);
         }
         
         const result = await response.json();
-        console.log('Product added successfully:', result);
+        console.log('Product added:', result);
         
-        // Create product object for the UI with proper ID returned from server
-        const productId = result.productId || result.id || Date.now();
-        
-        // Also save products to localStorage for persistence between page loads
-        saveProductToLocalStorage({
-            id: productId,
+        // Create and add the new product card to the page
+        const productData = {
+            id: result.productId,
+            title: title,
+            name: title,
             brand: brand,
-            name: name,
-            category: category,
-            price: price,
             description: description,
-            image: imageUrl,
-            tagType: tagType !== 'none' ? tagType : null
-        });
-        
-        // Create UI product object
-        const newProduct = {
-            id: productId,
-            brand: brand,
-            name: name,
-            category: category,
             price: price,
-            description: description,
-            image: imageUrl,
+            image: image_url,
+            image_url: image_url,
+            category: category,
             tagType: tagType !== 'none' ? tagType : null
         };
         
-        // Add product to page
-        createProductCard(newProduct);
+        createAndAddProductCard(productData);
         
         // Reset form and close modal
         document.getElementById('add-product-form').reset();
         document.getElementById('add-product-modal').style.display = 'none';
         
-        // Show success notification
+        // Show success message
         showNotification('Product added successfully!', 'success');
         
     } catch (error) {
@@ -283,98 +307,60 @@ async function handleAddProductSubmit(e) {
     }
 }
 
-// Function to save product to localStorage for persistence
-function saveProductToLocalStorage(product) {
-    // Get existing products
-    let savedProducts = JSON.parse(localStorage.getItem('beautyProducts') || '[]');
+// Function to create and add product card to the page
+function createAndAddProductCard(product) {
+    // Create product card
+    const card = createProductCard(product);
     
-    // Add new product
-    savedProducts.push(product);
+    // Find the appropriate container based on product category or current page
+    let productContainer;
     
-    // Save back to localStorage
-    localStorage.setItem('beautyProducts', JSON.stringify(savedProducts));
-    console.log('Product saved to localStorage:', product);
-}
-
-// Function to load products from localStorage
-function loadProductsFromLocalStorage() {
-    const savedProducts = JSON.parse(localStorage.getItem('beautyProducts') || '[]');
-    console.log('Loaded products from localStorage:', savedProducts);
-    
-    // If page is skincare, only show skincare products
-    // If page is makeup, only show makeup products
-    const pageType = window.location.pathname.includes('skincare.html') ? 'skincare' : 
-                    window.location.pathname.includes('makeup.html') ? 'makeup' : 'all';
-    
-    savedProducts.forEach(product => {
-        const category = product.category.toLowerCase();
-        
-        // Filter by page type
-        if (pageType === 'skincare' && (['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner'].includes(category))) {
-            createProductCard(product);
-        } else if (pageType === 'makeup' && (['face', 'eyes', 'lips', 'cheeks', 'brushes'].includes(category))) {
-            createProductCard(product);
-        } else if (pageType === 'all') {
-            createProductCard(product);
+    // First try to find by category
+    if (product.category) {
+        if (['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner'].includes(product.category.toLowerCase())) {
+            productContainer = document.getElementById('skincare-products');
+        } else if (['face', 'eyes', 'lips', 'cheeks', 'brushes'].includes(product.category.toLowerCase())) {
+            productContainer = document.getElementById('makeup-products');
         }
-    });
-}
-
-// Function to load products from the database
-async function loadProductsFromDatabase() {
-    try {
-        const response = await fetch('http://localhost:5000/api/products');
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch products');
+    }
+    
+    // If no container found by category, try by current page
+    if (!productContainer) {
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('makeup.html')) {
+            productContainer = document.getElementById('makeup-products');
+        } else if (currentPage.includes('skincare.html')) {
+            productContainer = document.getElementById('skincare-products');
+        } else if (currentPage.includes('index.html')) {
+            productContainer = document.getElementById('popular-products');
         }
-        
-        const products = await response.json();
-        console.log('Products loaded from database:', products);
-        
-        // Clear localStorage products first 
-        localStorage.removeItem('beautyProducts');
-        
-        // Process each product
-        products.forEach(product => {
-            // Convert database product to UI product
-            const uiProduct = {
-                id: product.product_id,
-                name: product.title,
-                brand: product.brand || 'Brand', // Fallback if brand not stored
-                description: product.product_description,
-                price: parseFloat(product.price),
-                category: product.category,
-                image: product.image_url,
-                tagType: null // No tag by default
-            };
-            
-            // Save to localStorage for persistence
-            saveProductToLocalStorage(uiProduct);
-            
-            // Don't create cards here, loadProductsFromLocalStorage will do that
-        });
-        
-        // Now load products from localStorage to display them
-        loadProductsFromLocalStorage();
-        
-    } catch (error) {
-        console.error('Error loading products from database:', error);
-        
-        // Fallback to localStorage if database fetch fails
-        loadProductsFromLocalStorage();
+    }
+    
+    // If still no container, use any products grid
+    if (!productContainer) {
+        productContainer = document.querySelector('.products-grid');
+    }
+    
+    // Add the card to the container
+    if (productContainer) {
+        productContainer.appendChild(card);
+        console.log('Added product card to container:', productContainer.id || 'products-grid');
+    } else {
+        console.error('No suitable product container found');
     }
 }
 
-// Function to create a product card and add it to the page
+// Function to create product card from database product
 function createProductCard(product) {
-    console.log('Creating product card:', product);
+    // Create product card container
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.setAttribute('data-product-id', product.id);
     
-    // Create product card element
-    const productCard = document.createElement('div');
-    productCard.className = 'product-card';
-    productCard.setAttribute('data-product-id', product.id);
-    productCard.setAttribute('data-category', product.category.toLowerCase());
+    // Set category if available
+    if (product.category) {
+        card.setAttribute('data-category', product.category.toLowerCase());
+    }
     
     // Add tag if specified
     if (product.tagType) {
@@ -382,46 +368,56 @@ function createProductCard(product) {
         tagElement.className = `${product.tagType}-tag`;
         tagElement.textContent = product.tagType === 'featured' ? 'Featured' : 
                                product.tagType === 'sale' ? '20% OFF' : 'New';
-        productCard.appendChild(tagElement);
+        card.appendChild(tagElement);
     }
     
     // Add product image
-    const imageElement = document.createElement('img');
-    imageElement.src = product.image;
-    imageElement.alt = product.name;
-    imageElement.className = 'product-image';
-    productCard.appendChild(imageElement);
+    const img = document.createElement('img');
+    img.src = product.image_url || product.image || '/assets/default-product.jpg';
+    img.alt = product.title || product.name;
+    img.className = 'product-image';
+    card.appendChild(img);
     
-    // Add product info
-    const infoElement = document.createElement('div');
-    infoElement.className = 'product-info';
+    // Add product info container
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'product-info';
     
-    const brandElement = document.createElement('div');
-    brandElement.className = 'product-brand';
-    brandElement.textContent = product.brand;
-    infoElement.appendChild(brandElement);
+    // Add brand if available
+    if (product.brand) {
+        const brandEl = document.createElement('div');
+        brandEl.className = 'product-brand';
+        brandEl.textContent = product.brand;
+        infoDiv.appendChild(brandEl);
+    }
     
-    const nameElement = document.createElement('h3');
-    nameElement.className = 'product-name';
-    nameElement.textContent = product.name;
-    infoElement.appendChild(nameElement);
+    // Add product name
+    const nameEl = document.createElement('h3');
+    nameEl.className = 'product-name';
+    nameEl.textContent = product.title || product.name;
+    infoDiv.appendChild(nameEl);
     
-    const categoryElement = document.createElement('span');
-    categoryElement.className = 'product-category';
-    categoryElement.textContent = product.category;
-    infoElement.appendChild(categoryElement);
+    // Add category tag if available
+    if (product.category) {
+        const catEl = document.createElement('span');
+        catEl.className = 'product-category';
+        catEl.textContent = product.category;
+        infoDiv.appendChild(catEl);
+    }
     
-    const descElement = document.createElement('p');
-    descElement.className = 'product-description';
-    descElement.textContent = product.description;
-    infoElement.appendChild(descElement);
+    // Add product description
+    const descEl = document.createElement('p');
+    descEl.className = 'product-description';
+    descEl.textContent = product.description || '';
+    infoDiv.appendChild(descEl);
     
-    const priceElement = document.createElement('p');
-    priceElement.className = 'product-price';
-    priceElement.textContent = `$${product.price.toFixed(2)}`;
-    infoElement.appendChild(priceElement);
+    // Add product price
+    const priceEl = document.createElement('p');
+    priceEl.className = 'product-price';
+    priceEl.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+    infoDiv.appendChild(priceEl);
     
-    productCard.appendChild(infoElement);
+    // Add info div to card
+    card.appendChild(infoDiv);
     
     // Add quick add button
     const quickAddBtn = document.createElement('button');
@@ -430,19 +426,12 @@ function createProductCard(product) {
     quickAddBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         
-        // Use existing addToCart function or create a simple one
         try {
+            // Try to use existing addToCart function
             addToCart(product.id, 1);
-            
-            // Animation feedback
-            quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => {
-                quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
-            }, 1000);
         } catch (err) {
-            console.log('Error adding to cart, using simplified version');
-            
-            // Simple cart implementation if the page's addToCart doesn't exist
+            console.log('Using simplified cart function');
+            // Simple implementation if addToCart doesn't exist
             let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
             const existingItem = cart.find(item => item.id === product.id);
             
@@ -451,234 +440,252 @@ function createProductCard(product) {
             } else {
                 cart.push({
                     id: product.id,
-                    name: product.name,
+                    name: product.title || product.name,
                     brand: product.brand,
                     price: product.price,
-                    image: product.image,
+                    image: product.image_url || product.image,
                     quantity: 1
                 });
             }
             
             localStorage.setItem('beautyCart', JSON.stringify(cart));
             
-            // Update cart count
+            // Update cart count if possible
             const cartCount = document.querySelector('.cart-count');
             if (cartCount) {
                 const count = parseInt(cartCount.textContent || '0');
                 cartCount.textContent = count + 1;
             }
-            
-            // Animation feedback
-            quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => {
-                quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
-            }, 1000);
         }
-    });
-    productCard.appendChild(quickAddBtn);
-    
-    // Add delete button
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-product-btn';
-    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-    deleteBtn.onclick = async (e) => {
-        e.stopPropagation();
         
-        if (confirm('Are you sure you want to delete this product?')) {
-            try {
-                // Send delete request to server
-                const response = await fetch(`http://localhost:5000/api/products/${product.id}`, {
-                    method: 'DELETE'
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Failed to delete product');
-                }
-                
-                // Remove from localStorage
-                removeProductFromLocalStorage(product.id);
-                
-                // Remove product card from DOM with animation
-                productCard.style.opacity = '0.5';
-                setTimeout(() => {
-                    productCard.remove();
-                }, 300);
-                
-                showNotification('Product deleted successfully', 'success');
-            } catch (error) {
-                console.error('Error deleting product:', error);
-                showNotification('Error deleting product: ' + error.message, 'error');
-            }
-        }
-    };
-    productCard.appendChild(deleteBtn);
+        // Animation feedback
+        quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        }, 1000);
+    });
+    card.appendChild(quickAddBtn);
     
-    // Add click event to open modal
-    productCard.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add') &&
-            !e.target.classList.contains('delete-product-btn') && !e.target.closest('.delete-product-btn')) {
+    // Add delete button for admin
+    if (localStorage.getItem('isAdmin') === 'true') {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-product-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteBtn.onclick = async (e) => {
+            e.stopPropagation();
             
-            // Use existing openProductModal function or create a simple one
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    await deleteProductFromDatabase(product.id);
+                    
+                    // Remove card with animation
+                    card.style.opacity = '0.5';
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                    
+                    showNotification('Product deleted successfully', 'success');
+                } catch (error) {
+                    showNotification('Failed to delete product', 'error');
+                }
+            }
+        };
+        card.appendChild(deleteBtn);
+    }
+    
+    // Add click event to view product details
+    card.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add') 
+            && !e.target.classList.contains('delete-product-btn') && !e.target.closest('.delete-product-btn')) {
+            
             try {
+                // Try using standard openProductModal function first
                 openProductModal(product.id);
             } catch (err) {
-                console.log('Error opening product modal, using simplified version');
-                
-                // Create a simple product modal if needed
-                const modal = document.getElementById('product-modal');
-                if (modal) {
-                    document.getElementById('modal-product-image').src = product.image;
-                    document.getElementById('modal-product-brand').textContent = product.brand;
-                    document.getElementById('modal-product-name').textContent = product.name;
-                    document.getElementById('modal-product-category').textContent = product.category;
-                    document.getElementById('modal-product-description').textContent = product.description;
-                    document.getElementById('modal-product-price').textContent = `$${product.price.toFixed(2)}`;
-                    
-                    // Set product ID for add to cart button
-                    document.querySelector('.add-to-cart').setAttribute('data-product-id', product.id);
-                    
-                    modal.style.display = 'flex';
-                }
+                console.log('Using custom modal opening:', err);
+                openProductModalWithData(product);
             }
         }
     });
     
-    // Add the card to the appropriate container based on category
-    let productsContainer;
-    
-    // For skincare products
-    if (['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner'].includes(product.category.toLowerCase())) {
-        productsContainer = document.getElementById('skincare-products');
-    } 
-    // For makeup products
-    else if (['face', 'eyes', 'lips', 'cheeks', 'brushes'].includes(product.category.toLowerCase())) {
-        productsContainer = document.getElementById('makeup-products');
-    }
-    
-    // Fallback to any products grid if specific container not found
-    if (!productsContainer) {
-        productsContainer = document.querySelector('.products-grid');
-    }
-    
-    // Add the product card to the container
-    if (productsContainer) {
-        productsContainer.appendChild(productCard);
-        console.log('Product card added to container:', productsContainer.id || 'products-grid');
-    } else {
-        console.error('No suitable product container found');
-    }
-    
-    return productCard;
+    return card;
 }
 
-// Function to remove product from localStorage
-function removeProductFromLocalStorage(productId) {
-    let savedProducts = JSON.parse(localStorage.getItem('beautyProducts') || '[]');
-    savedProducts = savedProducts.filter(product => product.id !== productId);
-    localStorage.setItem('beautyProducts', JSON.stringify(savedProducts));
-    console.log('Product removed from localStorage:', productId);
+// Function to open product modal with product data
+function openProductModalWithData(product) {
+    const modal = document.getElementById('product-modal');
+    
+    if (!modal) {
+        console.error('Product modal not found');
+        return;
+    }
+    
+    const imgEl = modal.querySelector('#modal-product-image');
+    const brandEl = modal.querySelector('#modal-product-brand');
+    const nameEl = modal.querySelector('#modal-product-name');
+    const catEl = modal.querySelector('#modal-product-category');
+    const descEl = modal.querySelector('#modal-product-description');
+    const priceEl = modal.querySelector('#modal-product-price');
+    const addToCartBtn = modal.querySelector('.add-to-cart');
+    
+    if (imgEl) imgEl.src = product.image_url || product.image || '/assets/default-product.jpg';
+    if (imgEl) imgEl.alt = product.title || product.name;
+    if (brandEl) brandEl.textContent = product.brand || '';
+    if (nameEl) nameEl.textContent = product.title || product.name;
+    if (catEl) catEl.textContent = product.category || '';
+    if (descEl) descEl.textContent = product.description || '';
+    if (priceEl) priceEl.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+    
+    if (addToCartBtn) {
+        addToCartBtn.setAttribute('data-product-id', product.id);
+        addToCartBtn.onclick = function() {
+            try {
+                addToCart(product.id, 1);
+                modal.style.display = 'none';
+            } catch (err) {
+                console.log('Using simplified cart function in modal');
+                // Simple implementation
+                let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+                const existingItem = cart.find(item => item.id === product.id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.title || product.name,
+                        brand: product.brand,
+                        price: product.price,
+                        image: product.image_url || product.image,
+                        quantity: 1
+                    });
+                }
+                
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                
+                // Update cart count if possible
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    const count = parseInt(cartCount.textContent || '0');
+                    cartCount.textContent = count + 1;
+                }
+                
+                modal.style.display = 'none';
+            }
+        };
+    }
+    
+    modal.style.display = 'flex';
 }
 
 // Function to add delete buttons to existing products
 function addDeleteButtonsToProducts() {
-    console.log('Adding delete buttons to existing products');
-    
+    // Add delete buttons to existing product cards
     const productCards = document.querySelectorAll('.product-card');
     productCards.forEach(card => {
-        if (!card.querySelector('.delete-product-btn')) {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-product-btn';
-            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
+        // Skip if already has delete button
+        if (card.querySelector('.delete-product-btn')) {
+            return;
+        }
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-product-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            
+            if (confirm('Are you sure you want to delete this product?')) {
+                const productId = card.getAttribute('data-product-id');
                 
-                if (confirm('Are you sure you want to delete this product?')) {
-                    const productId = card.getAttribute('data-product-id');
-                    
-                    // Send delete request to server
-                    fetch(`http://localhost:5000/api/products/${productId}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // Remove from localStorage
-                            removeProductFromLocalStorage(parseInt(productId));
-                            
-                            // Remove from DOM
+                if (productId) {
+                    deleteProductFromDatabase(productId)
+                        .then(() => {
+                            // Remove card with animation
                             card.style.opacity = '0.5';
                             setTimeout(() => {
                                 card.remove();
                             }, 300);
+                            
                             showNotification('Product deleted successfully', 'success');
-                        } else {
-                            throw new Error('Failed to delete product');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        showNotification('Error deleting product', 'error');
-                    });
+                        })
+                        .catch(error => {
+                            console.error('Error deleting product:', error);
+                            showNotification('Failed to delete product', 'error');
+                        });
+                } else {
+                    alert('This is a default product that cannot be deleted.');
                 }
-            };
-            card.appendChild(deleteBtn);
-        }
+            }
+        };
+        card.appendChild(deleteBtn);
     });
+}
+
+// Function to delete a product from the database
+async function deleteProductFromDatabase(productId) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to delete product');
+        }
+        
+        const result = await response.json();
+        console.log('Product deleted successfully:', result);
+        return result;
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        throw error;
+    }
 }
 
 // Function to show notification
 function showNotification(message, type) {
-    console.log('Showing notification:', message, type);
-    
     // Create notification element if it doesn't exist
-    let notification = document.getElementById('admin-notification');
-    
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'admin-notification';
+    if (!document.getElementById('notification')) {
+        const notification = document.createElement('div');
+        notification.id = 'notification';
+        document.body.appendChild(notification);
         
-        // Add styles for notification
+        // Add style for notification
         const style = document.createElement('style');
         style.textContent = `
-            #admin-notification {
+            #notification {
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                padding: 15px 25px;
-                border-radius: 8px;
+                padding: 12px 20px;
+                border-radius: 4px;
                 color: white;
                 font-weight: 500;
-                z-index: 9999;
+                z-index: 1000;
                 transform: translateY(-100px);
                 opacity: 0;
                 transition: transform 0.3s ease, opacity 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             }
-            #admin-notification.success {
+            #notification.success {
                 background-color: #4CAF50;
             }
-            #admin-notification.error {
+            #notification.error {
                 background-color: #f44336;
             }
-            #admin-notification.show {
+            #notification.show {
                 transform: translateY(0);
                 opacity: 1;
             }
         `;
         document.head.appendChild(style);
-        
-        document.body.appendChild(notification);
     }
     
-    // Set notification content and class
+    // Update notification content and show it
+    const notification = document.getElementById('notification');
     notification.textContent = message;
     notification.className = type;
+    notification.classList.add('show');
     
-    // Show the notification
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-    
-    // Hide after 3 seconds
+    // Hide notification after 3 seconds
     setTimeout(() => {
         notification.classList.remove('show');
     }, 3000);
