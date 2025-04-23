@@ -1855,7 +1855,6 @@ function showNotification(message, type) {
 }
     </script>
 <script src="../js/search.js"></script>
-<script src="js/admin.js"></script>
 
 <!-- Add Product Modal -->
 <div id="add-product-modal" class="modal">
@@ -1926,5 +1925,185 @@ function showNotification(message, type) {
         </form>
     </div>
 </div>
+<script src="./js/admin.js"></script>
+<!-- Add this at the very bottom of makeup.html, just before the closing </body> tag -->
+<script>
+    // Direct fix for makeup.html admin form submission
+    // This runs after all other scripts have loaded
+    window.addEventListener('load', function() {
+        console.log('Executing direct form fix...');
+        
+        // Check if we're on admin
+        if (localStorage.getItem('isAdmin') === 'true') {
+            console.log('Admin detected, applying form fix');
+            
+            // Get the form
+            const form = document.getElementById('add-product-form');
+            if (form) {
+                console.log('Form found, attaching direct submission handler');
+                
+                // Replace any existing handlers by cloning the form
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
+                
+                // Add a direct submission handler
+                newForm.addEventListener('submit', async function(e) {
+                    // Stop normal form submission
+                    e.preventDefault();
+                    console.log('Form submitted via direct handler');
+                    
+                    // Get all the form data
+                    const title = document.getElementById('product-name').value;
+                    const brand = document.getElementById('product-brand').value;
+                    const category = document.getElementById('product-category').value;
+                    const price = parseFloat(document.getElementById('product-price').value);
+                    const description = document.getElementById('product-description').value;
+                    const image_url = document.getElementById('product-image').value;
+                    const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+                    
+                    console.log('Form data:', { title, brand, category, price, description, image_url, tagType });
+                    
+                    try {
+                        // Send product data to server
+                        console.log('Sending to server...');
+                        const response = await fetch('http://localhost:5000/api/products', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                price,
+                                image_url,
+                                category
+                            })
+                        });
+                        
+                        console.log('Server response status:', response.status);
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error('Server error:', errorText);
+                            throw new Error('Failed to add product: ' + errorText);
+                        }
+                        
+                        const result = await response.json();
+                        console.log('Success! Product added:', result);
+                        
+                        // Create and add the new product card
+                        const productData = {
+                            id: result.productId,
+                            name: title,
+                            brand: brand,
+                            category: category,
+                            price: price,
+                            description: description,
+                            image: image_url,
+                            tagType: tagType !== 'none' ? tagType : null
+                        };
+                        
+                        // Find the product container
+                        const productsGrid = document.getElementById('makeup-products');
+                        if (productsGrid) {
+                            // Create the new product card
+                            const card = document.createElement('div');
+                            card.className = 'product-card';
+                            card.setAttribute('data-product-id', productData.id);
+                            card.setAttribute('data-category', productData.category.toLowerCase());
+                            
+                            // Add tag if specified
+                            if (productData.tagType) {
+                                const tagElement = document.createElement('div');
+                                tagElement.className = `${productData.tagType}-tag`;
+                                tagElement.textContent = productData.tagType === 'featured' ? 'Featured' : 
+                                                       productData.tagType === 'sale' ? '20% OFF' : 'New';
+                                card.appendChild(tagElement);
+                            }
+                            
+                            // Add product image
+                            const img = document.createElement('img');
+                            img.src = productData.image;
+                            img.alt = productData.name;
+                            img.className = 'product-image';
+                            card.appendChild(img);
+                            
+                            // Add product info container
+                            const infoDiv = document.createElement('div');
+                            infoDiv.className = 'product-info';
+                            
+                            // Add brand
+                            const brandEl = document.createElement('div');
+                            brandEl.className = 'product-brand';
+                            brandEl.textContent = productData.brand;
+                            infoDiv.appendChild(brandEl);
+                            
+                            // Add product name
+                            const nameEl = document.createElement('h3');
+                            nameEl.className = 'product-name';
+                            nameEl.textContent = productData.name;
+                            infoDiv.appendChild(nameEl);
+                            
+                            // Add category
+                            const catEl = document.createElement('span');
+                            catEl.className = 'product-category';
+                            catEl.textContent = productData.category;
+                            infoDiv.appendChild(catEl);
+                            
+                            // Add description
+                            const descEl = document.createElement('p');
+                            descEl.className = 'product-description';
+                            descEl.textContent = productData.description;
+                            infoDiv.appendChild(descEl);
+                            
+                            // Add price
+                            const priceEl = document.createElement('p');
+                            priceEl.className = 'product-price';
+                            priceEl.textContent = `$${productData.price.toFixed(2)}`;
+                            infoDiv.appendChild(priceEl);
+                            
+                            // Add info div to card
+                            card.appendChild(infoDiv);
+                            
+                            // Add quick add button
+                            const quickAddBtn = document.createElement('button');
+                            quickAddBtn.className = 'quick-add';
+                            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+                            card.appendChild(quickAddBtn);
+                            
+                            // Add delete button
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'delete-product-btn';
+                            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                            card.appendChild(deleteBtn);
+                            
+                            // Add the card to the container
+                            productsGrid.appendChild(card);
+                            console.log('Product card added to the page');
+                        }
+                        
+                        // Reset form and close modal
+                        newForm.reset();
+                        const modal = document.getElementById('add-product-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                        }
+                        
+                        // Show success message
+                        alert('Product added successfully!');
+                        
+                    } catch (error) {
+                        console.error('Error adding product:', error);
+                        alert('Error adding product: ' + error.message);
+                    }
+                });
+                
+                console.log('Direct form handler attached successfully');
+            } else {
+                console.error('Form not found! Check if modal exists in DOM');
+            }
+        }
+    });
+    </script>
 </body>
 </html>
