@@ -5,848 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Makeup Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* GLOBAL STYLES */
-        :root {
-            --primary: #f28e9c;
-            --primary-light: #ffd3da;
-            --secondary: #8ecfe8;
-            --dark: #333333;
-            --light: #ffffff;
-            --gray: #f5f5f5;
-            --accent: #d1b3ee;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #fcfcfc;
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        button {
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        /* HEADER STYLES */
-        header {
-            background-color: var(--light);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-        
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .logo img {
-            height: 50px;
-            transition: transform 0.3s ease;
-        }
-        
-        .logo img:hover {
-            transform: scale(1.05);
-        }
-        
-        .search-bar {
-            position: relative;
-            width: 40%;
-            max-width: 500px;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 0.8rem 1rem 0.8rem 3rem;
-            border: none;
-            border-radius: 30px;
-            background-color: var(--gray);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        
-        .search-bar input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--primary-light);
-            background-color: white;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            font-weight: 500;
-            padding: 0.5rem 0;
-            position: relative;
-            color: var(--dark);
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links a:hover, .nav-links a.active {
-            opacity: 1;
-            color: var(--primary);
-        }
-        
-        .nav-links a:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover:after, .nav-links a.active:after {
-            width: 100%;
-        }
-        
-        .header-icons {
-            display: flex;
-            gap: 1.5rem;
-        }
-        
-        .user-icon, .cart-icon {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: var(--gray);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .user-icon:hover, .cart-icon:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--primary);
-            color: white;
-            font-size: 0.7rem;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* MAIN CONTENT STYLES */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 5%;
-        }
-        
-        section {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        section h1 {
-            margin-bottom: 2rem;
-            font-size: 2.2rem;
-            position: relative;
-            display: inline-block;
-            color: var(--dark);
-        }
-        
-        section h1:after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary);
-            border-radius: 2px;
-        }
-
-        /* CATEGORY FILTER */
-        .category-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .filter-button {
-            padding: 0.6rem 1.2rem;
-            background-color: var(--gray);
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-button:hover, .filter-button.active {
-            background-color: var(--primary-light);
-            color: var(--dark);
-        }
-
-        .filter-button.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        /* PRODUCTS GRID */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-        
-        .product-card {
-            background-color: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            background-color: #f9f9f9;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .product-info {
-            padding: 1.2rem;
-        }
-        
-        .product-brand {
-            font-size: 0.85rem;
-            color: #777;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .product-category {
-            display: inline-block;
-            font-size: 0.8rem;
-            padding: 0.3rem 0.6rem;
-            background-color: var(--gray);
-            border-radius: 4px;
-            margin-bottom: 0.8rem;
-        }
-        
-        .product-description {
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            height: 2.8em;
-        }
-        
-        .product-price {
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        
-        .quick-add {
-            position: absolute;
-            bottom: 1.2rem;
-            right: 1.2rem;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .product-card:hover .quick-add {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .quick-add:hover {
-            background-color: var(--dark);
-        }
-
-        /* Tags */
-        .featured-tag, .sale-tag, .new-tag {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0.3rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 30px;
-            font-weight: 500;
-            z-index: 2;
-        }
-
-        .featured-tag {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        .sale-tag {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .new-tag {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        /* MODAL STYLES */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 200;
-            overflow-y: auto;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: var(--radius);
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            padding: 2rem;
-            animation: slideUp 0.4s ease;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .close:hover {
-            background-color: #eee;
-            transform: rotate(90deg);
-        }
-        
-        .product-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        #modal-product-image {
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            background-color: #f9f9f9;
-            border-radius: var(--radius);
-            padding: 1rem;
-        }
-        
-        .modal-brand {
-            font-size: 1rem;
-            color: #777;
-            margin-bottom: 0.5rem;
-        }
-        
-        .modal-name {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .modal-category {
-            display: inline-block;
-            font-size: 0.9rem;
-            padding: 0.4rem 0.8rem;
-            background-color: var(--gray);
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-description {
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: #555;
-        }
-        
-        .price {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 2rem;
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: var(--primary-light);
-            border-radius: var(--radius);
-        }
-        
-        .add-to-cart {
-            padding: 0.8rem 2rem;
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-            font-size: 1rem;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .add-to-cart:hover {
-            background-color: var(--dark);
-            transform: translateY(-3px);
-        }
-        
-        /* CART MODAL */
-        #cart-items {
-            margin-bottom: 2rem;
-        }
-        
-        .cart-item {
-            display: grid;
-            grid-template-columns: 80px 1fr auto;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
-            align-items: center;
-        }
-        
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: var(--radius);
-        }
-        
-        .cart-item-info h3 {
-            margin-bottom: 0.5rem;
-        }
-        
-        .cart-item-price {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .quantity-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .quantity-btn:hover {
-            background-color: #eee;
-        }
-        
-        .remove-item {
-            color: #999;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .remove-item:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-        
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--gray);
-        }
-        
-        .checkout-btn {
-            padding: 0.8rem 2rem;
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-            font-size: 1rem;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-        
-        .checkout-btn:hover {
-            background-color: var(--dark);
-            transform: translateY(-3px);
-        }
-        
-        /* RESPONSIVE STYLES */
-        @media (max-width: 900px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .search-bar {
-                width: 60%;
-            }
-            
-            .product-details {
-                grid-template-columns: 1fr;
-            }
-            
-            #modal-product-image {
-                height: 300px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .search-bar {
-                width: 70%;
-                order: 3;
-                margin-top: 1rem;
-            }
-            
-            nav {
-                flex-wrap: wrap;
-            }
-            
-            .header-icons, .logo {
-                width: 50%;
-            }
-            
-            .header-icons {
-                justify-content: flex-end;
-            }
-            
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            .cart-item {
-                grid-template-columns: 60px 1fr;
-            }
-            
-            .cart-item-actions {
-                grid-column: span 2;
-                justify-content: flex-end;
-            }
-            
-            .cart-total {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .checkout-btn {
-                width: 100%;
-            }
-        }
-
-        /* Add this CSS to both skincare.html and makeup.html in the <style> section */
-
-/* Delete product button for admin */
-.delete-product-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: all 0.3s ease;
-}
-
-.delete-product-btn:hover {
-    background-color: var(--primary);
-    color: white;
-}
-
-/* Add Product Button */
-.add-product-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--accent);
-    color: white;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.add-product-button:hover {
-    background-color: #c29fe0;
-    transform: rotate(90deg);
-}
-
-/* Add Product Modal Styles */
-#add-product-modal .modal-content {
-    max-width: 600px;
-}
-
-#add-product-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group label {
-    font-weight: 500;
-    color: var(--dark);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: var(--radius);
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-.radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-}
-
-.radio-group input[type="radio"] {
-    margin-right: 0.3rem;
-}
-
-.add-product-submit {
-    margin-top: 1rem;
-    padding: 0.8rem 2rem;
-    background-color: var(--primary);
-    color: white;
-    font-weight: 500;
-    font-size: 1rem;
-    border-radius: 30px;
-    align-self: center;
-    transition: all 0.3s ease;
-}
-
-.add-product-submit:hover {
-    background-color: var(--dark);
-    transform: translateY(-3px);
-}
-
-/* File upload preview */
-.image-preview {
-    width: 100%;
-    height: 200px;
-    margin-top: 0.5rem;
-    border: 1px dashed #ddd;
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: #f9f9f9;
-}
-
-.image-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.error-message {
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-.success-message {
-    color: #2ecc71;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-/* Add these styles to your CSS in each page */
-
-/* Search Results Styles */
-.results-count {
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    color: #777;
-}
-
-.no-results {
-    text-align: center;
-    width: 100%;
-    padding: 3rem 1rem;
-    background-color: var(--gray);
-    border-radius: var(--radius);
-}
-
-.no-results h3 {
-    margin: 1rem 0;
-    color: var(--dark);
-}
-
-.no-results p {
-    color: #777;
-    margin-bottom: 1.5rem;
-}
-
-.search-categories {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.search-category-link {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: var(--primary-light);
-    color: var(--dark);
-    border-radius: 30px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.search-category-link:hover {
-    background-color: var(--primary);
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Search highlight animation */
-@keyframes searchHighlight {
-    0% { transform: scale(1); box-shadow: var(--shadow); }
-    50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); }
-    100% { transform: scale(1); box-shadow: var(--shadow); }
-}
-
-.search-highlight {
-    animation: searchHighlight 1s ease;
-}
-    </style>
+    
+    <link rel="stylesheet" href="./styles/makeup.css">
 </head>
 <body>
     <header>
@@ -907,118 +67,6 @@
                     </button>
                 </div>
 
-                <!-- Product 2: Anastasia Beverly Hills Brow Pencil -->
-                <div class="product-card" data-product-id="2" data-category="eyes">
-                    <div class="sale-tag">20% OFF</div>
-                    <img src="/client/assets/makeup_browwiz.webp" alt="Anastasia Beverly Hills Brow Wiz" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Anastasia Beverly Hills</div>
-                        <h3 class="product-name">Brow Wiz</h3>
-                        <span class="product-category">Eyes</span>
-                        <p class="product-description">Ultra-slim, retractable eyebrow pencil for precise detailing and creating hair-like strokes.</p>
-                        <p class="product-price">$23.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 3: Charlotte Tilbury Lipstick -->
-                <div class="product-card" data-product-id="3" data-category="lips">
-                    <img src="/client/assets/makeup_charlotelipstik.jpg" alt="Charlotte Tilbury Matte Revolution Lipstick" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Charlotte Tilbury</div>
-                        <h3 class="product-name">Matte Revolution Lipstick</h3>
-                        <span class="product-category">Lips</span>
-                        <p class="product-description">Matte lipstick with 3D glowing pigments that create the illusion of fuller, wider lips.</p>
-                        <p class="product-price">$34.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 4: NARS Blush -->
-                <div class="product-card" data-product-id="4" data-category="cheeks">
-                    <div class="new-tag">New</div>
-                    <img src="/client/assets/makeup_nasrblush.webp" alt="NARS Blush" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">NARS</div>
-                        <h3 class="product-name">Blush</h3>
-                        <span class="product-category">Cheeks</span>
-                        <p class="product-description">Award-winning, natural-looking blush that delivers a wide range of shades and finishes.</p>
-                        <p class="product-price">$30.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 5: Urban Decay Eyeshadow Palette -->
-                <div class="product-card" data-product-id="5" data-category="eyes">
-                    <img src="/client/assets/makeup_nakedpallete.jpg" alt="Urban Decay Naked Palette" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Urban Decay</div>
-                        <h3 class="product-name">Naked Palette</h3>
-                        <span class="product-category">Eyes</span>
-                        <p class="product-description">Revolutionary eyeshadow palette filled with 12 neutral shades from silky mattes to smooth shimmers.</p>
-                        <p class="product-price">$54.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 6: Pat McGrath Labs Highlighter -->
-                <div class="product-card" data-product-id="6" data-category="cheeks">
-                    <div class="featured-tag">Luxury</div>
-                    <img src="/client/assets/makeup_pmlhighlighter.webp" alt="Pat McGrath Labs Highlighter" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Pat McGrath Labs</div>
-                        <h3 class="product-name">Skin Fetish Highlighter</h3>
-                        <span class="product-category">Cheeks</span>
-                        <p class="product-description">Transcendent gel-powder highlighter that creates an otherworldly glow on all skin tones.</p>
-                        <p class="product-price">$48.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 7: MAC Lipstick -->
-                <div class="product-card" data-product-id="7" data-category="lips">
-                    <img src="/client/assets/makeup_maclipstick.webp" alt="MAC Lipstick" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">MAC</div>
-                        <h3 class="product-name">Matte Lipstick</h3>
-                        <span class="product-category">Lips</span>
-                        <p class="product-description">Intense color payoff with a no-shine matte finish in iconic shades that last for hours.</p>
-                        <p class="product-price">$19.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 8: Morphe Brushes Set -->
-                <div class="product-card" data-product-id="8" data-category="brushes">
-                    <div class="sale-tag">15% OFF</div>
-                    <img src="/client/assets/makeup_brushset.webp" alt="Morphe Brush Set" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Morphe</div>
-                        <h3 class="product-name">Eye Brush Set</h3>
-                        <span class="product-category">Brushes</span>
-                        <p class="product-description">Set of professional-grade brushes for precise eyeshadow application and blending.</p>
-                        <p class="product-price">$24.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-    </main>
-
     <!-- Product Modal -->
     <div id="product-modal" class="modal">
         <div class="modal-content">
@@ -1056,82 +104,6 @@
 
     <script>
         // Product data for modal display
-        const products = [
-            {
-                id: 1,
-                brand: "Fenty Beauty",
-                name: "Pro Filt'r Soft Matte Foundation",
-                category: "Face",
-                price: 39.00,
-                image: "/client/assets/makeup_fentyfoundation.jpg",
-                description: "A soft matte, long-wear foundation with buildable, medium to full coverage, in a boundary-breaking range of 50 shades. The light-as-air, non-comedogenic formula is made with climate-adaptive technology that's resistant to sweat and humidity, and won't clog pores so that wherever you are, it's going to work on your skin."
-            },
-            {
-                id: 2,
-                brand: "Anastasia Beverly Hills",
-                name: "Brow Wiz",
-                category: "Eyes",
-                price: 23.00,
-                image: "/client/assets/makeup_browwiz.webp",
-                description: "An ultra-slim, retractable pencil for precise detailing and creating hair-like strokes. The fine tip is perfect for spot-filling sparse areas and creating hair-like strokes, while the spoolie end blends for a natural-looking finish. Available in multiple shades to match any hair color."
-            },
-            {
-                id: 3,
-                brand: "Charlotte Tilbury",
-                name: "Matte Revolution Lipstick",
-                category: "Lips",
-                price: 34.00,
-                image: "/client/assets/makeup_charlotelipstik.jpg",
-                description: "A matte lipstick that features a long-lasting, buildable, hydrating formula. Enriched with orchid extract and a blend of oils and waxes, this unique formula keeps lips hydrated all day. The square-angled tip mimics the shape of a lip brush for precise application."
-            },
-            {
-                id: 4,
-                brand: "NARS",
-                name: "Blush",
-                category: "Cheeks",
-                price: 30.00,
-                image: "/client/assets/makeup_nasrblush.webp",
-                description: "An award-winning, pressed powder blush that delivers healthy-looking color to flatter any skin tone. The micronized powder ensures a soft, blendable application. Iconic shades include a range of translucent, natural tones, each with a subtle pink for a natural-looking blush undertone."
-            },
-            {
-                id: 5,
-                brand: "Urban Decay",
-                name: "Naked Palette",
-                category: "Eyes",
-                price: 54.00,
-                image: "/client/assets/makeup_nakedpallete.jpg",
-                description: "An award-winning eyeshadow palette featuring 12 universal, neutral shades that flatter any skin tone. From ultra-smooth mattes to stunning shimmers, Naked is the palette that revolutionized neutral eyeshadows. Each shade features Urban Decay's Pigment Infusion System™ for rich, velvety, blendable color that lasts."
-            },
-            {
-                id: 6,
-                brand: "Pat McGrath Labs",
-                name: "Skin Fetish Highlighter",
-                category: "Cheeks",
-                price: 48.00,
-                image: "/client/assets/makeup_pmlhighlighter.webp",
-                description: "A transcendent, creamy powder highlighter that creates an otherworldly glow. This innovative formula fuses the luminosity of a cream, the ease of a powder, and the blendability of a gel. Apply lightly for subtle radiance or build for intense, prismatic luminosity."
-            },
-            {
-                id: 7,
-                brand: "MAC",
-                name: "Matte Lipstick",
-                category: "Lips",
-                price: 19.00,
-                image: "/client/assets/makeup_maclipstick.web",
-                description: "A rich, creamy lipstick formula with high color payoff in a no-shine matte finish. MAC Lipstick is available in various finishes, but the Matte finish is one of the most popular with its intense color and non-glossy, no-shine finish. The formula glides on smoothly and delivers rich, intense color."
-            },
-            {
-                id: 8,
-                brand: "Morphe",
-                name: "Eye Brush Set",
-                category: "Brushes",
-                price: 24.00,
-                image: "/client/assets/makeup_brushset.webp",
-                description: "A professional-quality eye brush set essential for creating a variety of eye looks. The set includes brushes for applying shadow to the lid, defining the crease, blending out harsh lines, smudging along the lash line, and highlighting the brow bone. Each brush features synthetic bristles and a sleek handle for ultimate control."
-            }
-        ];
-        
-        // Add this code to the makeup.html file, replacing the existing DOMContentLoaded event handler
 
 document.addEventListener('DOMContentLoaded', function() {
     // Cart data
@@ -1926,8 +898,129 @@ function showNotification(message, type) {
     </div>
 </div>
 <script src="./js/admin.js"></script>
-<!-- Add this at the very bottom of makeup.html, just before the closing </body> tag -->
+<script src="./js/products.js"></script>
 <script>
+    // Fallback products if API call fails
+// Add this to the beginning of your script.js or inline script
+document.addEventListener('DOMContentLoaded', function() {
+    // Global products array that will be populated from the database
+    window.products = [];
+    
+    // Load products from database on page load
+    loadProductsFromDatabase();
+    
+    // Rest of your initialization code...
+    setupFilters();
+    setupModalCloseEvents();
+    setupSearch();
+    addMakeupTipsButton();
+    checkFirstTimeVisitor();
+});
+
+// Function to load products from API or fallback
+async function loadProducts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/products');
+        console.log(response);
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const apiProducts = await response.json();
+        return apiProducts;
+    } catch (error) {
+        console.warn('Using fallback products due to error:', error.message);
+        // You should define your fallback products here
+        const fallbackProducts = [
+            {
+                id: 1,
+                name: "No",
+                brand: "Fenty Beauty",
+                category: "face",
+                price: 39.00,
+                description: "Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.",
+                image: "/client/assets/makeup_fentyfoundation.jpg",
+                tagType: "bestseller"
+            },
+            // Add more fallback products as needed
+        ];
+        return fallbackProducts;
+    }
+}
+
+// Load and display products on page
+async function loadProductsFromDatabase() {
+    try {
+        const productsGrid = document.getElementById('makeup-products');
+        if (productsGrid) {
+            productsGrid.innerHTML = '';
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading-indicator';
+            loadingElement.textContent = 'Loading products...';
+            loadingElement.style.textAlign = 'center';
+            loadingElement.style.padding = '2rem';
+            loadingElement.style.gridColumn = '1 / -1';
+            productsGrid.appendChild(loadingElement);
+        }
+
+        const products = await loadProducts();
+
+        const loadingIndicator = document.querySelector('.loading-indicator');
+        if (loadingIndicator) loadingIndicator.remove();
+
+        const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
+        const makeupProducts = products.filter(product =>
+            makeupCategories.includes(product.category.toLowerCase())
+        );
+
+        if (makeupProducts.length === 0) {
+            const noProductsMsg = document.createElement('div');
+            noProductsMsg.textContent = 'No makeup products found.';
+            noProductsMsg.style.textAlign = 'center';
+            noProductsMsg.style.padding = '2rem';
+            noProductsMsg.style.gridColumn = '1 / -1';
+            productsGrid.appendChild(noProductsMsg);
+            return;
+        }
+
+        // Set global products array
+        window.products = makeupProducts;
+
+        // Create cards
+        makeupProducts.forEach(product => {
+            const formattedProduct = {
+                id: product.id,
+                name: product.name || product.title,
+                brand: product.brand || 'Brand Not Specified',
+                category: product.category,
+                price: product.price,
+                description: product.description,
+                image: product.image || product.image_url,
+                tagType: product.featured ? 'featured' : 
+                         (product.sale ? 'sale' : 
+                         (product.new ? 'new' : null))
+            };
+            createProductCard(formattedProduct);
+        });
+
+        // Setup product cards after creating them
+        setupProductCards();
+
+    } catch (error) {
+        console.error('Error loading products:', error);
+
+        const productsGrid = document.getElementById('makeup-products');
+        if (productsGrid) {
+            productsGrid.innerHTML = `
+                <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                    <p>Failed to load products. Please try again later.</p>
+                    <button id="retry-load" style="padding: 0.5rem 1rem; margin-top: 1rem; background-color: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Retry
+                    </button>
+                </div>
+            `;
+            document.getElementById('retry-load').addEventListener('click', loadProductsFromDatabase);
+        }
+    }
+}
+
     // Direct fix for makeup.html admin form submission
     // This runs after all other scripts have loaded
     window.addEventListener('load', function() {

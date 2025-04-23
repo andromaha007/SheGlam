@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
             console.error('Error fetching products:', error);
             return res.status(500).json({ error: "Error fetching products" });
         }
-        res.json(results);
+        return res.json(results);
     });
 });
 
@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
     console.log('Received request to add product:', req.body);
     const { title, description, price, image_url } = req.body;
     
-    // Basic validation
+    
     if (!title || price === undefined) {
         return res.status(400).json({ error: "Product title and price are required" });
     }
@@ -58,6 +58,8 @@ router.post('/', (req, res) => {
         });
     });
 });
+
+// Basic validation
 
 // Update product
 router.put('/:id', (req, res) => {
