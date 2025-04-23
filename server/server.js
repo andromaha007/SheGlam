@@ -12,6 +12,7 @@ const adminRoutes = require('./routes/admin.routes');
 const productRoutes = require('./routes/product.routes');
 const orderRoutes = require('./routes/order.routes');
 const cartRoutes = require('./routes/cart.routes');
+const emailRoutes = require('./routes/email.routes'); // Add this line
 
 // API routes
 app.use('/api/users', userRoutes);
@@ -19,6 +20,7 @@ app.use('/api/admins', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/email', emailRoutes); // Add this line
 
 // Test route
 app.get('/test', (req, res) => {
@@ -34,4 +36,4 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-}); 
+});
