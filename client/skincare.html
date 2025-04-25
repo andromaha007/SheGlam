@@ -1339,7 +1339,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Filter makeup products
-            const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup', 'uncategorized'];
+            const makeupCategories = ['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner'];
             const makeupProducts = validatedProducts.filter(product => 
                 makeupCategories.includes(product.category)
             );
@@ -2558,6 +2558,321 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Run fix with a small delay to ensure DOM is loaded
     setTimeout(fixProductModal, 1000);
+});
+    </script>
+    <script>
+        // Add this to the end of both makeup.html and skincare.html files
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Product persistence fix script loaded');
+    
+    // Fix for products disappearing after refresh
+    function fixProductPersistence() {
+        console.log('Applying product persistence fix');
+        
+        // Original loadProducts function replacement - more robust category handling
+        window.loadProducts = async function() {
+            console.log('Running enhanced loadProducts with better category handling');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/products');
+                console.log('API response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log(`Loaded ${data.length} products from API`);
+                
+                // Validate and normalize product data, especially categories
+                const normalizedProducts = data.map(product => {
+                    // Ensure each product has a valid category
+                    let normalizedCategory = (product.category || '').toLowerCase().trim();
+                    
+                    // Default to a valid category if empty or invalid
+                    if (!normalizedCategory) {
+                        // Determine which page we're on to set appropriate default
+                        const isSkincareContext = window.location.pathname.includes('skincare');
+                        normalizedCategory = isSkincareContext ? 'cleanser' : 'face';
+                    }
+                    
+                    return {
+                        ...product,
+                        id: product.product_id || product.id,
+                        name: product.title || product.name || 'Unnamed Product',
+                        brand: product.brand || 'Brand Not Specified',
+                        category: normalizedCategory,
+                        price: parseFloat(product.price) || 0,
+                        description: product.product_description || product.description || '',
+                        image: product.image_url || product.image || '/client/assets/default-product.jpg'
+                    };
+                });
+                
+                console.log('Products normalized with consistent categories');
+                return normalizedProducts;
+                
+            } catch (error) {
+                console.warn('Error loading products from API:', error);
+                console.log('Falling back to default products');
+                
+                // Return fallback products with proper categories
+                return [
+                    {
+                        id: 1,
+                        name: "Pro Filt'r Soft Matte Foundation",
+                        brand: "Fenty Beauty",
+                        category: "face",
+                        price: 39.00,
+                        description: "Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.",
+                        image: "/client/assets/makeup_fentyfoundation.jpg"
+                    },
+                    {
+                        id: 2,
+                        name: "Hydrating Cleanser",
+                        brand: "CeraVe",
+                        category: "cleanser",
+                        price: 15.99,
+                        description: "Gentle face wash with hyaluronic acid, ceramides, and glycerin to hydrate without stripping the skin barrier.",
+                        image: "/client/assets/default-product.jpg"
+                    }
+                ];
+            }
+        };
+        
+        // Enhanced loadProductsFromDatabase with better category filtering
+        window.loadProductsFromDatabase = async function() {
+            console.log('Running enhanced loadProductsFromDatabase');
+            
+            try {
+                // Determine if we're on skincare or makeup page
+                const isSkincareContext = window.location.pathname.includes('skincare');
+                const containerGridId = isSkincareContext ? 'skincare-products' : 'makeup-products';
+                
+                const productsGrid = document.getElementById(containerGridId) || 
+                                     document.getElementById('makeup-products');
+                                     
+                if (!productsGrid) {
+                    console.error('Products grid not found');
+                    return;
+                }
+                
+                // Show loading indicator
+                productsGrid.innerHTML = '';
+                const loadingElement = document.createElement('div');
+                loadingElement.className = 'loading-indicator';
+                loadingElement.textContent = 'Loading products...';
+                loadingElement.style.textAlign = 'center';
+                loadingElement.style.padding = '2rem';
+                loadingElement.style.gridColumn = '1 / -1';
+                productsGrid.appendChild(loadingElement);
+                
+                // Load all products
+                const products = await loadProducts();
+                console.log('All products loaded:', products);
+                
+                // Remove loading indicator
+                const loadingIndicator = document.querySelector('.loading-indicator');
+                if (loadingIndicator) loadingIndicator.remove();
+                
+                // Filter products based on current page context
+                let filteredProducts;
+                if (isSkincareContext) {
+                    // On skincare page, show skincare products
+                    const skincareCategories = ['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner', 'skincare'];
+                    filteredProducts = products.filter(product => {
+                        const category = (product.category || '').toLowerCase();
+                        return skincareCategories.includes(category);
+                    });
+                } else {
+                    // On makeup page, show makeup products
+                    const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
+                    filteredProducts = products.filter(product => {
+                        const category = (product.category || '').toLowerCase();
+                        return makeupCategories.includes(category);
+                    });
+                }
+                
+                console.log('Filtered products:', filteredProducts);
+                
+                // Handle no products case
+                if (filteredProducts.length === 0) {
+                    const noProductsMsg = document.createElement('div');
+                    noProductsMsg.textContent = `No ${isSkincareContext ? 'skincare' : 'makeup'} products found.`;
+                    noProductsMsg.style.textAlign = 'center';
+                    noProductsMsg.style.padding = '2rem';
+                    noProductsMsg.style.gridColumn = '1 / -1';
+                    productsGrid.appendChild(noProductsMsg);
+                    return;
+                }
+                
+                // Store products in global window variable
+                window.products = filteredProducts;
+                
+                // Create product cards
+                filteredProducts.forEach(product => {
+                    console.log('Creating card for product:', product);
+                    const card = createProductCard(product);
+                    productsGrid.appendChild(card);
+                });
+                
+                console.log('All product cards created successfully');
+                
+                // Set up interaction for product cards
+                if (typeof setupProductCards === 'function') {
+                    setupProductCards();
+                }
+                
+            } catch (error) {
+                console.error('Error in enhanced loadProductsFromDatabase:', error);
+                
+                const productsGrid = document.getElementById('makeup-products');
+                if (productsGrid) {
+                    productsGrid.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                            <p>Failed to load products. Please try again later.</p>
+                            <button id="retry-load" style="padding: 0.5rem 1rem; margin-top: 1rem; background-color: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Retry
+                            </button>
+                        </div>
+                    `;
+                    
+                    const retryButton = document.getElementById('retry-load');
+                    if (retryButton) {
+                        retryButton.addEventListener('click', loadProductsFromDatabase);
+                    }
+                }
+            }
+        };
+        
+        // Fix for the form submission to ensure category is properly set
+        const fixAddProductForm = function() {
+            const form = document.getElementById('add-product-form');
+            if (!form) {
+                console.log('Add product form not found, skipping form fix');
+                return;
+            }
+            
+            console.log('Applying fix to add product form');
+            
+            // Clone to remove existing event listeners
+            const newForm = form.cloneNode(true);
+            form.parentNode.replaceChild(newForm, form);
+            
+            // Add enhanced submission handler
+            newForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('Enhanced add product form submitted');
+                
+                // Get form data
+                const title = document.getElementById('product-name').value;
+                const brand = document.getElementById('product-brand').value;
+                const category = document.getElementById('product-category').value;
+                const price = parseFloat(document.getElementById('product-price').value);
+                const description = document.getElementById('product-description').value;
+                const image_url = document.getElementById('product-image').value;
+                const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+                
+                // Log what we're sending to server
+                console.log('Submitting product with data:', { 
+                    title, brand, category, price, description, image_url, tagType 
+                });
+                
+                try {
+                    // Send to server with explicit category
+                    const response = await fetch('http://localhost:5000/api/products', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            title,
+                            brand,         // Include brand in API call
+                            description,
+                            price,
+                            image_url,
+                            category       // Ensure category is included
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error('Failed to add product: ' + errorText);
+                    }
+                    
+                    const result = await response.json();
+                    console.log('Product added successfully:', result);
+                    
+                    // Create new product object with consistent data structure
+                    const newProduct = {
+                        id: result.productId,
+                        product_id: result.productId,  // Add both id formats for consistency
+                        name: title,
+                        title: title,
+                        brand: brand,
+                        category: category,
+                        price: price,
+                        description: description,
+                        product_description: description,
+                        image: image_url,
+                        image_url: image_url,
+                        tagType: tagType !== 'none' ? tagType : null
+                    };
+                    
+                    // Add to global products array
+                    if (window.products && Array.isArray(window.products)) {
+                        window.products.push(newProduct);
+                        console.log('Product added to window.products array');
+                    } else {
+                        window.products = [newProduct];
+                        console.log('Created new window.products array with new product');
+                    }
+                    
+                    // Create and add product card
+                    const productsGrid = document.getElementById('makeup-products') || 
+                                        document.getElementById('skincare-products');
+                                        
+                    if (productsGrid) {
+                        const card = createProductCard(newProduct);
+                        productsGrid.appendChild(card);
+                        console.log('Product card added to the DOM');
+                    } else {
+                        console.error('Products grid not found');
+                    }
+                    
+                    // Reset form and close modal
+                    newForm.reset();
+                    const modal = document.getElementById('add-product-modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                    
+                    // Show success message
+                    if (typeof showNotification === 'function') {
+                        showNotification('Product added successfully!', 'success');
+                    } else {
+                        alert('Product added successfully!');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error adding product:', error);
+                    if (typeof showNotification === 'function') {
+                        showNotification('Error adding product: ' + error.message, 'error');
+                    } else {
+                        alert('Error adding product: ' + error.message);
+                    }
+                }
+            });
+            
+            console.log('Enhanced add product form handler installed');
+        };
+        
+        // Run the fixes
+        fixAddProductForm();
+    }
+    
+    // Apply the fix after a short delay to ensure DOM is loaded
+    setTimeout(fixProductPersistence, 1000);
 });
     </script>
 </body>
