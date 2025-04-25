@@ -3,849 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skincare Products</title>
+    <title>Makeup Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* GLOBAL STYLES */
-        :root {
-            --primary: #f28e9c;
-            --primary-light: #ffd3da;
-            --secondary: #8ecfe8;
-            --dark: #333333;
-            --light: #ffffff;
-            --gray: #f5f5f5;
-            --accent: #d1b3ee;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #fcfcfc;
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        button {
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        /* HEADER STYLES */
-        header {
-            background-color: var(--light);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-        
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .logo img {
-            height: 50px;
-            transition: transform 0.3s ease;
-        }
-        
-        .logo img:hover {
-            transform: scale(1.05);
-        }
-        
-        .search-bar {
-            position: relative;
-            width: 40%;
-            max-width: 500px;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 0.8rem 1rem 0.8rem 3rem;
-            border: none;
-            border-radius: 30px;
-            background-color: var(--gray);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        
-        .search-bar input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--primary-light);
-            background-color: white;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            font-weight: 500;
-            padding: 0.5rem 0;
-            position: relative;
-            color: var(--dark);
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links a:hover, .nav-links a.active {
-            opacity: 1;
-            color: var(--primary);
-        }
-        
-        .nav-links a:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover:after, .nav-links a.active:after {
-            width: 100%;
-        }
-        
-        .header-icons {
-            display: flex;
-            gap: 1.5rem;
-        }
-        
-        .user-icon, .cart-icon {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: var(--gray);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .user-icon:hover, .cart-icon:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--primary);
-            color: white;
-            font-size: 0.7rem;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* MAIN CONTENT STYLES */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 5%;
-        }
-        
-        section {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        section h1 {
-            margin-bottom: 2rem;
-            font-size: 2.2rem;
-            position: relative;
-            display: inline-block;
-            color: var(--dark);
-        }
-        
-        section h1:after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary);
-            border-radius: 2px;
-        }
-
-        /* CATEGORY FILTER */
-        .category-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .filter-button {
-            padding: 0.6rem 1.2rem;
-            background-color: var(--gray);
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-button:hover, .filter-button.active {
-            background-color: var(--primary-light);
-            color: var(--dark);
-        }
-
-        .filter-button.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        /* PRODUCTS GRID */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-        
-        .product-card {
-            background-color: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            background-color: #f9f9f9;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .product-info {
-            padding: 1.2rem;
-        }
-        
-        .product-brand {
-            font-size: 0.85rem;
-            color: #777;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .product-category {
-            display: inline-block;
-            font-size: 0.8rem;
-            padding: 0.3rem 0.6rem;
-            background-color: var(--gray);
-            border-radius: 4px;
-            margin-bottom: 0.8rem;
-        }
-        
-        .product-description {
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            height: 2.8em;
-        }
-        
-        .product-price {
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        
-        .quick-add {
-            position: absolute;
-            bottom: 1.2rem;
-            right: 1.2rem;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .product-card:hover .quick-add {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .quick-add:hover {
-            background-color: var(--dark);
-        }
-
-        /* Tags */
-        .featured-tag, .sale-tag, .new-tag {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0.3rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 30px;
-            font-weight: 500;
-            z-index: 2;
-        }
-
-        .featured-tag {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        .sale-tag {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .new-tag {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        /* MODAL STYLES */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 200;
-            overflow-y: auto;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: var(--radius);
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            padding: 2rem;
-            animation: slideUp 0.4s ease;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .close:hover {
-            background-color: #eee;
-            transform: rotate(90deg);
-        }
-        
-        .product-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        #modal-product-image {
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            background-color: #f9f9f9;
-            border-radius: var(--radius);
-            padding: 1rem;
-        }
-        
-        .modal-brand {
-            font-size: 1rem;
-            color: #777;
-            margin-bottom: 0.5rem;
-        }
-        
-        .modal-name {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .modal-category {
-            display: inline-block;
-            font-size: 0.9rem;
-            padding: 0.4rem 0.8rem;
-            background-color: var(--gray);
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-description {
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: #555;
-        }
-        
-        .price {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 2rem;
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: var(--primary-light);
-            border-radius: var(--radius);
-        }
-        
-        .add-to-cart {
-            padding: 0.8rem 2rem;
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-            font-size: 1rem;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .add-to-cart:hover {
-            background-color: var(--dark);
-            transform: translateY(-3px);
-        }
-        
-        /* CART MODAL */
-        #cart-items {
-            margin-bottom: 2rem;
-        }
-        
-        .cart-item {
-            display: grid;
-            grid-template-columns: 80px 1fr auto;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
-            align-items: center;
-        }
-        
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: var(--radius);
-        }
-        
-        .cart-item-info h3 {
-            margin-bottom: 0.5rem;
-        }
-        
-        .cart-item-price {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .quantity-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .quantity-btn:hover {
-            background-color: #eee;
-        }
-        
-        .remove-item {
-            color: #999;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .remove-item:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-        
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--gray);
-        }
-        
-        .checkout-btn {
-            padding: 0.8rem 2rem;
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-            font-size: 1rem;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-        
-        .checkout-btn:hover {
-            background-color: var(--dark);
-            transform: translateY(-3px);
-        }
-        
-        /* RESPONSIVE STYLES */
-        @media (max-width: 900px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .search-bar {
-                width: 60%;
-            }
-            
-            .product-details {
-                grid-template-columns: 1fr;
-            }
-            
-            #modal-product-image {
-                height: 300px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .search-bar {
-                width: 70%;
-                order: 3;
-                margin-top: 1rem;
-            }
-            
-            nav {
-                flex-wrap: wrap;
-            }
-            
-            .header-icons, .logo {
-                width: 50%;
-            }
-            
-            .header-icons {
-                justify-content: flex-end;
-            }
-            
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            .cart-item {
-                grid-template-columns: 60px 1fr;
-            }
-            
-            .cart-item-actions {
-                grid-column: span 2;
-                justify-content: flex-end;
-            }
-            
-            .cart-total {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .checkout-btn {
-                width: 100%;
-            }
-        }
-        /* Add this CSS to both skincare.html and makeup.html in the <style> section */
-
-/* Delete product button for admin */
-.delete-product-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: all 0.3s ease;
-}
-
-.delete-product-btn:hover {
-    background-color: var(--primary);
-    color: white;
-}
-
-/* Add Product Button */
-.add-product-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--accent);
-    color: white;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.add-product-button:hover {
-    background-color: #c29fe0;
-    transform: rotate(90deg);
-}
-
-/* Add Product Modal Styles */
-#add-product-modal .modal-content {
-    max-width: 600px;
-}
-
-#add-product-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group label {
-    font-weight: 500;
-    color: var(--dark);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: var(--radius);
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-.radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-}
-
-.radio-group input[type="radio"] {
-    margin-right: 0.3rem;
-}
-
-.add-product-submit {
-    margin-top: 1rem;
-    padding: 0.8rem 2rem;
-    background-color: var(--primary);
-    color: white;
-    font-weight: 500;
-    font-size: 1rem;
-    border-radius: 30px;
-    align-self: center;
-    transition: all 0.3s ease;
-}
-
-.add-product-submit:hover {
-    background-color: var(--dark);
-    transform: translateY(-3px);
-}
-
-/* File upload preview */
-.image-preview {
-    width: 100%;
-    height: 200px;
-    margin-top: 0.5rem;
-    border: 1px dashed #ddd;
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: #f9f9f9;
-}
-
-.image-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.error-message {
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-.success-message {
-    color: #2ecc71;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-/* Add these styles to your CSS in each page */
-
-/* Search Results Styles */
-.results-count {
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    color: #777;
-}
-
-.no-results {
-    text-align: center;
-    width: 100%;
-    padding: 3rem 1rem;
-    background-color: var(--gray);
-    border-radius: var(--radius);
-}
-
-.no-results h3 {
-    margin: 1rem 0;
-    color: var(--dark);
-}
-
-.no-results p {
-    color: #777;
-    margin-bottom: 1.5rem;
-}
-
-.search-categories {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.search-category-link {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: var(--primary-light);
-    color: var(--dark);
-    border-radius: 30px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.search-category-link:hover {
-    background-color: var(--primary);
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Search highlight animation */
-@keyframes searchHighlight {
-    0% { transform: scale(1); box-shadow: var(--shadow); }
-    50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); }
-    100% { transform: scale(1); box-shadow: var(--shadow); }
-}
-
-.search-highlight {
-    animation: searchHighlight 1s ease;
-}
-    </style>
+    
+    <link rel="stylesheet" href="./styles/makeup.css">
 </head>
 <body>
     <header>
@@ -856,13 +17,14 @@
                 </a>
             </div>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search skincare products...">
+                <input type="text" id="searchInput" placeholder="Search makeup products...">
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="skincare.html" class="active">Skincare</a>
                 <a href="makeup.html">Makeup</a>
+                <a href="contact.html">Contact</a>
             </div>
             <div class="header-icons">
                 <div class="user-icon" onclick="handleUserIconClick()">
@@ -877,146 +39,34 @@
     </header>
 
     <main>
-        <section id="skincare">
-            <h1>Skincare Products</h1>
+        <section id="makeup">
+            <h1>Makeup Products</h1>
             
             <div class="category-filter">
                 <button class="filter-button active" data-category="all">All Products</button>
-                <button class="filter-button" data-category="cleanser">Cleansers</button>
-                <button class="filter-button" data-category="moisturizer">Moisturizers</button>
-                <button class="filter-button" data-category="treatment">Treatments</button>
+                <button class="filter-button" data-category="cleansers">Cleansers</button>
+                <button class="filter-button" data-category="moisturizers">Moisturizers</button>
+                <button class="filter-button" data-category="treatments">Treatments</button>
                 <button class="filter-button" data-category="sunscreen">Sunscreen</button>
-                <button class="filter-button" data-category="toner">Toners</button>
+                <button class="filter-button" data-category="toners">Toners</button>
             </div>
             
-            <div class="products-grid" id="skincare-products">
-                <!-- Product 1: CeraVe Hydrating Cleanser -->
-                <div class="product-card" data-product-id="1" data-category="cleanser">
+            <div class="products-grid" id="makeup-products">
+                <!-- Product 1: Fenty Beauty Foundation -->
+                <div class="product-card" data-product-id="1" data-category="face">
                     <div class="featured-tag">Bestseller</div>
-                    <img src="/client/assets/skincare_ceravecleanser.webp" alt="CeraVe Hydrating Facial Cleanser" class="product-image">
+                    <img src="/client/assets/makeup_fentyfoundation.jpg" alt="Fenty Beauty Pro Filt'r Foundation" class="product-image">
                     <div class="product-info">
-                        <div class="product-brand">CeraVe</div>
-                        <h3 class="product-name">Hydrating Facial Cleanser</h3>
-                        <span class="product-category">Cleanser</span>
-                        <p class="product-description">Developed with dermatologists, this gentle cleanser with ceramides and hyaluronic acid hydrates while cleansing.</p>
-                        <p class="product-price">$15.99</p>
+                        <div class="product-brand">Fenty Beauty</div>
+                        <h3 class="product-name">Pro Filt'r Soft Matte Foundation</h3>
+                        <span class="product-category">Face</span>
+                        <p class="product-description">Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.</p>
+                        <p class="product-price">$39.00</p>
                     </div>
                     <button class="quick-add">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
-
-                <!-- Product 2: Estée Lauder Night Repair -->
-                <div class="product-card" data-product-id="2" data-category="treatment">
-                    <div class="sale-tag">15% OFF</div>
-                    <img src="/client/assets/skincare_esteelauder.jpg" alt="Estée Lauder Advanced Night Repair" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Estée Lauder</div>
-                        <h3 class="product-name">Advanced Night Repair</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Powerful overnight treatment that reduces multiple signs of aging with synchronized recovery complex II technology.</p>
-                        <p class="product-price">$75.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 3: La Roche-Posay Sunscreen -->
-                <div class="product-card" data-product-id="3" data-category="sunscreen">
-                    <img src="/client/assets/skincare_larocheposay.webp" alt="La Roche-Posay Anthelios Sunscreen" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">La Roche-Posay</div>
-                        <h3 class="product-name">Anthelios 50+ Invisible Fluid</h3>
-                        <span class="product-category">Sunscreen</span>
-                        <p class="product-description">Very high sun protection with SPF 50+ that provides broad-spectrum UVA/UVB protection in an ultra-lightweight formula.</p>
-                        <p class="product-price">$29.99</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 4: Neutrogena Hydro Boost -->
-                <div class="product-card" data-product-id="4" data-category="moisturizer">
-                    <div class="new-tag">New</div>
-                    <img src="/client/assets/skincare_neutrogenamoist.jpg" alt="Neutrogena Hydro Boost Gel Cream" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Neutrogena</div>
-                        <h3 class="product-name">Hydro Boost Gel Cream</h3>
-                        <span class="product-category">Moisturizer</span>
-                        <p class="product-description">Lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours with hyaluronic acid.</p>
-                        <p class="product-price">$19.99</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 5: Paula's Choice Exfoliant -->
-                <div class="product-card" data-product-id="5" data-category="treatment">
-                    <img src="/client/assets/skincare_paulachoice.webp" alt="Paula's Choice BHA Liquid Exfoliant" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Paula's Choice</div>
-                        <h3 class="product-name">2% BHA Liquid Exfoliant</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Leave-on exfoliant that gently removes dead skin and unclogs pores with salicylic acid for smoother, brighter skin.</p>
-                        <p class="product-price">$29.50</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 6: SkinCeuticals CE Ferulic -->
-                <div class="product-card" data-product-id="6" data-category="treatment">
-                    <div class="featured-tag">Premium</div>
-                    <img src="/client/assets/skincare_cetreatment.jpg" alt="SkinCeuticals C E Ferulic Serum" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">SkinCeuticals</div>
-                        <h3 class="product-name">C E Ferulic Serum</h3>
-                        <span class="product-category">Treatment</span>
-                        <p class="product-description">Patented daytime vitamin C serum for advanced environmental protection and improvement in the appearance of fine lines.</p>
-                        <p class="product-price">$166.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 7: Thayers Witch Hazel Toner -->
-                <div class="product-card" data-product-id="7" data-category="toner">
-                    <img src="/client/assets/skincare_thayerstreatment.webp" alt="Thayers Witch Hazel Rose Petal Toner" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">Thayers</div>
-                        <h3 class="product-name">Witch Hazel Rose Petal Toner</h3>
-                        <span class="product-category">Toner</span>
-                        <p class="product-description">Alcohol-free toner made with witch hazel extract, aloe vera, and rose water to cleanse, tone, and moisturize skin.</p>
-                        <p class="product-price">$10.95</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Product 8: BECCA Shimmering Skin Perfector -->
-                <div class="product-card" data-product-id="8" data-category="moisturizer">
-                    <div class="sale-tag">10% OFF</div>
-                    <img src="/client/assets/skincare_beccaperfector.jpg" alt="BECCA Shimmering Skin Perfector" class="product-image">
-                    <div class="product-info">
-                        <div class="product-brand">BECCA</div>
-                        <h3 class="product-name">Shimmering Skin Perfector</h3>
-                        <span class="product-category">Moisturizer</span>
-                        <p class="product-description">Luminous cream that creates a subtle glow, infused with fine luminescent pearls that absorb and reflect light.</p>
-                        <p class="product-price">$38.00</p>
-                    </div>
-                    <button class="quick-add">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-    </main>
 
     <!-- Product Modal -->
     <div id="product-modal" class="modal">
@@ -1054,7 +104,7 @@
     </div>
 
     <script>
-        
+        // Product data for modal display
 
 document.addEventListener('DOMContentLoaded', function() {
     // Cart data
@@ -1074,111 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search functionality
     setupSearch();
     
-    // Initialize skincare advice button
-    addSkincareAdviceButton();
-
+    // Add makeup tips button
+    addMakeupTipsButton();
+    
     // Get reference to checkout button
 const checkoutBtn = document.querySelector('.checkout-btn');
-
-// Add Product Modal Functionality
-function setupAddProductModal() {
-    // Get DOM elements
-    const addProductBtn = document.querySelector('.add-product-button');
-    const addProductModal = document.getElementById('add-product-modal');
-    
-    // Ensure elements exist before adding event listeners
-    if (!addProductBtn || !addProductModal) {
-        console.error('Add product button or modal not found');
-        return;
-    }
-    
-    const closeBtn = addProductModal.querySelector('.close');
-    const addProductForm = document.getElementById('add-product-form');
-    
-    // Open modal when add product button is clicked
-    addProductBtn.addEventListener('click', () => {
-        addProductModal.style.display = 'flex';
-    });
-    
-    // Close modal when close button is clicked
-    closeBtn.addEventListener('click', () => {
-        addProductModal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside the modal content
-    window.addEventListener('click', (e) => {
-        if (e.target === addProductModal) {
-            addProductModal.style.display = 'none';
-        }
-    });
-    
-    // Handle form submission
-    addProductForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Get form values
-        const name = document.getElementById('product-name').value;
-        const brand = document.getElementById('product-brand').value;
-        const category = document.getElementById('product-category').value;
-        const price = parseFloat(document.getElementById('product-price').value);
-        const description = document.getElementById('product-description').value;
-        const imageUrl = document.getElementById('product-image').value;
-        const tagType = document.querySelector('input[name="product-tag"]:checked').value;
-        
-        // Create product object for database
-        const productData = {
-            title: name,
-            description: description,
-            price: price,
-            image_url: imageUrl
-        };
-        
-        try {
-            // Send product data to server
-            const response = await fetch('http://localhost:5000/api/products', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productData)
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Product added:', result);
-                
-                // Create product card and add to page
-                const newProduct = {
-                    id: result.productId,
-                    brand: brand,
-                    name: name,
-                    category: category,
-                    price: price,
-                    description: description,
-                    image: imageUrl,
-                    tagType: tagType !== 'none' ? tagType : null
-                };
-                
-                createProductCard(newProduct);
-                
-                // Clear form
-                addProductForm.reset();
-                
-                // Close modal
-                addProductModal.style.display = 'none';
-                
-                // Show notification
-                alert('Product added successfully!');
-            } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to add product');
-            }
-        } catch (error) {
-            console.error('Error adding product:', error);
-            alert('Error adding product: ' + error.message);
-        }
-    });
-}
 
 // Function to create a new product card and add it to the page
 function createProductCard(product) {
@@ -1251,42 +201,6 @@ function createProductCard(product) {
     });
     productCard.appendChild(quickAddBtn);
     
-    // Add delete button (for admin)
-    if (localStorage.getItem('isAdmin') === 'true') {
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-product-btn';
-        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-        deleteBtn.onclick = async (e) => {
-            e.stopPropagation();
-            
-            if (confirm('Are you sure you want to delete this product?')) {
-                try {
-                    // Send delete request to server
-                    const response = await fetch(`http://localhost:5000/api/products/${product.id}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (response.ok) {
-                        // Remove product card from DOM with animation
-                        productCard.style.opacity = '0.5';
-                        setTimeout(() => {
-                            productCard.remove();
-                        }, 300);
-                        
-                        alert('Product deleted successfully');
-                    } else {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Failed to delete product');
-                    }
-                } catch (error) {
-                    console.error('Error deleting product:', error);
-                    alert('Error deleting product: ' + error.message);
-                }
-            }
-        };
-        productCard.appendChild(deleteBtn);
-    }
-    
     // Find the appropriate container to add the product card to
     let containerSelector = '.products-grid';
     if (product.category.toLowerCase() === 'cleanser' || product.category.toLowerCase() === 'moisturizer' || 
@@ -1326,72 +240,6 @@ function createProductCard(product) {
     return productCard;
 }
 
-// Initialize admin functionality 
-document.addEventListener('DOMContentLoaded', function() {
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    
-    if (isAdmin) {
-        console.log('Admin is logged in, setting up admin features');
-        
-        // Create and add the "Add Product" button if it doesn't exist
-        if (!document.querySelector('.add-product')) {
-            const addProductBtn = document.createElement('div');
-            addProductBtn.className = 'add-product';
-            addProductBtn.innerHTML = '<button class="add-product-button">+</button>';
-            
-            const nav = document.querySelector('nav');
-            if (nav) {
-                nav.appendChild(addProductBtn);
-            }
-        }
-        
-        // Hide cart icon for admin
-        const cartIcon = document.querySelector('.cart-icon');
-        if (cartIcon) {
-            cartIcon.style.display = 'none';
-        }
-        
-        // Set up the add product modal
-        setupAddProductModal();
-        
-        // Add delete buttons to existing products
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            if (!card.querySelector('.delete-product-btn')) {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-product-btn';
-                deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                deleteBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    
-                    if (confirm('Are you sure you want to delete this product?')) {
-                        const productId = card.getAttribute('data-product-id');
-                        
-                        fetch(`http://localhost:5000/api/products/${productId}`, {
-                            method: 'DELETE'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                card.style.opacity = '0.5';
-                                setTimeout(() => {
-                                    card.remove();
-                                }, 300);
-                                alert('Product deleted successfully');
-                            } else {
-                                throw new Error('Failed to delete product');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Error deleting product');
-                        });
-                    }
-                };
-                card.appendChild(deleteBtn);
-            }
-        });
-    }
-});//*//
    // Add this code to the skincare.html file just after the DOMContentLoaded event
 
 // Add event listener for checkout button
@@ -1404,32 +252,31 @@ if (checkoutBtn) {
         window.location.href = 'checkout.html';
     });
 }
-
 });
-
-// This is important - make sure your setupFilters function doesn't interfere with navigation
-function setupFilters() {
-    const filterButtons = document.querySelectorAll('.filter-button');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Update active class
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+        
+        // Filter functionality
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.filter-button');
             
-            const category = this.getAttribute('data-category');
-            const productCards = document.querySelectorAll('.product-card');
-            
-            productCards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active class
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    const productCards = document.querySelectorAll('.product-card');
+                    
+                    productCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
             });
-        });
-    });
-}
+        }
         
         // Product card setup
         function setupProductCards() {
@@ -1460,7 +307,7 @@ function setupFilters() {
             });
         }
         
-        // Modal setup
+        // Modal close events
         function setupModalCloseEvents() {
             const closeButtons = document.querySelectorAll('.close');
             
@@ -1483,6 +330,28 @@ function setupFilters() {
                 addToCart(productId, 1);
                 document.getElementById('product-modal').style.display = 'none';
             });
+        }
+        
+        // Product modal
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                const modal = document.getElementById('product-modal');
+                
+                document.getElementById('modal-product-image').src = product.image;
+                document.getElementById('modal-product-image').alt = product.name;
+                document.getElementById('modal-product-brand').textContent = product.brand;
+                document.getElementById('modal-product-name').textContent = product.name;
+                document.getElementById('modal-product-category').textContent = product.category;
+                document.getElementById('modal-product-description').textContent = product.description;
+                document.getElementById('modal-product-price').textContent = `$${product.price.toFixed(2)}`;
+                
+                // Set product ID for add to cart button
+                document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
+                
+                modal.style.display = 'flex';
+            }
         }
         
         // Search functionality
@@ -1525,28 +394,6 @@ function setupFilters() {
             // Show message if no results
             if (!found) {
                 alert('No products found matching your search. Try different keywords.');
-            }
-        }
-        
-        // Product modal
-        function openProductModal(productId) {
-            const product = products.find(p => p.id === productId);
-            
-            if (product) {
-                const modal = document.getElementById('product-modal');
-                
-                document.getElementById('modal-product-image').src = product.image;
-                document.getElementById('modal-product-image').alt = product.name;
-                document.getElementById('modal-product-brand').textContent = product.brand;
-                document.getElementById('modal-product-name').textContent = product.name;
-                document.getElementById('modal-product-category').textContent = product.category;
-                document.getElementById('modal-product-description').textContent = product.description;
-                document.getElementById('modal-product-price').textContent = `${product.price.toFixed(2)}`;
-                
-                // Set product ID for add to cart button
-                document.querySelector('.add-to-cart').setAttribute('data-product-id', productId);
-                
-                modal.style.display = 'flex';
             }
         }
         
@@ -1607,7 +454,7 @@ function setupFilters() {
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-info">
                         <h3>${item.name}</h3>
-                        <p class="cart-item-price">${item.price.toFixed(2)}</p>
+                        <p class="cart-item-price">$${item.price.toFixed(2)}</p>
                     </div>
                     <div class="cart-item-actions">
                         <div class="quantity-control">
@@ -1678,13 +525,119 @@ function setupFilters() {
             }
         }
         
+        // Add makeup tips section
+        function addMakeupTipsButton() {
+            const tipsButton = document.createElement('button');
+            tipsButton.textContent = 'View Skincare Tips';
+            tipsButton.style.backgroundColor = 'var(--primary)';
+            tipsButton.style.color = 'white';
+            tipsButton.style.border = 'none';
+            tipsButton.style.padding = '0.8rem 1.5rem';
+            tipsButton.style.borderRadius = '30px';
+            tipsButton.style.marginBottom = '2rem';
+            tipsButton.style.fontWeight = '500';
+            tipsButton.style.display = 'block';
+            tipsButton.style.marginLeft = 'auto';
+            tipsButton.style.marginRight = 'auto';
+            tipsButton.style.cursor = 'pointer';
+            
+            tipsButton.addEventListener('click', function() {
+                showMakeupTips();
+                this.style.display = 'none';
+            });
+            
+            // Insert after the category filters
+            const categoryFilter = document.querySelector('.category-filter');
+            categoryFilter.parentNode.insertBefore(tipsButton, categoryFilter.nextSibling);
+        }
+        
+        function showMakeupTips() {
+            const tipsElement = document.createElement('div');
+            tipsElement.className = 'makeup-tips';
+            tipsElement.style.marginTop = '4rem';
+            tipsElement.style.padding = '2rem';
+            tipsElement.style.backgroundColor = 'var(--gray)';
+            tipsElement.style.borderRadius = 'var(--radius)';
+            
+            tipsElement.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; position: relative; display: inline-block;">Makeup Application Tips</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Face Makeup Order</h3>
+                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Primer:</strong> Create a smooth base for foundation</li>
+                            <li><strong>Color Corrector:</strong> Target specific concerns</li>
+                            <li><strong>Foundation:</strong> Apply from center outward</li>
+                            <li><strong>Concealer:</strong> Target under eyes and blemishes</li>
+                            <li><strong>Powder:</strong> Set liquid products</li>
+                            <li><strong>Bronzer/Blush/Highlight:</strong> Add dimension</li>
+                            <li><strong>Setting Spray:</strong> Lock everything in place</li>
+                        </ol>
+                    </div>
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Eye Makeup Tips</h3>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Prime:</strong> Always use eyeshadow primer</li>
+                            <li><strong>Blend:</strong> Use windshield wiper motions</li>
+                            <li><strong>Dark to Light:</strong> Apply darkest shade in crease</li>
+                            <li><strong>Highlight:</strong> Add shimmer to inner corners</li>
+                            <li><strong>Mascara:</strong> Apply to top and bottom lashes</li>
+                            <li><strong>Waterline:</strong> Use waterproof liner to avoid smudging</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Lip Application Secrets</h3>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li><strong>Exfoliate:</strong> Use a lip scrub before application</li>
+                            <li><strong>Outline:</strong> Use lip liner for precise edges</li>
+                            <li><strong>Apply:</strong> Start in center and work outward</li>
+                            <li><strong>Blot:</strong> Press lips with tissue between layers</li>
+                            <li><strong>Highlight:</strong> Add a touch to cupid's bow</li>
+                            <li><strong>Set:</strong> Dust with translucent powder for matte look</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="hide-tips" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; background-color: var(--gray); border: 1px solid #ddd; border-radius: 30px;">Hide Tips</button>
+            `;
+            
+            // Find the right place to insert the tips info
+            const section = document.getElementById('makeup');
+            section.appendChild(tipsElement);
+            
+            // Add event listener to hide button
+            document.getElementById('hide-tips').addEventListener('click', function() {
+                tipsElement.style.display = 'none';
+                const tipsButton = document.createElement('button');
+                tipsButton.textContent = 'View Makeup Tips';
+                tipsButton.style.backgroundColor = 'var(--primary)';
+                tipsButton.style.color = 'white';
+                tipsButton.style.border = 'none';
+                tipsButton.style.padding = '0.8rem 1.5rem';
+                tipsButton.style.borderRadius = '30px';
+                tipsButton.style.marginBottom = '2rem';
+                tipsButton.style.fontWeight = '500';
+                tipsButton.style.display = 'block';
+                tipsButton.style.marginLeft = 'auto';
+                tipsButton.style.marginRight = 'auto';
+                tipsButton.style.cursor = 'pointer';
+                
+                tipsButton.addEventListener('click', function() {
+                    showMakeupTips();
+                    this.style.display = 'none';
+                });
+                
+                const categoryFilter = document.querySelector('.category-filter');
+                categoryFilter.parentNode.insertBefore(tipsButton, categoryFilter.nextSibling);
+            });
+        }
+        
         // Check if user has viewed the page before
         function checkFirstTimeVisitor() {
-            if (!localStorage.getItem('visitedSkincare')) {
+            if (!localStorage.getItem('visitedMakeup')) {
                 setTimeout(() => {
                     showWelcomePopup();
                 }, 2000);
-                localStorage.setItem('visitedSkincare', 'true');
+                localStorage.setItem('visitedMakeup', 'true');
             }
         }
         
@@ -1702,8 +655,8 @@ function setupFilters() {
             welcomePopup.style.animation = 'slideIn 0.5s ease';
             
             welcomePopup.innerHTML = `
-                <h3 style="margin-bottom: 10px; color: var(--primary);">Welcome to Skincare!</h3>
-                <p style="margin-bottom: 15px;">Discover our premium collection of skincare products for all skin types.</p>
+                <h3 style="margin-bottom: 10px; color: var(--primary);">Welcome to Makeup!</h3>
+                <p style="margin-bottom: 15px;">Discover our premium collection of makeup products for every look.</p>
                 <button style="background-color: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; width: 100%;">Explore Now</button>
                 <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-weight: bold;" id="close-popup">×</span>
             `;
@@ -1734,279 +687,6 @@ function setupFilters() {
         
         // Initialize checking for first-time visitors
         checkFirstTimeVisitor();
-        
-        // Product data for modal display
-        const products = [
-            {
-                id: 1,
-                brand: "CeraVe",
-                name: "Hydrating Facial Cleanser",
-                category: "Cleanser",
-                price: 15.99,
-                image: "/client/assets/skincare_ceravecleanser.webp",
-                description: "Developed with dermatologists, this gentle, non-foaming cleanser for normal to dry skin hydrates while cleansing. Contains three essential ceramides and hyaluronic acid to help restore the skin's natural barrier and retain moisture. Free from fragrance and soap, this cleanser is perfect for daily use both morning and evening."
-            },
-            {
-                id: 2,
-                brand: "Estée Lauder",
-                name: "Advanced Night Repair",
-                category: "Treatment",
-                price: 75.00,
-                image: "/client/assets/skincare_esteelauder.jpg",
-                description: "This powerful overnight treatment works to reduce the look of multiple signs of aging. The synchronized recovery complex II technology helps to promote the skin's natural renewal process, resulting in smoother, more radiant skin. Use nightly on cleansed skin before your moisturizer for best results."
-            },
-            {
-                id: 3,
-                brand: "La Roche-Posay",
-                name: "Anthelios 50+ Invisible Fluid",
-                category: "Sunscreen",
-                price: 29.99,
-                image: "/client/assets/skincare_larocheposay.webp",
-                description: "A very high sun protection facial sunscreen with SPF 50+ that provides broad-spectrum UVA/UVB protection. Its ultra-lightweight formula absorbs quickly without leaving a white cast or greasy residue. Water-resistant and suitable for sensitive skin, this sunscreen is perfect for daily protection against sun damage."
-            },
-            {
-                id: 4,
-                brand: "Neutrogena",
-                name: "Hydro Boost Gel Cream",
-                category: "Moisturizer",
-                price: 19.99,
-                image: "/client/assets/skincare_neutrogenamoist.jpg",
-                description: "A lightweight gel-cream that instantly quenches dry skin and keeps it hydrated for up to 48 hours. Formulated with hyaluronic acid, it boosts hydration and locks it in for smoother, supple skin. Oil-free, dye-free, and fragrance-free, it's suitable for sensitive skin and can be used under makeup."
-            },
-            {
-                id: 5,
-                brand: "Paula's Choice",
-                name: "2% BHA Liquid Exfoliant",
-                category: "Treatment",
-                price: 29.50,
-                image: "/client/assets/skincare_paulachoice.webp",
-                description: "A leave-on exfoliant that gently and effectively removes built-up layers of dead skin and unclogs pores. The non-abrasive formula with salicylic acid reveals smoother, brighter skin by unclogging pores and evening skin tone. Perfect for daily use, this exfoliant helps reduce blackheads, enlarged pores, and improve skin texture."
-            },
-            {
-                id: 6,
-                brand: "SkinCeuticals",
-                name: "C E Ferulic Serum",
-                category: "Treatment",
-                price: 166.00,
-                image: "/client/assets/skincare_cetreatment.jpg",
-                description: "A patented daytime vitamin C serum that delivers advanced environmental protection and improves the appearance of fine lines, wrinkles, and loss of firmness. The synergistic antioxidant combination helps neutralize free radicals induced by UVA/UVB, infrared radiation, and pollution. Once absorbed, this serum can't be washed or rubbed off, remaining effective for a minimum of 72 hours."
-            },
-            {
-                id: 7,
-                brand: "Thayers",
-                name: "Witch Hazel Rose Petal Toner",
-                category: "Toner",
-                price: 10.95,
-                image: "/client/assets/skincare_thayerstreatment.webp",
-                description: "An alcohol-free toner made with witch hazel extract, aloe vera, and rose water. The gentle formula helps to cleanse, tone, and moisturize the skin without causing dryness or irritation. Witch hazel helps to refine pores while rose water soothes and adds a natural glow to the complexion."
-            },
-            {
-                id: 8,
-                brand: "BECCA",
-                name: "Shimmering Skin Perfector",
-                category: "Moisturizer",
-                price: 38.00,
-                image: "/client/assets/skincare_beccaperfector.jpg",
-                description: "A luminous highlighter that creates a radiant glow on the skin. The creamy powder formula is infused with ultra-fine luminescent pearls that absorb, reflect, and refract light for a natural-looking highlight. Can be worn alone or layered over foundation for a customizable glow."
-            },
-            
-        ];
-        
-        // Add skincare routines information
-        function showRoutines() {
-            const routinesElement = document.createElement('div');
-            routinesElement.className = 'skincare-routines';
-            routinesElement.style.marginTop = '4rem';
-            routinesElement.style.padding = '2rem';
-            routinesElement.style.backgroundColor = 'var(--gray)';
-            routinesElement.style.borderRadius = 'var(--radius)';
-            
-            routinesElement.innerHTML = `
-                <h2 style="margin-bottom: 1.5rem; position: relative; display: inline-block;">Skincare Routines</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Morning Routine</h3>
-                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Cleanser:</strong> Start with a gentle cleanser</li>
-                            <li><strong>Toner:</strong> Balance skin's pH</li>
-                            <li><strong>Serum:</strong> Apply vitamin C for antioxidant protection</li>
-                            <li><strong>Moisturizer:</strong> Hydrate and seal in previous products</li>
-                            <li><strong>Sunscreen:</strong> Always finish with SPF 30+ protection</li>
-                        </ol>
-                    </div>
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Evening Routine</h3>
-                        <ol style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Makeup Remover:</strong> Double cleanse if wearing makeup</li>
-                            <li><strong>Cleanser:</strong> Remove remaining impurities</li>
-                            <li><strong>Exfoliant:</strong> Use 2-3 times per week</li>
-                            <li><strong>Treatment:</strong> Apply serums with actives like retinol</li>
-                            <li><strong>Moisturizer:</strong> Use a richer formula for overnight repair</li>
-                        </ol>
-                    </div>
-                    <div class="routine-card" style="background-color: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Weekly Treatments</h3>
-                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
-                            <li><strong>Face Mask:</strong> Use 1-2 times weekly based on skin needs</li>
-                            <li><strong>Chemical Exfoliation:</strong> AHA/BHA treatments for cell turnover</li>
-                            <li><strong>Facial Massage:</strong> Improve circulation with a jade roller or gua sha</li>
-                            <li><strong>Extra Hydration:</strong> Apply overnight masks for intense moisture</li>
-                        </ul>
-                    </div>
-                </div>
-                <button id="hide-routines" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; background-color: var(--gray); border: 1px solid #ddd; border-radius: 30px;">Hide Routines</button>
-            `;
-            
-            // Find the right place to insert the routines info
-            const section = document.getElementById('skincare');
-            section.appendChild(routinesElement);
-            
-            // Add event listener to hide button
-            document.getElementById('hide-routines').addEventListener('click', function() {
-                routinesElement.style.display = 'none';
-            });
-        }
-        
-        // Add skincare advice button
-        function addSkincareAdviceButton() {
-            const adviceButton = document.createElement('button');
-            adviceButton.textContent = 'View Skincare Routines';
-            adviceButton.style.backgroundColor = 'var(--primary)';
-            adviceButton.style.color = 'white';
-            adviceButton.style.border = 'none';
-            adviceButton.style.padding = '0.8rem 1.5rem';
-            adviceButton.style.borderRadius = '30px';
-            adviceButton.style.marginBottom = '2rem';
-            adviceButton.style.fontWeight = '500';
-            adviceButton.style.display = 'block';
-            adviceButton.style.marginLeft = 'auto';
-            adviceButton.style.marginRight = 'auto';
-            adviceButton.style.cursor = 'pointer';
-            
-            adviceButton.addEventListener('click', function() {
-                showRoutines();
-                this.style.display = 'none';
-            });
-            
-            // Insert after the category filters
-            const categoryFilter = document.querySelector('.category-filter');
-            categoryFilter.parentNode.insertBefore(adviceButton, categoryFilter.nextSibling);
-        }
-
-        const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    if (isAdmin) {
-        // Show admin controls
-        document.querySelector('.add-product').style.display = 'flex';
-        document.querySelector('.cart-icon').style.display = 'none';
-        
-        // Add delete buttons to products
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-product-btn';
-            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteBtn.onclick = (e) => {
-                e.stopPropagation();
-                // Here you would add delete functionality
-                card.style.opacity = '0.5';
-                setTimeout(() => {
-                    card.remove();
-                }, 300);
-            };
-            card.appendChild(deleteBtn);
-        });
-    }
-
-    // Add Product Modal Functionality
-function setupAddProductModal() {
-    // Get DOM elements
-    const addProductBtn = document.querySelector('.add-product-button');
-    const addProductModal = document.getElementById('add-product-modal');
-    const closeBtn = addProductModal.querySelector('.close');
-    const addProductForm = document.getElementById('add-product-form');
-    
-    // Open modal when add product button is clicked
-    addProductBtn.addEventListener('click', () => {
-        addProductModal.style.display = 'flex';
-    });
-    
-    // Close modal when close button is clicked
-    closeBtn.addEventListener('click', () => {
-        addProductModal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside the modal content
-    window.addEventListener('click', (e) => {
-        if (e.target === addProductModal) {
-            addProductModal.style.display = 'none';
-        }
-    });
-    
-    // Handle form submission
-    addProductForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Get form values
-        const name = document.getElementById('product-name').value;
-        const brand = document.getElementById('product-brand').value;
-        const category = document.getElementById('product-category').value;
-        const price = parseFloat(document.getElementById('product-price').value);
-        const description = document.getElementById('product-description').value;
-        const imageUrl = document.getElementById('product-image').value;
-        const tagType = document.querySelector('input[name="product-tag"]:checked').value;
-        
-        // Create product object for database
-        const productData = {
-            title: name,
-            description: description,
-            price: price,
-            image_url: imageUrl
-        };
-        
-        try {
-            // Send product data to server
-            const response = await fetch('/api/products', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productData)
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Product added:', result);
-                
-                // Create product card and add to page
-                createProductCard({
-                    id: result.productId,
-                    brand: brand,
-                    name: name,
-                    category: category,
-                    price: price,
-                    description: description,
-                    image: imageUrl,
-                    tagType: tagType !== 'none' ? tagType : null
-                });
-                
-                // Clear form
-                addProductForm.reset();
-                
-                // Close modal
-                addProductModal.style.display = 'none';
-                
-                // Show success notification
-                showNotification('Product added successfully', 'success');
-            } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to add product');
-            }
-        } catch (error) {
-            console.error('Error adding product:', error);
-            showNotification(error.message, 'error');
-        }
-    });
-}
 
 // Function to create a new product card in the DOM
 function createProductCard(product) {
@@ -2146,24 +826,1147 @@ function showNotification(message, type) {
         }, 300);
     }, 3000);
 }
+    </script>
+<script src="../js/search.js"></script>
 
-// Initialize add product functionality when admin is logged in
-function initAdminProductFeatures() {
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    if (isAdmin) {
-        setupAddProductModal();
+<!-- Add Product Modal -->
+<div id="add-product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Product</h2>
+        <form id="add-product-form">
+            <div class="form-group">
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-brand">Brand</label>
+                <input type="text" id="product-brand" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-category">Category</label>
+                <select id="product-category" required>
+                    <option value="">Select a category</option>
+                    <option value="cleanser">Cleanser</option>
+                    <option value="moisturizer">Moisturizer</option>
+                    <option value="treatment">Treatment</option>
+                    <option value="sunscreen">Sunscreen</option>
+                    <option value="toner">Toner</option>
+                    <option value="face">Face Makeup</option>
+                    <option value="eyes">Eye Makeup</option>
+                    <option value="lips">Lip Products</option>
+                    <option value="cheeks">Cheek Products</option>
+                    <option value="brushes">Brushes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-price">Price ($)</label>
+                <input type="number" id="product-price" step="0.01" min="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-description">Description</label>
+                <textarea id="product-description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-image">Image URL</label>
+                <input type="text" id="product-image" required placeholder="Enter image URL">
+            </div>
+            
+            <div class="form-group">
+                <label>Featured Tag</label>
+                <div class="radio-group">
+                    <input type="radio" id="tag-none" name="product-tag" value="none" checked>
+                    <label for="tag-none">None</label>
+                    
+                    <input type="radio" id="tag-featured" name="product-tag" value="featured">
+                    <label for="tag-featured">Featured</label>
+                    
+                    <input type="radio" id="tag-sale" name="product-tag" value="sale">
+                    <label for="tag-sale">Sale</label>
+                    
+                    <input type="radio" id="tag-new" name="product-tag" value="new">
+                    <label for="tag-new">New</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="add-product-submit">Add Product</button>
+        </form>
+    </div>
+</div>
+<script src="./js/admin.js"></script>
+<script src="./js/products.js"></script>
+<script>
+    // Fallback products if API call fails
+// Add this to the beginning of your script.js or inline script
+document.addEventListener('DOMContentLoaded', function() {
+    // Global products array that will be populated from the database
+    window.products = [];
+    
+    // Load products from database on page load
+    loadProductsFromDatabase();
+    
+    // Rest of your initialization code...
+    setupFilters();
+    setupModalCloseEvents();
+    setupSearch();
+    addMakeupTipsButton();
+    checkFirstTimeVisitor();
+});
+
+// Function to load products from API or fallback
+async function loadProducts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/products');
+        console.log(response);
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const apiProducts = await response.json();
+        return apiProducts;
+    } catch (error) {
+        console.warn('Using fallback products due to error:', error.message);
+        // You should define your fallback products here
+        const fallbackProducts = [
+            {
+                id: 1,
+                name: "No",
+                brand: "Fenty Beauty",
+                category: "face",
+                price: 39.00,
+                description: "Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.",
+                image: "/client/assets/makeup_fentyfoundation.jpg",
+                tagType: "bestseller"
+            },
+            // Add more fallback products as needed
+        ];
+        return fallbackProducts;
     }
 }
 
-// Call init function when DOM is loaded
+// Load and display products on page
+async function loadProductsFromDatabase() {
+    try {
+        const productsGrid = document.getElementById('makeup-products');
+        if (productsGrid) {
+            productsGrid.innerHTML = '';
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading-indicator';
+            loadingElement.textContent = 'Loading products...';
+            loadingElement.style.textAlign = 'center';
+            loadingElement.style.padding = '2rem';
+            loadingElement.style.gridColumn = '1 / -1';
+            productsGrid.appendChild(loadingElement);
+        }
+
+        const products = await loadProducts();
+
+        const loadingIndicator = document.querySelector('.loading-indicator');
+        if (loadingIndicator) loadingIndicator.remove();
+
+        const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
+        const makeupProducts = products.filter(product =>
+            makeupCategories.includes(product.category.toLowerCase())
+        );
+
+        if (makeupProducts.length === 0) {
+            const noProductsMsg = document.createElement('div');
+            noProductsMsg.textContent = 'No makeup products found.';
+            noProductsMsg.style.textAlign = 'center';
+            noProductsMsg.style.padding = '2rem';
+            noProductsMsg.style.gridColumn = '1 / -1';
+            productsGrid.appendChild(noProductsMsg);
+            return;
+        }
+
+        // Set global products array
+        window.products = makeupProducts;
+
+        // Create cards
+        makeupProducts.forEach(product => {
+            const formattedProduct = {
+                id: product.id,
+                name: product.name || product.title,
+                brand: product.brand || 'Brand Not Specified',
+                category: product.category,
+                price: product.price,
+                description: product.description,
+                image: product.image || product.image_url,
+                tagType: product.featured ? 'featured' : 
+                         (product.sale ? 'sale' : 
+                         (product.new ? 'new' : null))
+            };
+            createProductCard(formattedProduct);
+        });
+
+        // Setup product cards after creating them
+        setupProductCards();
+
+    } catch (error) {
+        console.error('Error loading products:', error);
+
+        const productsGrid = document.getElementById('makeup-products');
+        if (productsGrid) {
+            productsGrid.innerHTML = `
+                <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                </div>
+            `;
+            document.getElementById('retry-load').addEventListener('click', loadProductsFromDatabase);
+        }
+    }
+}
+
+    // Direct fix for makeup.html admin form submission
+    // This runs after all other scripts have loaded
+    window.addEventListener('load', function() {
+        console.log('Executing direct form fix...');
+        
+        // Check if we're on admin
+        if (localStorage.getItem('isAdmin') === 'true') {
+            console.log('Admin detected, applying form fix');
+            
+            // Get the form
+            const form = document.getElementById('add-product-form');
+            if (form) {
+                console.log('Form found, attaching direct submission handler');
+                
+                // Replace any existing handlers by cloning the form
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
+                
+                // Add a direct submission handler
+                newForm.addEventListener('submit', async function(e) {
+                    // Stop normal form submission
+                    e.preventDefault();
+                    console.log('Form submitted via direct handler');
+                    
+                    // Get all the form data
+                    const title = document.getElementById('product-name').value;
+                    const brand = document.getElementById('product-brand').value;
+                    const category = document.getElementById('product-category').value;
+                    const price = parseFloat(document.getElementById('product-price').value);
+                    const description = document.getElementById('product-description').value;
+                    const image_url = document.getElementById('product-image').value;
+                    const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+                    
+                    console.log('Form data:', { title, brand, category, price, description, image_url, tagType });
+                    
+                    try {
+                        // Send product data to server
+                        console.log('Sending to server...');
+                        const response = await fetch('http://localhost:5000/api/products', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                price,
+                                image_url,
+                                category
+                            })
+                        });
+                        
+                        console.log('Server response status:', response.status);
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error('Server error:', errorText);
+                            throw new Error('Failed to add product: ' + errorText);
+                        }
+                        
+                        const result = await response.json();
+                        console.log('Success! Product added:', result);
+                        
+                        // Create and add the new product card
+                        const productData = {
+                            id: result.productId,
+                            name: title,
+                            brand: brand,
+                            category: category,
+                            price: price,
+                            description: description,
+                            image: image_url,
+                            tagType: tagType !== 'none' ? tagType : null
+                        };
+                        
+                        // Find the product container
+                        const productsGrid = document.getElementById('makeup-products');
+                        if (productsGrid) {
+                            // Create the new product card
+                            const card = document.createElement('div');
+                            card.className = 'product-card';
+                            card.setAttribute('data-product-id', productData.id);
+                            card.setAttribute('data-category', productData.category.toLowerCase());
+                            
+                            // Add tag if specified
+                            if (productData.tagType) {
+                                const tagElement = document.createElement('div');
+                                tagElement.className = `${productData.tagType}-tag`;
+                                tagElement.textContent = productData.tagType === 'featured' ? 'Featured' : 
+                                                       productData.tagType === 'sale' ? '20% OFF' : 'New';
+                                card.appendChild(tagElement);
+                            }
+                            
+                            // Add product image
+                            const img = document.createElement('img');
+                            img.src = productData.image;
+                            img.alt = productData.name;
+                            img.className = 'product-image';
+                            card.appendChild(img);
+                            
+                            // Add product info container
+                            const infoDiv = document.createElement('div');
+                            infoDiv.className = 'product-info';
+                            
+                            // Add brand
+                            const brandEl = document.createElement('div');
+                            brandEl.className = 'product-brand';
+                            brandEl.textContent = productData.brand;
+                            infoDiv.appendChild(brandEl);
+                            
+                            // Add product name
+                            const nameEl = document.createElement('h3');
+                            nameEl.className = 'product-name';
+                            nameEl.textContent = productData.name;
+                            infoDiv.appendChild(nameEl);
+                            
+                            // Add category
+                            const catEl = document.createElement('span');
+                            catEl.className = 'product-category';
+                            catEl.textContent = productData.category;
+                            infoDiv.appendChild(catEl);
+                            
+                            // Add description
+                            const descEl = document.createElement('p');
+                            descEl.className = 'product-description';
+                            descEl.textContent = productData.description;
+                            infoDiv.appendChild(descEl);
+                            
+                            // Add price
+                            const priceEl = document.createElement('p');
+                            priceEl.className = 'product-price';
+                            priceEl.textContent = `$${productData.price.toFixed(2)}`;
+                            infoDiv.appendChild(priceEl);
+                            
+                            // Add info div to card
+                            card.appendChild(infoDiv);
+                            
+                            // Add quick add button
+                            const quickAddBtn = document.createElement('button');
+                            quickAddBtn.className = 'quick-add';
+                            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+                            card.appendChild(quickAddBtn);
+                            
+                            // Add delete button
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'delete-product-btn';
+                            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                            card.appendChild(deleteBtn);
+                            
+                            // Add the card to the container
+                            productsGrid.appendChild(card);
+                            console.log('Product card added to the page');
+                        }
+                        
+                        // Reset form and close modal
+                        newForm.reset();
+                        const modal = document.getElementById('add-product-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                        }
+                        
+                        // Show success message
+                        alert('Product added successfully!');
+                        
+                    } catch (error) {
+                        console.error('Error adding product:', error);
+                        alert('Error adding product: ' + error.message);
+                    }
+                });
+                
+                console.log('Direct form handler attached successfully');
+            } else {
+                console.error('Form not found! Check if modal exists in DOM');
+            }
+        }
+    });
+    </script>
+    <script>
+        // Comprehensive fix for all identified issues
+// Add this code to the bottom of your makeup.html file, replacing any previous fixes
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Rest of your existing initialization code...
+    console.log('Comprehensive fix script initialized');
     
-    // Initialize admin features
-    initAdminProductFeatures();
+    // ====================================================
+    // 1. FIX MISSING ELEMENTS AND NULL ERRORS
+    // ====================================================
+    
+    // Fix for null elements in event handlers
+    const safeAddEventListener = function(selector, event, handler) {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener(event, handler);
+            return true;
+        } else {
+            console.warn(`Element not found: ${selector}`);
+            return false;
+        }
+    };
+    
+    // Fix setupModalCloseEvents function
+    window.setupModalCloseEvents = function() {
+        console.log('Running fixed setupModalCloseEvents');
+        
+        // Close buttons for modals
+        const closeButtons = document.querySelectorAll('.close');
+        if (closeButtons.length > 0) {
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        } else {
+            console.warn('No close buttons found');
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+        
+        // Add to cart button in product modal
+        const addToCartButton = document.querySelector('.add-to-cart');
+        if (addToCartButton) {
+            addToCartButton.addEventListener('click', function() {
+                try {
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    if (!isNaN(productId)) {
+                        if (typeof addToCart === 'function') {
+                            addToCart(productId, 1);
+                        } else {
+                            console.warn('addToCart function not available');
+                        }
+                        const modal = document.getElementById('product-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error in add to cart button click:', err);
+                }
+            });
+        } else {
+            console.warn('Add to cart button not found');
+        }
+    };
+    
+    // ====================================================
+    // 2. PRODUCT LOADING FIX
+    // ====================================================
+    
+    // Fix product loading - completely rewritten with robust error handling
+    window.loadProductsFromDatabase = async function() {
+        console.log('Running fixed loadProductsFromDatabase');
+        
+        try {
+            const productsGrid = document.getElementById('makeup-products');
+            if (!productsGrid) {
+                console.error('Products grid not found');
+                return;
+            }
+            
+            // Clear and show loading indicator
+            productsGrid.innerHTML = '';
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading-indicator';
+            loadingElement.textContent = 'Loading products...';
+            loadingElement.style.textAlign = 'center';
+            loadingElement.style.padding = '2rem';
+            loadingElement.style.gridColumn = '1 / -1';
+            productsGrid.appendChild(loadingElement);
+            
+            // Load products from API or fallback
+            const rawProducts = await loadProducts();
+            console.log('Raw products loaded:', rawProducts);
+            
+            // Remove loading indicator
+            const loadingIndicator = document.querySelector('.loading-indicator');
+            if (loadingIndicator) loadingIndicator.remove();
+            
+            // Validate and clean up each product
+            const validatedProducts = rawProducts.map(product => {
+                return {
+                    id: product.id || Math.floor(Math.random() * 10000),
+                    name: product.name || product.title || 'Unnamed Product',
+                    title: product.title || product.name || 'Unnamed Product',
+                    brand: product.brand || 'Brand Not Specified',
+                    category: (product.category && typeof product.category === 'string') 
+                        ? product.category.toLowerCase() 
+                        : 'uncategorized',
+                    price: parseFloat(product.price) || 0,
+                    description: product.description || 'No description available',
+                    image: product.image || product.image_url || '/client/assets/default-product.jpg',
+                    tagType: product.featured ? 'featured' : 
+                            (product.sale ? 'sale' : 
+                            (product.new ? 'new' : null))
+                };
+            });
+            
+            // Filter makeup products
+            const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup', 'uncategorized'];
+            const makeupProducts = validatedProducts.filter(product => 
+                makeupCategories.includes(product.category)
+            );
+            
+            console.log('Filtered makeup products:', makeupProducts);
+            
+            // Check if we have any products
+            if (makeupProducts.length === 0) {
+                productsGrid.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                        <p>No makeup products found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Store products in global variable
+            window.products = makeupProducts;
+            
+            // Create product cards
+            makeupProducts.forEach(product => {
+                const card = createProductCard(product);
+                productsGrid.appendChild(card);
+            });
+            
+            console.log('Product cards created successfully');
+            
+            // Set up interaction for product cards
+            setupProductCards();
+            
+        } catch (error) {
+            console.error('Error in loadProductsFromDatabase:', error);
+            
+            const productsGrid = document.getElementById('makeup-products');
+            if (productsGrid) {
+                productsGrid.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                        <p>Failed to load products. Please try again later.</p>
+                        <button id="retry-load" style="padding: 0.5rem 1rem; margin-top: 1rem; background-color: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Retry
+                        </button>
+                    </div>
+                `;
+                
+                const retryButton = document.getElementById('retry-load');
+                if (retryButton) {
+                    retryButton.addEventListener('click', loadProductsFromDatabase);
+                }
+            }
+        }
+    };
+    
+    // Fix product loading function
+    window.loadProducts = async function() {
+        console.log('Running fixed loadProducts');
+        
+        try {
+            const response = await fetch('http://localhost:5000/api/products');
+            console.log('API response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log(`Loaded ${data.length} products from API`);
+            return data;
+            
+        } catch (error) {
+            console.warn('Error loading products from API:', error);
+            console.log('Falling back to default products');
+            
+            // Return fallback products
+            return [
+                {
+                    id: 1,
+                    name: "Pro Filt'r Soft Matte Foundation",
+                    brand: "Fenty Beauty",
+                    category: "face",
+                    price: 39.00,
+                    description: "Medium to full coverage foundation with a soft matte finish in 50 boundary-breaking shades.",
+                    image: "/client/assets/makeup_fentyfoundation.jpg"
+                },
+                {
+                    id: 2,
+                    name: "Lip Glow Oil",
+                    brand: "Dior",
+                    category: "lips",
+                    price: 38.00,
+                    description: "A nourishing lip oil that enhances your natural lip color with a glossy finish.",
+                    image: "/client/assets/default-product.jpg"
+                }
+            ];
+        }
+    };
+    
+    // ====================================================
+    // 3. PRODUCT CARD CREATION FIX
+    // ====================================================
+    
+    // Fix product card creation
+    window.createProductCard = function(product) {
+        // Create product card element
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.setAttribute('data-product-id', product.id);
+        card.setAttribute('data-category', product.category || 'uncategorized');
+        
+        // Add tag if specified
+        if (product.tagType) {
+            const tagElement = document.createElement('div');
+            tagElement.className = `${product.tagType}-tag`;
+            tagElement.textContent = product.tagType === 'featured' ? 'Featured' : 
+                                   product.tagType === 'sale' ? '20% OFF' : 'New';
+            card.appendChild(tagElement);
+        }
+        
+        // Add product image
+        const img = document.createElement('img');
+        img.src = product.image || '/client/assets/default-product.jpg';
+        img.alt = product.name || 'Product Image';
+        img.className = 'product-image';
+        img.onerror = function() {
+            this.src = '/client/assets/default-product.jpg';
+        };
+        card.appendChild(img);
+        
+        // Add product info
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'product-info';
+        
+        // Brand
+        const brandEl = document.createElement('div');
+        brandEl.className = 'product-brand';
+        brandEl.textContent = product.brand || 'Brand Not Specified';
+        infoDiv.appendChild(brandEl);
+        
+        // Name
+        const nameEl = document.createElement('h3');
+        nameEl.className = 'product-name';
+        nameEl.textContent = product.name || product.title || 'Unnamed Product';
+        infoDiv.appendChild(nameEl);
+        
+        // Category
+        const catEl = document.createElement('span');
+        catEl.className = 'product-category';
+        const catText = product.category || 'Uncategorized';
+        catEl.textContent = catText.charAt(0).toUpperCase() + catText.slice(1);
+        infoDiv.appendChild(catEl);
+        
+        // Description
+        const descEl = document.createElement('p');
+        descEl.className = 'product-description';
+        descEl.textContent = product.description || 'No description available';
+        infoDiv.appendChild(descEl);
+        
+        // Price
+        const priceEl = document.createElement('p');
+        priceEl.className = 'product-price';
+        const price = parseFloat(product.price) || 0;
+        priceEl.textContent = `$${price.toFixed(2)}`;
+        infoDiv.appendChild(priceEl);
+        
+        // Add info div to card
+        card.appendChild(infoDiv);
+        
+        // Add quick add button
+        const quickAddBtn = document.createElement('button');
+        quickAddBtn.className = 'quick-add';
+        quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+        quickAddBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            try {
+                // Try to use existing addToCart function
+                if (typeof addToCart === 'function') {
+                    addToCart(product.id, 1);
+                } else {
+                    // Fallback implementation
+                    let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+                    const existingItem = cart.find(item => item.id === product.id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            id: product.id,
+                            name: product.name || product.title,
+                            brand: product.brand,
+                            price: product.price,
+                            image: product.image,
+                            quantity: 1
+                        });
+                    }
+                    
+                    localStorage.setItem('beautyCart', JSON.stringify(cart));
+                    
+                    // Update cart count if possible
+                    const cartCount = document.querySelector('.cart-count');
+                    if (cartCount) {
+                        const count = parseInt(cartCount.textContent || '0');
+                        cartCount.textContent = count + 1;
+                    }
+                }
+                
+                // Animation feedback
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-plus"></i>';
+                }, 1000);
+            } catch (err) {
+                console.error('Error adding to cart:', err);
+            }
+        });
+        card.appendChild(quickAddBtn);
+        
+        // Add delete button for admin
+        if (localStorage.getItem('isAdmin') === 'true') {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-product-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.addEventListener('click', async function(e) {
+                e.stopPropagation();
+                
+                if (confirm('Are you sure you want to delete this product?')) {
+                    try {
+                        const response = await fetch(`http://localhost:5000/api/products/${product.id}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Failed to delete product');
+                        }
+                        
+                        // Remove card with animation
+                        card.style.opacity = '0.5';
+                        setTimeout(() => {
+                            card.remove();
+                        }, 300);
+                        
+                        // Show notification
+                        if (typeof showNotification === 'function') {
+                            showNotification('Product deleted successfully', 'success');
+                        } else {
+                            alert('Product deleted successfully');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting product:', error);
+                        if (typeof showNotification === 'function') {
+                            showNotification('Failed to delete product', 'error');
+                        } else {
+                            alert('Failed to delete product');
+                        }
+                    }
+                }
+            });
+            card.appendChild(deleteBtn);
+        }
+        
+        // Add click event to view product details
+        card.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('quick-add') && !e.target.closest('.quick-add') &&
+                !e.target.classList.contains('delete-product-btn') && !e.target.closest('.delete-product-btn')) {
+                
+                try {
+                    // Try to use openProductModal function
+                    if (typeof openProductModal === 'function') {
+                        openProductModal(product.id);
+                    } else {
+                        // Fallback implementation
+                        const modal = document.getElementById('product-modal');
+                        
+                        if (!modal) {
+                            console.error('Product modal not found');
+                            return;
+                        }
+                        
+                        // Update modal content
+                        const imgEl = modal.querySelector('#modal-product-image');
+                        const brandEl = modal.querySelector('#modal-product-brand');
+                        const nameEl = modal.querySelector('#modal-product-name');
+                        const catEl = modal.querySelector('#modal-product-category');
+                        const descEl = modal.querySelector('#modal-product-description');
+                        const priceEl = modal.querySelector('#modal-product-price');
+                        
+                        if (imgEl) imgEl.src = product.image || '/client/assets/default-product.jpg';
+                        if (imgEl) imgEl.alt = product.name || 'Product Image';
+                        if (brandEl) brandEl.textContent = product.brand || '';
+                        if (nameEl) nameEl.textContent = product.name || product.title || '';
+                        if (catEl) catEl.textContent = product.category || '';
+                        if (descEl) descEl.textContent = product.description || '';
+                        if (priceEl) priceEl.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+                        
+                        // Set product ID for add to cart button
+                        const addToCartBtn = modal.querySelector('.add-to-cart');
+                        if (addToCartBtn) {
+                            addToCartBtn.setAttribute('data-product-id', product.id);
+                        }
+                        
+                        // Show the modal
+                        modal.style.display = 'flex';
+                    }
+                } catch (err) {
+                    console.error('Error opening product modal:', err);
+                }
+            }
+        });
+        
+        return card;
+    };
+    
+    // ====================================================
+    // 4. ADMIN FUNCTIONALITY FIX
+    // ====================================================
+    
+    // Fix the admin form not found issue
+    function fixAdminForm() {
+        console.log('Fixing admin form issues');
+        
+        // Only run for admin users
+        if (localStorage.getItem('isAdmin') !== 'true') {
+            return;
+        }
+        
+        // Ensure add product modal exists
+        let addProductModal = document.getElementById('add-product-modal');
+        if (!addProductModal) {
+            console.log('Add product modal not found, creating it');
+            
+            // Create the modal element
+            addProductModal = document.createElement('div');
+            addProductModal.id = 'add-product-modal';
+            addProductModal.className = 'modal';
+            
+            // Set modal content
+            addProductModal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Add New Product</h2>
+                    <form id="add-product-form">
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-brand">Brand</label>
+                            <input type="text" id="product-brand" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-category">Category</label>
+                            <select id="product-category" required>
+                                <option value="">Select a category</option>
+                                <option value="face">Face Makeup</option>
+                                <option value="eyes">Eye Makeup</option>
+                                <option value="lips">Lip Products</option>
+                                <option value="cheeks">Cheek Products</option>
+                                <option value="brushes">Brushes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-price">Price ($)</label>
+                            <input type="number" id="product-price" step="0.01" min="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-description">Description</label>
+                            <textarea id="product-description" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-image">Image URL</label>
+                            <input type="text" id="product-image" required placeholder="Enter image URL">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Featured Tag</label>
+                            <div class="radio-group">
+                                <input type="radio" id="tag-none" name="product-tag" value="none" checked>
+                                <label for="tag-none">None</label>
+                                
+                                <input type="radio" id="tag-featured" name="product-tag" value="featured">
+                                <label for="tag-featured">Featured</label>
+                                
+                                <input type="radio" id="tag-sale" name="product-tag" value="sale">
+                                <label for="tag-sale">Sale</label>
+                                
+                                <input type="radio" id="tag-new" name="product-tag" value="new">
+                                <label for="tag-new">New</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="add-product-submit">Add Product</button>
+                    </form>
+                </div>
+            `;
+            
+            // Add to document
+            document.body.appendChild(addProductModal);
+            console.log('Add product modal created and added to document');
+        }
+        
+        // Create an "Add Product" button if it doesn't exist
+        let addProductButton = document.querySelector('.add-product-button');
+        if (!addProductButton) {
+            console.log('Add product button not found, creating it');
+            
+            const addProductDiv = document.createElement('div');
+            addProductDiv.className = 'add-product';
+            addProductDiv.style.display = 'flex';
+            addProductDiv.style.marginLeft = 'auto';
+            addProductDiv.style.marginRight = '20px';
+            
+            addProductButton = document.createElement('button');
+            addProductButton.className = 'add-product-button';
+            addProductButton.innerHTML = '+';
+            addProductButton.style.backgroundColor = 'var(--primary)';
+            addProductButton.style.color = 'white';
+            addProductButton.style.border = 'none';
+            addProductButton.style.borderRadius = '50%';
+            addProductButton.style.width = '30px';
+            addProductButton.style.height = '30px';
+            addProductButton.style.fontSize = '20px';
+            addProductButton.style.cursor = 'pointer';
+            addProductButton.style.display = 'flex';
+            addProductButton.style.alignItems = 'center';
+            addProductButton.style.justifyContent = 'center';
+            
+            addProductDiv.appendChild(addProductButton);
+            
+            // Add the button to nav
+            const nav = document.querySelector('nav');
+            if (nav) {
+                nav.appendChild(addProductDiv);
+                console.log('Add product button added to nav');
+            } else {
+                // Fallback to adding at the top of the page
+                const header = document.querySelector('header');
+                if (header) {
+                    header.appendChild(addProductDiv);
+                    console.log('Add product button added to header');
+                }
+            }
+        }
+        
+        // Set up modal close button
+        const closeButton = addProductModal.querySelector('.close');
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                addProductModal.style.display = 'none';
+            });
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === addProductModal) {
+                addProductModal.style.display = 'none';
+            }
+        });
+        
+        // Set up add product button
+        addProductButton.addEventListener('click', function() {
+            addProductModal.style.display = 'flex';
+        });
+        
+        // Set up form submission
+        const form = document.getElementById('add-product-form');
+        if (form) {
+            // Remove existing event listeners
+            const newForm = form.cloneNode(true);
+            form.parentNode.replaceChild(newForm, form);
+            
+            // Add submission handler
+            newForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const title = document.getElementById('product-name').value;
+                const brand = document.getElementById('product-brand').value;
+                const category = document.getElementById('product-category').value;
+                const price = parseFloat(document.getElementById('product-price').value);
+                const description = document.getElementById('product-description').value;
+                const image_url = document.getElementById('product-image').value;
+                const tagType = document.querySelector('input[name="product-tag"]:checked').value;
+                
+                console.log('Submitting product:', { title, brand, category, price, description, image_url, tagType });
+                
+                try {
+                    // Send to server
+                    const response = await fetch('http://localhost:5000/api/products', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            title,
+                            brand,
+                            description,
+                            price,
+                            image_url,
+                            category
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error('Failed to add product: ' + errorText);
+                    }
+                    
+                    const result = await response.json();
+                    console.log('Product added:', result);
+                    
+                    // Create product object
+                    const newProduct = {
+                        id: result.productId || result.id,
+                        name: title,
+                        title: title,
+                        brand: brand,
+                        category: category,
+                        price: price,
+                        description: description,
+                        image: image_url,
+                        image_url: image_url,
+                        tagType: tagType !== 'none' ? tagType : null
+                    };
+                    
+                    // Add to global products array
+                    if (window.products && Array.isArray(window.products)) {
+                        window.products.push(newProduct);
+                    } else {
+                        window.products = [newProduct];
+                    }
+                    
+                    // Create and add product card
+                    const card = createProductCard(newProduct);
+                    
+                    // Add the card to the makeup products container
+                    const productsGrid = document.getElementById('makeup-products');
+                    if (productsGrid) {
+                        productsGrid.appendChild(card);
+                    }
+                    
+                    // Reset form and close modal
+                    newForm.reset();
+                    addProductModal.style.display = 'none';
+                    
+                    // Show success message
+                    if (typeof showNotification === 'function') {
+                        showNotification('Product added successfully!', 'success');
+                    } else {
+                        alert('Product added successfully!');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error adding product:', error);
+                    if (typeof showNotification === 'function') {
+                        showNotification('Error adding product: ' + error.message, 'error');
+                    } else {
+                        alert('Error adding product: ' + error.message);
+                    }
+                }
+            });
+        }
+    }
+    
+    // Fix notification function if doesn't exist
+    if (typeof showNotification !== 'function') {
+        window.showNotification = function(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.id = 'notification';
+            notification.textContent = message;
+            notification.className = type;
+            
+            // Style the notification
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '4px';
+            notification.style.color = 'white';
+            notification.style.fontWeight = '500';
+            notification.style.zIndex = '1000';
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            notification.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            
+            if (type === 'success') {
+                notification.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#f44336';
+            }
+            
+            // Add to document
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                // Remove from DOM after animation
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        };
+    }
+    
+    // ====================================================
+    // 5. INITIALIZE FIXES
+    // ====================================================
+    
+    // Apply all fixes
+    fixAdminForm();
+    
+    // Setup product cards if they exist
+    if (typeof setupProductCards === 'function') {
+        try {
+            setupProductCards();
+        } catch (err) {
+            console.warn('Error setting up product cards:', err);
+        }
+    }
+    
+    // Try running loadProductsFromDatabase
+    if (!document.querySelector('.product-card')) {
+        console.log('No product cards found, running loadProductsFromDatabase');
+        loadProductsFromDatabase();
+    }
+    
+    console.log('Comprehensive fix applied successfully');
 });
     </script>
-<script src="../js/search.js"></script>
-<script src="js/admin.js"></script>
 </body>
 </html>

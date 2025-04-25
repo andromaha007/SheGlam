@@ -29,7 +29,18 @@ async function loadProducts() {
 // Load and display products on page
 async function loadProductsFromDatabase() {
     try {
-        const productsGrid = document.getElementById('makeup-products');
+        // Determine which product grid we're working with
+        let productsGrid;
+        const currentPage = window.location.pathname.toLowerCase();
+        
+        if (currentPage.includes('makeup.html')) {
+            productsGrid = document.getElementById('makeup-products');
+        } else if (currentPage.includes('skincare.html')) {
+            productsGrid = document.getElementById('skincare-products');
+        } else {
+            productsGrid = document.getElementById('popular-products');
+        }
+        
         if (productsGrid) {
             productsGrid.innerHTML = '';
             const loadingElement = document.createElement('div');
@@ -42,18 +53,31 @@ async function loadProductsFromDatabase() {
         }
 
         const products = await loadProducts();
+        console.log('Loaded products:', products);
 
         const loadingIndicator = document.querySelector('.loading-indicator');
         if (loadingIndicator) loadingIndicator.remove();
 
-        const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
-        const makeupProducts = products.filter(product =>
-            makeupCategories.includes(product.category.toLowerCase())
-        );
+        // Filter products based on the current page
+        let filteredProducts;
+        if (currentPage.includes('makeup.html')) {
+            const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
+            filteredProducts = products.filter(product => 
+                product.category && makeupCategories.includes(product.category.toLowerCase())
+            );
+        } else if (currentPage.includes('skincare.html')) {
+            const skincareCategories = ['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner', 'skincare'];
+            filteredProducts = products.filter(product => 
+                product.category && skincareCategories.includes(product.category.toLowerCase())
+            );
+        } else {
+            // For homepage, show all products or a selection
+            filteredProducts = products;
+        }
 
-        if (makeupProducts.length === 0) {
+        if (filteredProducts.length === 0) {
             const noProductsMsg = document.createElement('div');
-            noProductsMsg.textContent = 'No makeup products found.';
+            noProductsMsg.textContent = 'No products found for this category.';
             noProductsMsg.style.textAlign = 'center';
             noProductsMsg.style.padding = '2rem';
             noProductsMsg.style.gridColumn = '1 / -1';
@@ -61,32 +85,35 @@ async function loadProductsFromDatabase() {
             return;
         }
 
-        // Define global products array
-        window.products = makeupProducts;
+        // Define global products array for access in other functions
+        window.products = filteredProducts;
 
-        // Create cards
-        makeupProducts.forEach(product => {
+        // Create cards for each product
+        filteredProducts.forEach(product => {
             const formattedProduct = {
-                id: product.id,
-                name: product.name || product.title,
+                id: product.product_id,
+                name: product.title,
                 brand: product.brand || 'Brand Not Specified',
                 category: product.category,
                 price: product.price,
-                description: product.description,
-                image: product.image || product.image_url,
+                description: product.product_description,
+                image: product.image_url,
                 tagType: product.featured ? 'featured' : 
                          (product.sale ? 'sale' : 
                          (product.new ? 'new' : null))
             };
+            
+            // Create and add the product card to the page
             createProductCard(formattedProduct);
         });
 
+        // Setup product cards interactions
         setupProductCards();
 
     } catch (error) {
         console.error('Error loading products:', error);
 
-        const productsGrid = document.getElementById('makeup-products');
+        const productsGrid = document.querySelector('.products-grid');
         if (productsGrid) {
             productsGrid.innerHTML = `
                 <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
