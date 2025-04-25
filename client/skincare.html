@@ -17,7 +17,7 @@
                 </a>
             </div>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search makeup products...">
+                <input type="text" id="searchInput" placeholder="Search skincare products...">
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="nav-links">
@@ -40,15 +40,15 @@
 
     <main>
         <section id="makeup">
-            <h1>Makeup Products</h1>
+            <h1>Skincare Products</h1>
             
             <div class="category-filter">
                 <button class="filter-button active" data-category="all">All Products</button>
-                <button class="filter-button" data-category="cleansers">Cleansers</button>
-                <button class="filter-button" data-category="moisturizers">Moisturizers</button>
-                <button class="filter-button" data-category="treatments">Treatments</button>
+                <button class="filter-button" data-category="cleanser">Cleanser</button>
+                <button class="filter-button" data-category="moisturizer">Moisturizer</button>
+                <button class="filter-button" data-category="treatment">Treatment</button>
                 <button class="filter-button" data-category="sunscreen">Sunscreen</button>
-                <button class="filter-button" data-category="toners">Toners</button>
+                <button class="filter-button" data-category="toner">Toner</button>
             </div>
             
             <div class="products-grid" id="makeup-products">
@@ -190,15 +190,18 @@ function createProductCard(product) {
     quickAddBtn.className = 'quick-add';
     quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
     quickAddBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        addToCart(product.id, 1);
-        
-        // Animation feedback
-        quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
-        setTimeout(() => {
-            quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
-        }, 1000);
-    });
+    e.stopPropagation();
+    // Ensure product.id is correctly obtained
+    const productId = product.id;
+    console.log("Quick add clicked for product:", productId);
+    addToCart(productId, 1);
+    
+    // Animation feedback
+    quickAddBtn.innerHTML = '<i class="fas fa-check"></i>';
+    setTimeout(() => {
+        quickAddBtn.innerHTML = '<i class="fas fa-plus"></i>';
+    }, 1000);
+});
     productCard.appendChild(quickAddBtn);
     
     // Find the appropriate container to add the product card to
@@ -399,34 +402,50 @@ if (checkoutBtn) {
         
         // Cart functionality
         function showCartModal() {
-            updateCartDisplay();
-            document.getElementById('cart-modal').style.display = 'flex';
-        }
+    updateCartDisplay();
+    const cartModal = document.getElementById('cart-modal');
+    if (cartModal) {
+        cartModal.style.display = 'flex';
+    } else {
+        console.error('Cart modal not found');
+    }
+}
+
         
         function addToCart(productId, quantity) {
-            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
-            const product = products.find(p => p.id === productId);
-            
-            if (product) {
-                const existingItem = cart.find(item => item.id === productId);
-                
-                if (existingItem) {
-                    existingItem.quantity += quantity;
-                } else {
-                    cart.push({
-                        id: productId,
-                        name: product.name,
-                        brand: product.brand,
-                        price: product.price,
-                        image: product.image,
-                        quantity: quantity
-                    });
-                }
-                
-                localStorage.setItem('beautyCart', JSON.stringify(cart));
-                updateCartCount();
-            }
+    let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+    
+    // Find product by ID (make sure this works)
+    const product = window.products.find(p => p.id === productId);
+    
+    console.log("Adding to cart:", productId, product); // Debug line
+    
+    if (product) {
+        const existingItem = cart.find(item => item.id === productId);
+        
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({
+                id: productId,
+                name: product.name || product.title,
+                brand: product.brand,
+                price: product.price,
+                image: product.image || product.image_url,
+                quantity: quantity
+            });
         }
+        
+        localStorage.setItem('beautyCart', JSON.stringify(cart));
+        updateCartCount();
+        
+        // Show feedback
+        showNotification("Product added to cart", "success");
+    } else {
+        console.error("Product not found:", productId);
+        showNotification("Could not add product to cart", "error");
+    }
+}
         
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
@@ -435,52 +454,54 @@ if (checkoutBtn) {
         }
         
         function updateCartDisplay() {
-            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
-            const cartItemsContainer = document.getElementById('cart-items');
-            cartItemsContainer.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-                document.getElementById('cart-total-amount').textContent = '0.00';
-                return;
-            }
-            
-            cart.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'cart-item';
-                itemElement.setAttribute('data-product-id', item.id);
-                
-                itemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <h3>${item.name}</h3>
-                        <p class="cart-item-price">$${item.price.toFixed(2)}</p>
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="quantity-control">
-                            <button class="quantity-btn decrease">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn increase">+</button>
-                        </div>
-                        <i class="fas fa-times remove-item"></i>
-                    </div>
-                `;
-                
-                cartItemsContainer.appendChild(itemElement);
-                
-                // Add event listeners for quantity buttons
-                const decreaseBtn = itemElement.querySelector('.decrease');
-                const increaseBtn = itemElement.querySelector('.increase');
-                const removeBtn = itemElement.querySelector('.remove-item');
-                
-                decreaseBtn.addEventListener('click', () => updateItemQuantity(item.id, -1));
-                increaseBtn.addEventListener('click', () => updateItemQuantity(item.id, 1));
-                removeBtn.addEventListener('click', () => removeItemFromCart(item.id));
-            });
-            
-            // Update cart total
-            document.getElementById('cart-total-amount').textContent = calculateCartTotal().toFixed(2);
-        }
+    const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalElement = document.getElementById('cart-total-amount');
+
+    if (!cartItemsContainer || !cartTotalElement) {
+        console.error('Cart elements not found in the DOM.');
+        return;
+    }
+
+    cartItemsContainer.innerHTML = '';
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotalElement.textContent = '0.00';
+        return;
+    }
+
+    cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.setAttribute('data-product-id', item.id);
+        
+        itemElement.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="cart-item-info">
+                <h3>${item.name}</h3>
+                <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-item-actions">
+                <div class="quantity-control">
+                    <button class="quantity-btn decrease">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn increase">+</button>
+                </div>
+                <i class="fas fa-times remove-item"></i>
+            </div>
+        `;
+
+        cartItemsContainer.appendChild(itemElement);
+
+        itemElement.querySelector('.decrease').addEventListener('click', () => updateItemQuantity(item.id, -1));
+        itemElement.querySelector('.increase').addEventListener('click', () => updateItemQuantity(item.id, 1));
+        itemElement.querySelector('.remove-item').addEventListener('click', () => removeItemFromCart(item.id));
+    });
+
+    cartTotalElement.textContent = calculateCartTotal().toFixed(2);
+}
+
         
         function updateItemQuantity(productId, change) {
             let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
@@ -854,11 +875,6 @@ function showNotification(message, type) {
                     <option value="treatment">Treatment</option>
                     <option value="sunscreen">Sunscreen</option>
                     <option value="toner">Toner</option>
-                    <option value="face">Face Makeup</option>
-                    <option value="eyes">Eye Makeup</option>
-                    <option value="lips">Lip Products</option>
-                    <option value="cheeks">Cheek Products</option>
-                    <option value="brushes">Brushes</option>
                 </select>
             </div>
             
@@ -966,14 +982,14 @@ async function loadProductsFromDatabase() {
         const loadingIndicator = document.querySelector('.loading-indicator');
         if (loadingIndicator) loadingIndicator.remove();
 
-        const makeupCategories = ['face', 'eyes', 'lips', 'cheeks', 'brushes', 'makeup'];
+        const skincareCategories = ['cleanser', 'moisturizer', 'treatment', 'sunscreen', 'toner', 'skincare'];
         const makeupProducts = products.filter(product =>
-            makeupCategories.includes(product.category.toLowerCase())
+            skincareCategories.includes(product.category.toLowerCase())
         );
 
         if (makeupProducts.length === 0) {
             const noProductsMsg = document.createElement('div');
-            noProductsMsg.textContent = 'No makeup products found.';
+            noProductsMsg.textContent = 'No skincare products found.';
             noProductsMsg.style.textAlign = 'center';
             noProductsMsg.style.padding = '2rem';
             noProductsMsg.style.gridColumn = '1 / -1';
@@ -1045,7 +1061,7 @@ async function loadProductsFromDatabase() {
                     // Get all the form data
                     const title = document.getElementById('product-name').value;
                     const brand = document.getElementById('product-brand').value;
-                    const category = document.getElementById('product-category').value;
+                    const category = document.getElementById('product-category').value; // This should match the database value
                     const price = parseFloat(document.getElementById('product-price').value);
                     const description = document.getElementById('product-description').value;
                     const image_url = document.getElementById('product-image').value;
@@ -1513,6 +1529,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             id: product.id,
                             name: product.name || product.title,
                             brand: product.brand,
+                            category: product.category,
                             price: product.price,
                             image: product.image,
                             quantity: 1
@@ -1678,11 +1695,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             <label for="product-category">Category</label>
                             <select id="product-category" required>
                                 <option value="">Select a category</option>
-                                <option value="face">Face Makeup</option>
-                                <option value="eyes">Eye Makeup</option>
-                                <option value="lips">Lip Products</option>
-                                <option value="cheeks">Cheek Products</option>
-                                <option value="brushes">Brushes</option>
+                                <option value="cleanser">Cleanser</option>
+                                <option value="moisturizer">Moisturizer</option>
+                                <option value="treatment">Treatment</option>
+                                <option value="sunscreen">Sunscreen</option>
+                                <option value="toner">Toner</option>
                             </select>
                         </div>
                         
@@ -1966,6 +1983,374 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     console.log('Comprehensive fix applied successfully');
+});
+    </script>
+    <script>
+        // Fix for cart modal not found issues
+// Add this code to the bottom of both skincare.html and makeup.html files
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Cart fix script loaded');
+    
+    // Fix for cart modal not found
+    function fixCartFunctionality() {
+        console.log('Fixing cart functionality');
+        
+        // 1. Check if the cart modal exists, create if it doesn't
+        let cartModal = document.getElementById('cart-modal');
+        if (!cartModal) {
+            console.log('Cart modal not found, creating it');
+            
+            cartModal = document.createElement('div');
+            cartModal.id = 'cart-modal';
+            cartModal.className = 'modal';
+            
+            cartModal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Shopping Cart</h2>
+                    <div id="cart-items">
+                        <!-- Cart items will be populated by JavaScript -->
+                    </div>
+                    <div class="cart-total">
+                        <h3>Total: $<span id="cart-total-amount">0.00</span></h3>
+                        <button class="checkout-btn">Proceed to Checkout</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(cartModal);
+            console.log('Cart modal created and added to the document');
+            
+            // Add event listener to close button
+            const closeBtn = cartModal.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    cartModal.style.display = 'none';
+                });
+            }
+            
+            // Add event listener to checkout button
+            const checkoutBtn = cartModal.querySelector('.checkout-btn');
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', function() {
+                    cartModal.style.display = 'none';
+                    window.location.href = 'checkout.html';
+                });
+            }
+        }
+        
+        // 2. Fix the showCartModal function
+        window.showCartModal = function() {
+            console.log('Running fixed showCartModal function');
+            
+            // Make sure cart modal exists
+            let modal = document.getElementById('cart-modal');
+            if (!modal) {
+                console.error('Cart modal not found, something went wrong with the fix');
+                return;
+            }
+            
+            // Update cart display before showing
+            updateCartDisplay();
+            
+            // Show the modal
+            modal.style.display = 'flex';
+        };
+        
+        // 3. Fix updateCartDisplay function
+        window.updateCartDisplay = function() {
+            console.log('Running fixed updateCartDisplay function');
+            
+            // Get cart items from localStorage
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            
+            // Get the cart items container
+            const cartItemsContainer = document.getElementById('cart-items');
+            if (!cartItemsContainer) {
+                console.error('Cart items container not found');
+                return;
+            }
+            
+            // Clear existing items
+            cartItemsContainer.innerHTML = '';
+            
+            // Show empty cart message if no items
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+                
+                // Update total amount
+                const totalAmountElement = document.getElementById('cart-total-amount');
+                if (totalAmountElement) {
+                    totalAmountElement.textContent = '0.00';
+                }
+                return;
+            }
+            
+            // Add each item to the cart display
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.setAttribute('data-product-id', item.id);
+                
+                itemElement.innerHTML = `
+                    <img src="${item.image || '/client/assets/default-product.jpg'}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p class="cart-item-price">$${parseFloat(item.price).toFixed(2)}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn decrease">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn increase">+</button>
+                        </div>
+                        <i class="fas fa-times remove-item"></i>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(itemElement);
+                
+                // Add event listeners for quantity buttons
+                const decreaseBtn = itemElement.querySelector('.decrease');
+                const increaseBtn = itemElement.querySelector('.increase');
+                const removeBtn = itemElement.querySelector('.remove-item');
+                
+                if (decreaseBtn) {
+                    decreaseBtn.addEventListener('click', function() {
+                        updateItemQuantity(item.id, -1);
+                    });
+                }
+                
+                if (increaseBtn) {
+                    increaseBtn.addEventListener('click', function() {
+                        updateItemQuantity(item.id, 1);
+                    });
+                }
+                
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', function() {
+                        removeItemFromCart(item.id);
+                    });
+                }
+            });
+            
+            // Update cart total
+            const totalAmountElement = document.getElementById('cart-total-amount');
+            if (totalAmountElement) {
+                totalAmountElement.textContent = calculateCartTotal().toFixed(2);
+            }
+        };
+        
+        // 4. Helper functions for cart operations
+        window.updateItemQuantity = function(productId, change) {
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity += change;
+                
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        };
+        
+        window.removeItemFromCart = function(productId) {
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                cart.splice(itemIndex, 1);
+                localStorage.setItem('beautyCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        };
+        
+        window.calculateCartTotal = function() {
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            return cart.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0);
+        };
+        
+        window.updateCartCount = function() {
+            const cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Find cart count element
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+        };
+        
+        // 5. Setup cart icon click event
+        const cartIcon = document.querySelector('.cart-icon');
+        if (cartIcon) {
+            // Remove any existing event listeners
+            const newCartIcon = cartIcon.cloneNode(true);
+            cartIcon.parentNode.replaceChild(newCartIcon, cartIcon);
+            
+            // Add new event listener
+            newCartIcon.addEventListener('click', function() {
+                showCartModal();
+            });
+            
+            console.log('Cart icon click event fixed');
+        }
+        
+        // Initialize cart count
+        updateCartCount();
+        console.log('Cart functionality fixed successfully');
+    }
+    
+    // Run the fix
+    setTimeout(fixCartFunctionality, 500); // Short delay to ensure DOM is fully loaded
+});
+    </script>
+    <script>
+        // Fix for items being added to cart twice
+// Add this code to the bottom of both skincare.html and makeup.html files
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Double-add fix script loaded');
+    
+    // Fix for multiple event listeners on cart buttons
+    function fixDoubleAddToCart() {
+        console.log('Fixing double add to cart issue');
+        
+        // 1. Fix addToCart function to prevent duplicating items
+        window.addToCart = function(productId, quantity) {
+            console.log('Running fixed addToCart function for product ID:', productId, 'quantity:', quantity);
+            
+            // Get current cart
+            let cart = JSON.parse(localStorage.getItem('beautyCart')) || [];
+            
+            // Find product information
+            let product;
+            if (window.products && Array.isArray(window.products)) {
+                product = window.products.find(p => p.id === productId);
+            }
+            
+            if (!product) {
+                console.warn('Product not found in products array, using default values');
+                // If product not found in array, check if we're dealing with a DOM element
+                const productCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+                if (productCard) {
+                    const name = productCard.querySelector('.product-name')?.textContent || 'Unknown Product';
+                    const brand = productCard.querySelector('.product-brand')?.textContent || '';
+                    const price = parseFloat(productCard.querySelector('.product-price')?.textContent?.replace('$', '') || 0);
+                    const image = productCard.querySelector('.product-image')?.src || '';
+                    
+                    product = { id: productId, name, brand, price, image };
+                } else {
+                    // Last resort fallback
+                    product = { 
+                        id: productId, 
+                        name: 'Product #' + productId, 
+                        price: 0,
+                        image: '/client/assets/default-product.jpg'
+                    };
+                }
+            }
+            
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (existingItemIndex !== -1) {
+                // Update quantity of existing item
+                cart[existingItemIndex].quantity += quantity;
+                console.log('Updated quantity for existing item:', cart[existingItemIndex]);
+            } else {
+                // Add new item to cart
+                cart.push({
+                    id: productId,
+                    name: product.name || product.title,
+                    brand: product.brand || '',
+                    price: product.price,
+                    image: product.image || product.image_url,
+                    quantity: quantity
+                });
+                console.log('Added new item to cart:', cart[cart.length - 1]);
+            }
+            
+            // Save updated cart
+            localStorage.setItem('beautyCart', JSON.stringify(cart));
+            
+            // Update cart count display
+            updateCartCount();
+            
+            return true; // Indicate success
+        };
+        
+        // 2. Remove duplicate event listeners from quick-add buttons
+        const quickAddButtons = document.querySelectorAll('.quick-add');
+        quickAddButtons.forEach(button => {
+            // Clone and replace to remove all existing event listeners
+            const newButton = button.cloneNode(true);
+            if (button.parentNode) {
+                button.parentNode.replaceChild(newButton, button);
+                
+                // Add a single new event listener
+                newButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const productCard = this.closest('.product-card');
+                    if (!productCard) {
+                        console.error('Product card not found');
+                        return;
+                    }
+                    
+                    const productId = parseInt(productCard.getAttribute('data-product-id'));
+                    if (isNaN(productId)) {
+                        console.error('Invalid product ID');
+                        return;
+                    }
+                    
+                    console.log('Quick add button clicked for product ID:', productId);
+                    addToCart(productId, 1);
+                    
+                    // Animation feedback
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-plus"></i>';
+                    }, 1000);
+                });
+            }
+        });
+        
+        // 3. Fix the add to cart button in the product modal
+        const modalAddToCartButton = document.querySelector('.add-to-cart');
+        if (modalAddToCartButton) {
+            const newModalButton = modalAddToCartButton.cloneNode(true);
+            modalAddToCartButton.parentNode.replaceChild(newModalButton, modalAddToCartButton);
+            
+            newModalButton.addEventListener('click', function() {
+                const productId = parseInt(this.getAttribute('data-product-id'));
+                if (!isNaN(productId)) {
+                    console.log('Modal add to cart button clicked for product ID:', productId);
+                    addToCart(productId, 1);
+                    
+                    // Close the modal
+                    const modal = document.getElementById('product-modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                } else {
+                    console.error('Invalid product ID in modal add to cart button');
+                }
+            });
+        }
+        
+        console.log('Double add to cart issue fixed');
+    }
+    
+    // Wait for the page to fully load before applying the fix
+    setTimeout(fixDoubleAddToCart, 1000);
 });
     </script>
 </body>

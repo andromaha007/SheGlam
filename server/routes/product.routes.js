@@ -33,19 +33,17 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// Add new product
 router.post('/', (req, res) => {
     console.log('Received request to add product:', req.body);
-    const { title, description, price, image_url } = req.body;
-    
+    const { title, description, price, image_url, category } = req.body;
     
     if (!title || price === undefined) {
         return res.status(400).json({ error: "Product title and price are required" });
     }
     
-    const query = 'INSERT INTO products (title, product_description, price, image_url) VALUES (?, ?, ?, ?)';
+    const query = 'INSERT INTO products (title, product_description, price, image_url, category) VALUES (?, ?, ?, ?, ?)';
     
-    db.query(query, [title, description, price, image_url], (error, results) => {
+    db.query(query, [title, description, price, image_url, category], (error, results) => {
         if (error) {
             console.error('Error adding product:', error);
             return res.status(500).json({ error: "Error adding product: " + error.message });
