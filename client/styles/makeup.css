@@ -973,3 +973,129 @@ animation: searchHighlight 1s ease;
     display: flex;
     animation: fadeIn 0.3s ease;
 }
+
+/* Add these CSS styles to ensure the product modal displays correctly */
+/* Add this to your existing CSS or as a <style> tag in your HTML */
+
+#product-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#product-modal .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    max-width: 900px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+#product-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#product-modal .product-details {
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+}
+
+@media screen and (max-width: 768px) {
+    #product-modal .product-details {
+        flex-direction: column;
+    }
+}
+
+#product-modal #modal-product-image {
+    max-width: 40%;
+    height: auto;
+    object-fit: contain;
+    margin-right: 30px;
+}
+
+@media screen and (max-width: 768px) {
+    #product-modal #modal-product-image {
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+
+#product-modal .product-info {
+    flex: 1;
+}
+
+#product-modal .modal-brand {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+#product-modal .modal-name {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+#product-modal .modal-category {
+    display: inline-block;
+    background-color: #f8f8f8;
+    color: #666;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+#product-modal .modal-description {
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#product-modal .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary, #333);
+    margin-bottom: 20px;
+}
+
+#product-modal .add-to-cart {
+    background-color: var(--primary, #333);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 200px;
+}
+
+#product-modal .add-to-cart i {
+    margin-right: 8px;
+}
+
+#product-modal .add-to-cart:hover {
+    background-color: var(--primary-dark, #222);
+}

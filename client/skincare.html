@@ -2353,5 +2353,212 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(fixDoubleAddToCart, 1000);
 });
     </script>
+    <script>
+        // Fix for product modal not working
+// Add this code to the bottom of both skincare.html and makeup.html files
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Product modal fix script loaded');
+    
+    function fixProductModal() {
+        console.log('Fixing product modal functionality');
+        
+        // 1. Make sure the product modal exists and has all required elements
+        let productModal = document.getElementById('product-modal');
+        if (!productModal) {
+            console.error('Product modal not found, creating it');
+            
+            // Create the modal element
+            productModal = document.createElement('div');
+            productModal.id = 'product-modal';
+            productModal.className = 'modal';
+            
+            // Set modal content
+            productModal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div class="product-details">
+                        <img src="" alt="" id="modal-product-image">
+                        <div class="product-info">
+                            <div class="modal-brand" id="modal-product-brand">Brand</div>
+                            <h2 class="modal-name" id="modal-product-name">Product Name</h2>
+                            <div class="modal-category" id="modal-product-category">Category</div>
+                            <p class="modal-description" id="modal-product-description">Product description will appear here.</p>
+                            <p class="price" id="modal-product-price">$0.00</p>
+                            <button class="add-to-cart" data-product-id="">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to document
+            document.body.appendChild(productModal);
+            console.log('Product modal created and added to document');
+            
+            // Add event listener to close button
+            const closeBtn = productModal.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    productModal.style.display = 'none';
+                });
+            }
+            
+            // Add event listener to add to cart button
+            const addToCartBtn = productModal.querySelector('.add-to-cart');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    if (!isNaN(productId)) {
+                        if (typeof addToCart === 'function') {
+                            addToCart(productId, 1);
+                        }
+                        productModal.style.display = 'none';
+                    }
+                });
+            }
+        }
+        
+        // 2. Fix the openProductModal function
+        window.openProductModal = function(productId) {
+            console.log('Running fixed openProductModal for product ID:', productId);
+            
+            // Find the product
+            let product;
+            
+            // Try to find product in global products array
+            if (window.products && Array.isArray(window.products)) {
+                product = window.products.find(p => p.id === productId);
+            }
+            
+            // If not found, try to find it in the DOM
+            if (!product) {
+                const productCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+                if (productCard) {
+                    const name = productCard.querySelector('.product-name')?.textContent || 'Unknown Product';
+                    const brand = productCard.querySelector('.product-brand')?.textContent || '';
+                    const category = productCard.querySelector('.product-category')?.textContent || '';
+                    const description = productCard.querySelector('.product-description')?.textContent || '';
+                    const priceText = productCard.querySelector('.product-price')?.textContent || '$0.00';
+                    const price = parseFloat(priceText.replace('$', '')) || 0;
+                    const image = productCard.querySelector('.product-image')?.src || '';
+                    
+                    product = { 
+                        id: productId, 
+                        name, 
+                        brand, 
+                        category, 
+                        description, 
+                        price, 
+                        image 
+                    };
+                }
+            }
+            
+            // Check if product was found
+            if (!product) {
+                console.error('Product not found:', productId);
+                return;
+            }
+            
+            // Get modal elements
+            const modal = document.getElementById('product-modal');
+            if (!modal) {
+                console.error('Product modal not found even after attempted fix');
+                return;
+            }
+            
+            // Update modal content
+            const imgEl = document.getElementById('modal-product-image');
+            const brandEl = document.getElementById('modal-product-brand');
+            const nameEl = document.getElementById('modal-product-name');
+            const catEl = document.getElementById('modal-product-category');
+            const descEl = document.getElementById('modal-product-description');
+            const priceEl = document.getElementById('modal-product-price');
+            const addToCartBtn = document.querySelector('.add-to-cart');
+            
+            // Safely update elements
+            if (imgEl) {
+                imgEl.src = product.image || product.image_url || '/client/assets/default-product.jpg';
+                imgEl.alt = product.name || product.title || 'Product Image';
+                console.log('Set image src to:', imgEl.src);
+            } else {
+                console.error('Modal product image element not found');
+            }
+            
+            if (brandEl) brandEl.textContent = product.brand || '';
+            if (nameEl) nameEl.textContent = product.name || product.title || '';
+            if (catEl) catEl.textContent = product.category || '';
+            if (descEl) descEl.textContent = product.description || '';
+            if (priceEl) priceEl.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+            
+            if (addToCartBtn) {
+                addToCartBtn.setAttribute('data-product-id', productId);
+            }
+            
+            // Show the modal
+            modal.style.display = 'flex';
+            console.log('Product modal shown successfully');
+        };
+        
+        // 3. Ensure product cards have click events to open modal
+        function setupProductCardClicks() {
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                // Remove existing event listeners by cloning the node
+                const newCard = card.cloneNode(true);
+                if (card.parentNode) {
+                    card.parentNode.replaceChild(newCard, card);
+                    
+                    // Add a single new event listener
+                    newCard.addEventListener('click', function(e) {
+                        // Only handle click if not clicking on quick-add or delete button
+                        if (!e.target.classList.contains('quick-add') && 
+                            !e.target.closest('.quick-add') &&
+                            !e.target.classList.contains('delete-product-btn') && 
+                            !e.target.closest('.delete-product-btn')) {
+                            
+                            const productId = parseInt(this.getAttribute('data-product-id'));
+                            if (!isNaN(productId)) {
+                                console.log('Product card clicked, opening modal for product ID:', productId);
+                                openProductModal(productId);
+                            }
+                        }
+                    });
+                    
+                    // Ensure quick-add button still works
+                    const quickAddBtn = newCard.querySelector('.quick-add');
+                    if (quickAddBtn) {
+                        quickAddBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const productId = parseInt(newCard.getAttribute('data-product-id'));
+                            if (!isNaN(productId) && typeof addToCart === 'function') {
+                                addToCart(productId, 1);
+                                
+                                // Animation feedback
+                                this.innerHTML = '<i class="fas fa-check"></i>';
+                                setTimeout(() => {
+                                    this.innerHTML = '<i class="fas fa-plus"></i>';
+                                }, 1000);
+                            }
+                        });
+                    }
+                }
+            });
+            
+            console.log('Product card click events fixed');
+        }
+        
+        // Run all fixes
+        setupProductCardClicks();
+        console.log('Product modal functionality fixed');
+    }
+    
+    // Run fix with a small delay to ensure DOM is loaded
+    setTimeout(fixProductModal, 1000);
+});
+    </script>
 </body>
 </html>
